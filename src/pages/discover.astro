@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Discover Movies | GoodWatch"
+  description="Swipe through personalized movie recommendations based on your taste and mood."
+>
+  <section class="py-8 px-4 min-h-screen">
+    <div class="max-w-md mx-auto">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold mb-2">Discover</h1>
+        <p class="text-gw-text-secondary text-sm">Swipe right to like, left to pass, up to love</p>
+      </div>
+
+      <div class="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide" id="mood-selector">
+        <button data-mood="" class="mood-btn active px-4 py-2 rounded-full text-sm whitespace-nowrap bg-gw-accent text-gw-bg">All</button>
+        <button data-mood="feel-good" class="mood-btn px-4 py-2 rounded-full text-sm whitespace-nowrap bg-gw-card border border-gw-border">Feel-Good</button>
+        <button data-mood="thrilling" class="mood-btn px-4 py-2 rounded-full text-sm whitespace-nowrap bg-gw-card border border-gw-border">Thrilling</button>
+        <button data-mood="romantic" class="mood-btn px-4 py-2 rounded-full text-sm whitespace-nowrap bg-gw-card border border-gw-border">Romantic</button>
+        <button data-mood="funny" class="mood-btn px-4 py-2 rounded-full text-sm whitespace-nowrap bg-gw-card border border-gw-border">Funny</button>
+        <button data-mood="mind-bending" class="mood-btn px-4 py-2 rounded-full text-sm whitespace-nowrap bg-gw-card border border-gw-border">Mind-Bending</button>
+      </div>
+
+      <div class="flex justify-center gap-6 mb-4 text-sm">
+        <span class="text-green-500">👍 <span id="liked-count">0</span></span>
+        <span class="text-yellow-500">💛 <span id="loved-count">0</span></span>
+        <span class="text-red-500">👎 <span id="passed-count">0</span></span>
+      </div>
+
+      <div class="relative h-[480px]" id="card-stack">
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-gw-accent border-t-transparent"></div>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-4 mt-6">
+        <button id="btn-pass" class="w-14 h-14 rounded-full bg-gw-card border border-red-500/50 text-red-500 flex items-center justify-center hover:bg-red-500/20 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <button id="btn-love" class="w-14 h-14 rounded-full bg-gw-card border border-yellow-500/50 text-yellow-500 flex items-center justify-center hover:bg-yellow-500/20 transition">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+        </button>
+        <button id="btn-like" class="w-14 h-14 rounded-full bg-gw-card border border-green-500/50 text-green-500 flex items-center justify-center hover:bg-green-500/20 transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </button>
+      </div>
+
+      <div class="mt-8 text-center">
+        <a href="/calibrate" class="text-gw-accent text-sm hover:underline">New here? Take 1-min taste quiz →</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { supabase } from '../lib/supabase';
+  const TMDB = 'https://image.tmdb.org/t/p/w500';
+  
+  let movies: any[] = [], idx = 0, mood = '', stats = {liked:0,passed:0,loved:0};
+  const userId = localStorage.getItem('gw_user_id') || (() => { const id = 'anon_' + Math.random().toString(36).slice(2); localStorage.setItem('gw_user_id', id); return id; })();
+  const sessionId = crypto.randomUUID();
+  let cardStart = Date.now();
+
+  const stack = document.getElementById('card-stack')!;
+
+  async function load() {
+    stack.innerHTML = '<div class="absolute inset-0 flex items-center justify-center"><div class="animate-spin rounded-full h-12 w-12 border-4 border-gw-accent border-t-transparent"></div></div>';
+    const { data: swiped } = await supabase.from('swipes').select('movie_id').eq('user_id', userId);
+    const swipedSet = new Set(swiped?.map(s => s.movie_id) || []);
+    const { data } = await supabase.from('movies').select('id,title,poster_path,vote_average,release_date,genres,movie_axes(warmth,suspense,humor,darkness,complexity)').not('poster_path','is',null).gte('vote_average',6).order('vote_average',{ascending:false}).limit(60);
+    movies = (data||[]).filter(m => !swipedSet.has(m.id)).sort(() => Math.random() - 0.5);
+    idx = 0;
+    render();
+  }
+
+  function render() {
+    if (idx >= movies.length) { stack.innerHTML = '<div class="text-center py-12"><div class="text-5xl mb-4">🎬</div><h2 class="text-xl font-bold mb-2">All done!</h2><button onclick="location.reload()" class="bg-gw-accent text-gw-bg px-6 py-2 rounded-full mt-4">Load More</button></div>'; return; }
+    const m = movies[idx], ax = m.movie_axes?.[0];
+    cardStart = Date.now();
+    const tags = ax ? [ax.warmth>=7&&'Heartwarming',ax.suspense>=7&&'Suspenseful',ax.humor>=7&&'Funny',ax.darkness>=7&&'Dark',ax.complexity>=7&&'Complex'].filter(Boolean).slice(0,3) : [];
+    stack.innerHTML = `<div id="card" class="absolute inset-0 flex items-center justify-center"><div class="w-full max-w-sm cursor-grab touch-none select-none"><div class="relative rounded-2xl overflow-hidden shadow-2xl bg-gw-card"><div class="aspect-[2/3] relative"><img src="${TMDB}${m.poster_path}" alt="${m.title}" class="w-full h-full object-cover" draggable="false"><div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div><div id="ind-like" class="absolute inset-0 bg-green-500/30 flex items-center justify-center opacity-0"><span class="text-4xl font-bold text-green-500 -rotate-12">LIKE</span></div><div id="ind-pass" class="absolute inset-0 bg-red-500/30 flex items-center justify-center opacity-0"><span class="text-4xl font-bold text-red-500 rotate-12">PASS</span></div><div id="ind-love" class="absolute inset-0 bg-yellow-500/30 flex items-center justify-center opacity-0"><span class="text-4xl font-bold text-yellow-500">LOVE</span></div><div class="absolute bottom-0 left-0 right-0 p-5"><h2 class="text-xl font-bold mb-1">${m.title}</h2><div class="flex items-center gap-2 text-sm text-white/80"><span class="text-yellow-400">★</span><span>${m.vote_average?.toFixed(1)}</span>${m.release_date?`<span>• ${m.release_date.slice(0,4)}</span>`:''}</div>${tags.length?`<div class="flex gap-2 mt-2">${tags.map(t=>`<span class="px-2 py-0.5 bg-white/20 rounded text-xs">${t}</span>`).join('')}</div>`:''}</div></div></div></div></div>`;
+    setupGestures();
+  }
+
+  function setupGestures() {
+    const card = document.getElementById('card'); if(!card) return;
+    let sx=0,sy=0,cx=0,cy=0,drag=false;
+    const start = (x:number,y:number) => { sx=x;sy=y;drag=true; };
+    const move = (x:number,y:number) => { if(!drag)return; cx=x-sx;cy=y-sy; card.style.transform=`translate(${cx}px,${cy}px) rotate(${cx*0.1}deg)`; const il=document.getElementById('ind-like'),ip=document.getElementById('ind-pass'),iv=document.getElementById('ind-love'); if(il)il.style.opacity=cx>50?String(Math.min((cx-50)/50,1)):'0'; if(ip)ip.style.opacity=cx<-50?String(Math.min((-cx-50)/50,1)):'0'; if(iv)iv.style.opacity=cy<-50?String(Math.min((-cy-50)/50,1)):'0'; };
+    const end = () => { if(!drag)return; drag=false; if(cx>100)swipe('right'); else if(cx<-100)swipe('left'); else if(cy<-100)swipe('up'); else { card.style.transform=''; ['ind-like','ind-pass','ind-love'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.opacity='0';}); } cx=cy=0; };
+    card.onmousedown = e => start(e.clientX,e.clientY); card.onmousemove = e => move(e.clientX,e.clientY); card.onmouseup = end; card.onmouseleave = end;
+    card.ontouchstart = e => start(e.touches[0].clientX,e.touches[0].clientY); card.ontouchmove = e => move(e.touches[0].clientX,e.touches[0].clientY); card.ontouchend = end;
+  }
+
+  async function swipe(dir: 'left'|'right'|'up') {
+    const m = movies[idx]; if(!m)return;
+    const card = document.getElementById('card'); if(card){ card.style.transition='transform 0.3s'; card.style.transform=`translate(${dir==='right'?500:dir==='left'?-500:0}px,${dir==='up'?-500:0}px) rotate(${dir==='right'?30:dir==='left'?-30:0}deg)`; }
+    if(dir==='right')stats.liked++; else if(dir==='up')stats.loved++; else stats.passed++;
+    document.getElementById('liked-count')!.textContent=String(stats.liked); document.getElementById('loved-count')!.textContent=String(stats.loved); document.getElementById('passed-count')!.textContent=String(stats.passed);
+    await supabase.from('swipes').insert({user_id:userId,movie_id:m.id,direction:dir,mood_slug:mood||null,session_id:sessionId,position_in_session:idx,time_to_decision_ms:Date.now()-cardStart});
+    if(dir!=='left') await supabase.from('user_watchlist').upsert({user_id:userId,movie_id:m.id,added_from:'swipe',mood_when_added:mood||null},{onConflict:'user_id,movie_id'});
+    setTimeout(()=>{idx++;render();},300);
+  }
+
+  document.getElementById('btn-pass')!.onclick = () => swipe('left');
+  document.getElementById('btn-like')!.onclick = () => swipe('right');
+  document.getElementById('btn-love')!.onclick = () => swipe('up');
+  document.querySelectorAll('.mood-btn').forEach(b => b.addEventListener('click', () => { document.querySelectorAll('.mood-btn').forEach(x=>{x.classList.remove('active','bg-gw-accent','text-gw-bg');x.classList.add('bg-gw-card','border','border-gw-border');}); b.classList.add('active','bg-gw-accent','text-gw-bg');b.classList.remove('bg-gw-card','border','border-gw-border'); mood=(b as HTMLElement).dataset.mood||''; load(); }));
+  document.onkeydown = e => { if(e.key==='ArrowLeft')swipe('left'); else if(e.key==='ArrowRight')swipe('right'); else if(e.key==='ArrowUp')swipe('up'); };
+  load();
+</script>
+<style>.scrollbar-hide::-webkit-scrollbar{display:none}.scrollbar-hide{-ms-overflow-style:none;scrollbar-width:none}</style>

@@ -1,0 +1,236 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { supabase, getPosterUrl } from '../lib/supabase';
+
+export const prerender = false;
+
+const userId = Astro.cookies.get('gw_user_id')?.value || 'anonymous';
+
+// Fetch user's watchlist with movie details
+const { data: watchlistItems } = await supabase
+  .from('user_watchlist')
+  .select(`
+    id,
+    tmdb_id,
+    planned_date,
+    watch_context,
+    priority,
+    status,
+    created_at,
+    movie_id
+  `)
+  .eq('user_id', userId)
+  .eq('status', 'queued')
+  .order('priority', { ascending: false })
+  .order('created_at', { ascending: false });
+
+// Get movie details
+let watchlist: any[] = [];
+if (watchlistItems && watchlistItems.length > 0) {
+  const movieIds = watchlistItems.map(w => w.movie_id).filter(Boolean);
+  const { data: movies } = await supabase
+    .from('movies')
+    .select('id, tmdb_id, title, year, poster_path, runtime, imdb_rating, genres')
+    .in('id', movieIds);
+  
+  if (movies) {
+    watchlist = watchlistItems.map(item => {
+      const movie = movies.find(m => m.id === item.movie_id);
+      return movie ? { ...item, movie } : null;
+    }).filter(Boolean);
+  }
+}
+
+// Group by planned date
+const today = new Date().toISOString().split('T')[0];
+const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+const weekEnd = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+
+const tonight = watchlist.filter(w => w.planned_date === today);
+const tomorrowNight = watchlist.filter(w => w.planned_date === tomorrow);
+const thisWeek = watchlist.filter(w => w.planned_date > tomorrow && w.planned_date <= weekEnd);
+const later = watchlist.filter(w => !w.planned_date || w.planned_date > weekEnd);
+
+function getGenreName(g: any): string {
+  return typeof g === 'string' ? g : g?.name || '';
+}
+---
+
+<Layout title="Watchlist - GoodWatch" description="Your upcoming movie nights">
+  <main class="min-h-screen bg-gw-bg px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold mb-2">Upcoming Nights</h1>
+      <p class="text-gw-text-secondary mb-8">Plan what you'll watch and when.</p>
+      
+      {watchlist.length === 0 ? (
+        <div class="text-center py-16">
+          <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gw-card border border-gw-border flex items-center justify-center">
+            <svg class="w-10 h-10 text-gw-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+          </div>
+          <h2 class="text-xl font-semibold mb-2">No movies saved yet</h2>
+          <p class="text-gw-text-secondary mb-6">Save movies from Tonight's Pick to plan your week.</p>
+          <a href="/tonight" class="inline-flex items-center gap-2 bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-6 py-3 rounded-full font-semibold transition">
+            Get Tonight's Pick
+          </a>
+        </div>
+      ) : (
+        <div class="space-y-8">
+          
+          {tonight.length > 0 && (
+            <section>
+              <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                <span class="w-2 h-2 bg-gw-accent rounded-full"></span>
+                Tonight
+              </h2>
+              <div class="grid gap-4">
+                {tonight.map(item => (
+                  <div class="bg-gw-card border border-gw-border rounded-xl p-4 flex gap-4">
+                    <img src={getPosterUrl(item.movie.poster_path, 'w154')} alt={item.movie.title} class="w-20 h-28 object-cover rounded-lg" />
+                    <div class="flex-1">
+                      <h3 class="font-semibold">{item.movie.title}</h3>
+                      <p class="text-sm text-gw-text-secondary">{item.movie.year} • {item.movie.runtime}m</p>
+                      {item.watch_context && (
+                        <span class="inline-block mt-2 px-2 py-1 bg-gw-bg rounded text-xs">{item.watch_context}</span>
+                      )}
+                    </div>
+                    <a href={`/movie/${item.tmdb_id}`} class="self-center bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-4 py-2 rounded-full text-sm font-medium transition">
+                      Watch
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+          
+          {tomorrowNight.length > 0 && (
+            <section>
+              <h2 class="text-lg font-semibold mb-4 text-gw-text-secondary">Tomorrow</h2>
+              <div class="grid gap-4">
+                {tomorrowNight.map(item => (
+                  <div class="bg-gw-card border border-gw-border rounded-xl p-4 flex gap-4">
+                    <img src={getPosterUrl(item.movie.poster_path, 'w154')} alt={item.movie.title} class="w-16 h-24 object-cover rounded-lg" />
+                    <div class="flex-1">
+                      <h3 class="font-semibold">{item.movie.title}</h3>
+                      <p class="text-sm text-gw-text-secondary">{item.movie.year}</p>
+                    </div>
+                    <button class="self-center text-gw-text-secondary hover:text-white" data-plan={item.id}>Reschedule</button>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+          
+          {thisWeek.length > 0 && (
+            <section>
+              <h2 class="text-lg font-semibold mb-4 text-gw-text-secondary">This Week</h2>
+              <div class="grid gap-4">
+                {thisWeek.map(item => (
+                  <div class="bg-gw-card border border-gw-border rounded-xl p-4 flex gap-4">
+                    <img src={getPosterUrl(item.movie.poster_path, 'w154')} alt={item.movie.title} class="w-16 h-24 object-cover rounded-lg" />
+                    <div class="flex-1">
+                      <h3 class="font-semibold">{item.movie.title}</h3>
+                      <p class="text-sm text-gw-text-secondary">{item.movie.year} • {new Date(item.planned_date).toLocaleDateString('en-US', { weekday: 'short' })}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+          
+          {later.length > 0 && (
+            <section>
+              <h2 class="text-lg font-semibold mb-4 text-gw-text-secondary">Saved for Later</h2>
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {later.map(item => (
+                  <a href={`/movie/${item.tmdb_id}`} class="group">
+                    <div class="aspect-[2/3] rounded-lg overflow-hidden mb-2">
+                      <img src={getPosterUrl(item.movie.poster_path, 'w342')} alt={item.movie.title} class="w-full h-full object-cover group-hover:scale-105 transition" />
+                    </div>
+                    <h3 class="font-medium text-sm truncate">{item.movie.title}</h3>
+                    <p class="text-xs text-gw-text-secondary">{item.movie.year}</p>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+          
+          {later.length > 3 && (
+            <div class="bg-gw-card/50 border border-gw-border rounded-xl p-4 text-center">
+              <p class="text-sm text-gw-text-secondary">You have {later.length} movies without a date.</p>
+              <button class="mt-2 text-gw-accent hover:underline text-sm">Plan your week →</button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>
+
+<!-- Plan Date Modal -->
+<div id="plan-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden">
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-sm bg-gw-card border border-gw-border rounded-2xl p-6">
+      <h3 class="text-lg font-bold mb-4">When do you want to watch?</h3>
+      <div class="space-y-2">
+        <button class="w-full text-left px-4 py-3 bg-gw-bg hover:bg-gw-border rounded-lg transition" data-date="today">🌙 Tonight</button>
+        <button class="w-full text-left px-4 py-3 bg-gw-bg hover:bg-gw-border rounded-lg transition" data-date="tomorrow">📅 Tomorrow</button>
+        <button class="w-full text-left px-4 py-3 bg-gw-bg hover:bg-gw-border rounded-lg transition" data-date="weekend">🎉 This Weekend</button>
+        <button class="w-full text-left px-4 py-3 bg-gw-bg hover:bg-gw-border rounded-lg transition" data-date="later">📌 Save for Later</button>
+      </div>
+      
+      <div class="mt-4 pt-4 border-t border-gw-border">
+        <p class="text-sm text-gw-text-secondary mb-3">Watching with?</p>
+        <div class="flex gap-2">
+          <button class="flex-1 px-3 py-2 bg-gw-bg hover:bg-gw-accent hover:text-gw-bg rounded-lg text-sm transition" data-context="solo">Solo</button>
+          <button class="flex-1 px-3 py-2 bg-gw-bg hover:bg-gw-accent hover:text-gw-bg rounded-lg text-sm transition" data-context="partner">Partner</button>
+          <button class="flex-1 px-3 py-2 bg-gw-bg hover:bg-gw-accent hover:text-gw-bg rounded-lg text-sm transition" data-context="family">Family</button>
+        </div>
+      </div>
+      
+      <button id="close-plan-modal" class="mt-4 w-full py-2 text-gw-text-secondary hover:text-white">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const planModal = document.getElementById('plan-modal');
+  let currentItemId: string | null = null;
+  
+  document.querySelectorAll('[data-plan]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentItemId = (btn as HTMLElement).dataset.plan || null;
+      planModal?.classList.remove('hidden');
+    });
+  });
+  
+  document.getElementById('close-plan-modal')?.addEventListener('click', () => {
+    planModal?.classList.add('hidden');
+  });
+  
+  document.querySelectorAll('[data-date]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const dateOption = (btn as HTMLElement).dataset.date;
+      let plannedDate = null;
+      
+      const today = new Date();
+      if (dateOption === 'today') plannedDate = today.toISOString().split('T')[0];
+      else if (dateOption === 'tomorrow') plannedDate = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      else if (dateOption === 'weekend') {
+        const dayOfWeek = today.getDay();
+        const daysUntilSat = (6 - dayOfWeek + 7) % 7 || 7;
+        plannedDate = new Date(Date.now() + daysUntilSat * 86400000).toISOString().split('T')[0];
+      }
+      
+      if (currentItemId) {
+        await fetch('/api/watchlist', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemId: currentItemId, plannedDate })
+        });
+        window.location.reload();
+      }
+    });
+  });
+</script>

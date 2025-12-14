@@ -1,11 +1,16 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://tlzpswurafpphujrihvq.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsenBzd3VyYWZwcGh1anJpaHZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQyNTgwNTIsImV4cCI6MjA3OTgzNDA1Mn0.AuY_d9-2hQ14oOA_FciCzAS4Cwbnqdiz-vvcZqIU78M';
+const supabaseUrl = 'https://jdjqrlkynwfhbtyuddjk.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkanFybGt5bndmaGJ0eXVkZGprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0NzUwMTEsImV4cCI6MjA4MDA1MTAxMX0.KDRMLCewVMp3lwphkUvtoWOkg6kyAk8iSbVkRKiHYSk';
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Types
+export interface GenreObject {
+  id: number;
+  name: string;
+}
+
 export interface Movie {
   id: string;
   tmdb_id: number;
@@ -15,7 +20,7 @@ export interface Movie {
   decade?: string;
   release_date?: string;
   language?: string;
-  genres?: string[];
+  genres?: GenreObject[];
   overview?: string;
   tagline?: string;
   poster_path?: string;
@@ -34,6 +39,12 @@ export interface Movie {
     IN?: { flatrate?: Array<{ provider_name: string; logo_path: string }> };
     US?: { flatrate?: Array<{ provider_name: string; logo_path: string }> };
   };
+}
+
+// Helper to get genre names from a movie
+export function getGenreNames(movie: Movie): string[] {
+  if (!movie.genres) return [];
+  return movie.genres.map(g => g.name);
 }
 
 // Helper functions
@@ -113,14 +124,58 @@ export async function getTrendingMovies(limit = 20): Promise<Movie[]> {
   return data || [];
 }
 
+// MOOD TO GENRE ID MAPPING - Maps moods to TMDB genre IDs
+const MOOD_TO_GENRE_IDS: Record<string, number[]> = {
+  'Feel-Good': [35, 10751, 16],      // Comedy, Family, Animation
+  'Thrilling': [53, 28, 80],          // Thriller, Action, Crime
+  'Romantic': [10749, 18],            // Romance, Drama
+  'Mind-Bending': [878, 9648, 53],    // Science Fiction, Mystery, Thriller
+  'Nostalgic': [18, 10751, 35],       // Drama, Family, Comedy
+  'Dark': [27, 53, 80],               // Horror, Thriller, Crime
+  'Inspirational': [18, 99],          // Drama, Documentary
+  'Relaxing': [35, 10751, 16],        // Comedy, Family, Animation
+  'Adventurous': [12, 28, 14],        // Adventure, Action, Fantasy
+  'Emotional': [18, 10749],           // Drama, Romance
+  'Funny': [35],                       // Comedy
+  'Intense': [53, 28, 27],            // Thriller, Action, Horror
+  'Mysterious': [9648, 53, 80],       // Mystery, Thriller, Crime
+  'Uplifting': [35, 18, 10751],       // Comedy, Drama, Family
+  'Thought-Provoking': [18, 878, 99], // Drama, Science Fiction, Documentary
+};
+
 export async function getMoviesByMood(mood: string, limit = 30): Promise<Movie[]> {
-  const { data, error } = await supabase
+  // First try mood_tags if they exist
+  let { data, error } = await supabase
     .from('movies')
     .select('*')
     .not('poster_path', 'is', null)
     .contains('mood_tags', [mood])
     .order('popularity', { ascending: false })
     .limit(limit);
+  
+  // If no results from mood_tags, fall back to genre ID mapping
+  if (!data?.length) {
+    // Normalize mood name (handle both "feel-good" and "Feel-Good")
+    const normalizedMood = mood.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    ).join('-');
+    
+    const genreIds = MOOD_TO_GENRE_IDS[normalizedMood] || MOOD_TO_GENRE_IDS[mood] || [18];
+    
+    // Query using raw PostgREST filter for JSON containment
+    const result = await supabase
+      .from('movies')
+      .select('*')
+      .not('poster_path', 'is', null)
+      .filter('genres', 'cs', `[{"id":${genreIds[0]}}]`)
+      .gte('vote_count', 100)
+      .gte('vote_average', 6.5)
+      .order('vote_average', { ascending: false })
+      .limit(limit);
+    
+    data = result.data;
+    error = result.error;
+  }
   
   if (error) {
     console.error('Error fetching by mood:', error);
@@ -129,12 +184,28 @@ export async function getMoviesByMood(mood: string, limit = 30): Promise<Movie[]
   return data || [];
 }
 
+// Genre name to ID mapping
+const GENRE_NAME_TO_ID: Record<string, number> = {
+  'Action': 28, 'Adventure': 12, 'Animation': 16, 'Comedy': 35,
+  'Crime': 80, 'Documentary': 99, 'Drama': 18, 'Family': 10751,
+  'Fantasy': 14, 'History': 36, 'Horror': 27, 'Music': 10402,
+  'Mystery': 9648, 'Romance': 10749, 'Science Fiction': 878,
+  'TV Movie': 10770, 'Thriller': 53, 'War': 10752, 'Western': 37
+};
+
 export async function getMoviesByGenre(genre: string, limit = 30): Promise<Movie[]> {
+  const genreId = GENRE_NAME_TO_ID[genre];
+  
+  if (!genreId) {
+    console.error('Unknown genre:', genre);
+    return [];
+  }
+  
   const { data, error } = await supabase
     .from('movies')
     .select('*')
     .not('poster_path', 'is', null)
-    .contains('genres', [genre])
+    .filter('genres', 'cs', `[{"id":${genreId}}]`)
     .order('popularity', { ascending: false })
     .limit(limit);
   
@@ -200,12 +271,19 @@ export async function getMoviesByDecade(decade: string, limit = 30): Promise<Mov
 
 // Get movies by mood + genre combination
 export async function getMoviesByMoodAndGenre(mood: string, genre: string, limit = 30): Promise<Movie[]> {
+  const genreId = GENRE_NAME_TO_ID[genre];
+  
+  if (!genreId) {
+    console.error('Unknown genre:', genre);
+    return [];
+  }
+  
   const { data, error } = await supabase
     .from('movies')
     .select('*')
     .not('poster_path', 'is', null)
-    .contains('mood_tags', [mood])
-    .contains('genres', [genre])
+    .filter('genres', 'cs', `[{"id":${genreId}}]`)
+    .gte('vote_count', 50)
     .order('popularity', { ascending: false })
     .limit(limit);
   
@@ -218,11 +296,18 @@ export async function getMoviesByMoodAndGenre(mood: string, genre: string, limit
 
 // Get movies by genre + decade
 export async function getMoviesByGenreAndDecade(genre: string, decade: string, limit = 30): Promise<Movie[]> {
+  const genreId = GENRE_NAME_TO_ID[genre];
+  
+  if (!genreId) {
+    console.error('Unknown genre:', genre);
+    return [];
+  }
+  
   const { data, error } = await supabase
     .from('movies')
     .select('*')
     .not('poster_path', 'is', null)
-    .contains('genres', [genre])
+    .filter('genres', 'cs', `[{"id":${genreId}}]`)
     .eq('decade', decade)
     .gte('vote_count', 30)
     .order('vote_average', { ascending: false })
@@ -239,12 +324,18 @@ export async function getMoviesByGenreAndDecade(genre: string, decade: string, l
 export async function getSimilarMovies(movie: Movie, limit = 12): Promise<Movie[]> {
   if (!movie.genres?.length) return [];
   
+  // Get the first genre's ID from the movie's genres array
+  const firstGenre = movie.genres[0];
+  const genreId = firstGenre.id;
+  
+  if (!genreId) return [];
+  
   const { data, error } = await supabase
     .from('movies')
     .select('*')
     .not('poster_path', 'is', null)
     .neq('tmdb_id', movie.tmdb_id)
-    .contains('genres', [movie.genres[0]])
+    .filter('genres', 'cs', `[{"id":${genreId}}]`)
     .gte('vote_count', 50)
     .order('popularity', { ascending: false })
     .limit(limit);
@@ -384,7 +475,7 @@ export function generateMovieSchema(movie: Movie, siteUrl: string) {
       "@type": "Person",
       "name": movie.director
     } : undefined,
-    "genre": movie.genres,
+    "genre": getGenreNames(movie),
     "duration": movie.runtime ? `PT${movie.runtime}M` : undefined,
     "aggregateRating": movie.vote_average ? {
       "@type": "AggregateRating",

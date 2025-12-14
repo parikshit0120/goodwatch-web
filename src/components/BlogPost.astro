@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  category: string;
+  date: string;
+  readTime: string;
+}
+
+const { title, description, category, date, readTime } = Astro.props;
+---
+
+<Layout title={`${title} | GoodWatch Blog`} description={description}>
+  <article class="py-16 px-4">
+    <div class="max-w-3xl mx-auto">
+      <a href="/blog" class="inline-flex items-center gap-2 text-gw-text-secondary hover:text-gw-accent mb-8 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+      
+      <header class="mb-10">
+        <div class="flex items-center gap-3 text-sm text-gw-text-secondary mb-4">
+          <span class="px-2 py-1 bg-gw-accent/10 text-gw-accent rounded text-xs">{category}</span>
+          <span>{date}</span>
+          <span>•</span>
+          <span>{readTime}</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold mb-4 leading-tight">{title}</h1>
+        <p class="text-xl text-gw-text-secondary leading-relaxed">{description}</p>
+      </header>
+      
+      <div class="prose prose-invert prose-lg max-w-none">
+        <slot />
+      </div>
+      
+      <div class="mt-12 pt-8 border-t border-gw-border">
+        <p class="text-gw-text-secondary">
+          Ready to find your perfect movie? 
+          <a href="/moods" class="text-gw-accent hover:underline">Discover by mood →</a>
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>

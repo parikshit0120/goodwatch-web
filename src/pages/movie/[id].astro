@@ -35,12 +35,12 @@ const movieSchema = {
     "@type": "Person",
     "name": name
   })),
-  "aggregateRating": movie.vote_average && movie.vote_count ? {
+  "aggregateRating": movie.imdb_rating && movie.imdb_votes ? {
     "@type": "AggregateRating",
-    "ratingValue": movie.vote_average.toFixed(1),
+    "ratingValue": movie.imdb_rating.toFixed(1),
     "bestRating": "10",
     "worstRating": "0",
-    "ratingCount": movie.vote_count
+    "ratingCount": movie.imdb_votes
   } : undefined,
   "keywords": [...(movie.genres || []), ...(movie.mood_tags || [])].join(', ')
 };
@@ -58,7 +58,45 @@ const seoDescription = movie.overview
   : `Discover ${movie.title} (${movie.year}) - a ${movie.genres?.slice(0, 2).join(', ')} film. Find out where to watch and see if it matches your mood.`;
 
 // Streaming providers (India first, then US)
-const streamingProviders = movie.streaming_providers?.IN?.flatrate || movie.streaming_providers?.US?.flatrate || [];
+const streamingProviders = movie.ott_providers?.filter((p: any) => p.type === "flatrate") || [];
+
+// Provider URL helper - opens provider search with movie title
+function getProviderUrl(providerName: string, title: string, year: number): string {
+  const query = encodeURIComponent(`${title} ${year || ""}`.trim());
+  const providers: Record<string, string> = {
+    "Netflix": `https://www.netflix.com/search?q=${query}`,
+    "Amazon Prime Video": `https://www.primevideo.com/search?phrase=${query}`,
+    "Amazon Prime Video with Ads": `https://www.primevideo.com/search?phrase=${query}`,
+    "JioHotstar": `https://www.hotstar.com/in/search?q=${query}`,
+    "Disney+ Hotstar": `https://www.hotstar.com/in/search?q=${query}`,
+    "Apple TV+": `https://tv.apple.com/search?term=${query}`,
+    "SonyLIV": `https://www.sonyliv.com/search?searchTerm=${query}`,
+    "Sony Liv": `https://www.sonyliv.com/search?searchTerm=${query}`,
+    "Zee5": `https://www.zee5.com/search?q=${query}`,
+    "ZEE5": `https://www.zee5.com/search?q=${query}`,
+    "JioCinema": `https://www.jiocinema.com/search/${query}`,
+    "Jio Cinema": `https://www.jiocinema.com/search/${query}`,
+    "Crunchyroll": `https://www.crunchyroll.com/search?q=${query}`,
+    "Sun NXT": `https://www.sunnxt.com/search?q=${query}`,
+    "Hoichoi": `https://www.hoichoi.tv/search?q=${query}`,
+    "Lionsgate Play": `https://www.lionsgateplay.com/search?q=${query}`,
+    "MX Player": `https://www.mxplayer.in/search?q=${query}`,
+    "Voot": `https://www.voot.com/search?q=${query}`,
+    "Aha": `https://www.aha.video/search?q=${query}`,
+    "aha": `https://www.aha.video/search?q=${query}`,
+    "Mubi": `https://mubi.com/search?query=${query}`,
+    "MUBI": `https://mubi.com/search?query=${query}`,
+    "VI movies and tv": `https://www.vi.com/moviesandtv/search?q=${query}`,
+  };
+  return providers[providerName] || `https://www.google.com/search?q=${query}+watch+online`;
+}
+
+// Format vote count for display
+function formatVotes(votes: number): string {
+  if (votes >= 1000000) return (votes / 1000000).toFixed(1) + "M";
+  if (votes >= 1000) return Math.round(votes / 1000) + "K";
+  return votes.toString();
+}
 ---
 
 <Layout 
@@ -110,14 +148,15 @@ const streamingProviders = movie.streaming_providers?.IN?.flatrate || movie.stre
                 <span>{formatRuntime(movie.runtime)}</span>
               </>
             )}
-            {movie.vote_average && (
+            {(movie.imdb_rating || movie.vote_average) && (
               <>
                 <span>•</span>
-                <span class="flex items-center gap-1 text-yellow-400">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                  {movie.vote_average.toFixed(1)}
+                <span class="flex items-center gap-1.5">
+                  <span class="bg-[#F5C518] text-black text-xs font-bold px-1.5 py-0.5 rounded">IMDb</span>
+                  <span class="font-semibold text-white">{movie.imdb_rating?.toFixed(1) || movie.vote_average?.toFixed(1)}</span>
+                  {movie.imdb_votes && (
+                    <span class="text-gw-text-secondary">({formatVotes(movie.imdb_votes)})</span>
+                  )}
                 </span>
               </>
             )}
@@ -134,10 +173,10 @@ const streamingProviders = movie.streaming_providers?.IN?.flatrate || movie.stre
             <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
               {movie.genres.map((genre) => (
                 <a 
-                  href={`/genre/${genre.toLowerCase().replace(/\s+/g, '-')}`}
+                  href={`/genre/${(typeof genre === "string" ? genre : genre.name).toLowerCase().replace(/\s+/g, '-')}`}
                   class="px-3 py-1 bg-gw-card border border-gw-border rounded-full text-sm hover:bg-gw-accent hover:text-gw-bg hover:border-gw-accent transition"
                 >
-                  {genre}
+                  {typeof genre === "string" ? genre : genre.name}
                 </a>
               ))}
             </div>
@@ -171,25 +210,25 @@ const streamingProviders = movie.streaming_providers?.IN?.flatrate || movie.stre
   </section>
   
   <!-- Content -->
-  <section class="max-w-7xl mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+  <section class="max-w-7xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Main Content -->
-      <div class="lg:col-span-2 space-y-10">
+      <div class="lg:col-span-2 space-y-8">
         <!-- Overview -->
         {movie.overview && (
           <div>
-            <h2 class="text-2xl font-bold mb-4">Overview</h2>
-            <p class="text-gw-text-secondary leading-relaxed text-lg">{movie.overview}</p>
+            <h2 class="text-xl font-bold mb-3">Overview</h2>
+            <p class="text-gw-text-secondary leading-relaxed">{movie.overview}</p>
           </div>
         )}
         
         <!-- Cast -->
         {movie.movie_cast && movie.movie_cast.length > 0 && (
           <div>
-            <h2 class="text-2xl font-bold mb-4">Cast</h2>
+            <h2 class="text-xl font-bold mb-3">Cast</h2>
             <div class="flex flex-wrap gap-2">
               {movie.movie_cast.slice(0, 10).map((actor) => (
-                <span class="px-3 py-1.5 bg-gw-card border border-gw-border rounded-full text-sm">
+                <span class="px-3 py-1 bg-gw-card border border-gw-border rounded-full text-sm">
                   {actor}
                 </span>
               ))}
@@ -200,8 +239,8 @@ const streamingProviders = movie.streaming_providers?.IN?.flatrate || movie.stre
         <!-- Director -->
         {movie.director && (
           <div>
-            <h2 class="text-2xl font-bold mb-4">Director</h2>
-            <span class="px-4 py-2 bg-gw-card border border-gw-border rounded-full">
+            <h2 class="text-xl font-bold mb-3">Director</h2>
+            <span class="px-3 py-1.5 bg-gw-card border border-gw-border rounded-full text-sm">
               {movie.director}
             </span>
           </div>
@@ -210,12 +249,12 @@ const streamingProviders = movie.streaming_providers?.IN?.flatrate || movie.stre
         <!-- Mood Tags -->
         {movie.mood_tags && movie.mood_tags.length > 0 && (
           <div>
-            <h2 class="text-2xl font-bold mb-4">Perfect For</h2>
+            <h2 class="text-xl font-bold mb-3">Perfect For</h2>
             <div class="flex flex-wrap gap-2">
               {movie.mood_tags.map((mood) => (
                 <a 
                   href={`/mood/${mood.toLowerCase().replace(/\s+/g, '-')}`}
-                  class="px-4 py-2 bg-gw-accent/20 text-gw-accent border border-gw-accent/30 rounded-full hover:bg-gw-accent hover:text-gw-bg transition"
+                  class="px-3 py-1.5 bg-gw-accent/20 text-gw-accent border border-gw-accent/30 rounded-full text-sm hover:bg-gw-accent hover:text-gw-bg transition"
                 >
                   {mood}
                 </a>
@@ -226,72 +265,95 @@ const streamingProviders = movie.streaming_providers?.IN?.flatrate || movie.stre
       </div>
       
       <!-- Sidebar -->
-      <div class="space-y-8">
+      <div class="space-y-6">
         <!-- Where to Watch -->
-        <div class="bg-gw-card border border-gw-border rounded-xl p-6">
-          <h3 class="text-xl font-bold mb-4">Where to Watch</h3>
+        <div class="bg-gw-card border border-gw-border rounded-xl p-5">
+          <h3 class="text-lg font-bold mb-3">Where to Watch</h3>
           {streamingProviders.length > 0 ? (
-            <div class="space-y-3">
+            <div class="space-y-2">
               {streamingProviders.map((provider) => (
-                <div class="flex items-center gap-3 p-3 bg-gw-bg rounded-lg">
+                <a 
+                  href={getProviderUrl(provider.name, movie.title, movie.year)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="flex items-center gap-3 p-3 bg-gw-bg rounded-lg hover:bg-gw-border transition group"
+                >
                   {provider.logo_path && (
                     <img 
                       src={`https://image.tmdb.org/t/p/w92${provider.logo_path}`}
-                      alt={provider.provider_name}
+                      alt={provider.name}
                       class="w-10 h-10 rounded-lg"
                     />
                   )}
-                  <span class="font-medium">{provider.provider_name}</span>
-                </div>
+                  <span class="font-medium flex-1">{provider.name}</span>
+                  <svg class="w-4 h-4 text-gw-text-secondary group-hover:text-gw-accent transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                  </svg>
+                </a>
               ))}
             </div>
           ) : (
-            <p class="text-gw-text-secondary">
+            <p class="text-gw-text-secondary text-sm">
               Streaming availability not found. Check your local services.
             </p>
           )}
         </div>
         
         <!-- Movie Details -->
-        <div class="bg-gw-card border border-gw-border rounded-xl p-6">
-          <h3 class="text-xl font-bold mb-4">Details</h3>
-          <dl class="space-y-4 text-sm">
+        <div class="bg-gw-card border border-gw-border rounded-xl p-5">
+          <h3 class="text-lg font-bold mb-3">Details</h3>
+          <dl class="space-y-3 text-sm">
             {movie.release_date && (
-              <div>
+              <div class="flex justify-between">
                 <dt class="text-gw-text-secondary">Release Date</dt>
-                <dd class="font-medium">{new Date(movie.release_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</dd>
+                <dd class="font-medium">{new Date(movie.release_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</dd>
               </div>
             )}
             {movie.runtime && (
-              <div>
+              <div class="flex justify-between">
                 <dt class="text-gw-text-secondary">Runtime</dt>
                 <dd class="font-medium">{formatRuntime(movie.runtime)}</dd>
               </div>
             )}
             {movie.language && (
-              <div>
+              <div class="flex justify-between">
                 <dt class="text-gw-text-secondary">Language</dt>
                 <dd class="font-medium uppercase">{movie.language}</dd>
               </div>
             )}
-            {movie.vote_count && (
-              <div>
-                <dt class="text-gw-text-secondary">Ratings</dt>
-                <dd class="font-medium">{movie.vote_count.toLocaleString()} votes</dd>
+            {(movie.imdb_votes || movie.vote_count) && (
+              <div class="flex justify-between">
+                <dt class="text-gw-text-secondary">IMDb Votes</dt>
+                <dd class="font-medium">{(movie.imdb_votes || movie.vote_count).toLocaleString()}</dd>
+              </div>
+            )}
+            {movie.imdb_id && (
+              <div class="flex justify-between">
+                <dt class="text-gw-text-secondary">IMDb</dt>
+                <dd>
+                  <a 
+                    href={`https://www.imdb.com/title/${movie.imdb_id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-gw-accent hover:underline"
+                  >
+                    {movie.imdb_id}
+                  </a>
+                </dd>
               </div>
             )}
           </dl>
         </div>
         
         <!-- Get App CTA -->
-        <div class="bg-gradient-to-br from-gw-accent/20 to-gw-accent/5 border border-gw-accent/30 rounded-xl p-6 text-center">
-          <h3 class="text-lg font-bold mb-2">Discover More Movies</h3>
-          <p class="text-sm text-gw-text-secondary mb-4">
-            Swipe through movies that match your mood with the GoodWatch app.
+        <div class="bg-gradient-to-br from-gw-accent/20 to-gw-accent/5 border border-gw-accent/30 rounded-xl p-5 text-center">
+          <h3 class="font-bold mb-2">Discover More Movies</h3>
+          <p class="text-sm text-gw-text-secondary mb-3">
+            Swipe through movies that match your mood.
           </p>
           <a 
             href="/app" 
-            class="inline-block bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-6 py-2.5 rounded-full font-semibold text-sm transition"
+            class="inline-block bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-5 py-2 rounded-full font-semibold text-sm transition"
           >
             Get the App
           </a>

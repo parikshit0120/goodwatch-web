@@ -1,0 +1,235 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { supabase, getPosterUrl } from '../lib/supabase';
+
+export const prerender = false;
+
+const userId = Astro.cookies.get('gw_user_id')?.value || 'anonymous';
+
+// Get taste profile
+const { data: profile } = await supabase
+  .from('user_taste_profile')
+  .select('*')
+  .eq('user_id', userId)
+  .single();
+
+// Get active reflections
+const { data: reflections } = await supabase
+  .from('taste_reflections')
+  .select('*')
+  .eq('user_id', userId)
+  .eq('is_dismissed', false)
+  .gte('valid_until', new Date().toISOString())
+  .order('created_at', { ascending: false })
+  .limit(5);
+
+// Get recent watches
+const { data: recentWatches } = await supabase
+  .from('user_watch_history')
+  .select('*, movie_id')
+  .eq('user_id', userId)
+  .eq('status', 'finished')
+  .order('finished_at', { ascending: false })
+  .limit(10);
+
+// Get movie details for recent watches
+let watchedMovies: any[] = [];
+if (recentWatches && recentWatches.length > 0) {
+  const movieIds = recentWatches.map(w => w.movie_id).filter(Boolean);
+  const { data: movies } = await supabase
+    .from('movies')
+    .select('id, title, poster_path, year')
+    .in('id', movieIds);
+  
+  if (movies) {
+    watchedMovies = recentWatches.map(w => ({
+      ...w,
+      movie: movies.find(m => m.id === w.movie_id)
+    })).filter(w => w.movie);
+  }
+}
+
+// Stats
+const totalWatches = profile?.total_watches || 0;
+const totalLoved = profile?.total_loved || 0;
+const totalSwipes = profile?.total_swipes || 0;
+
+// Reflection icons
+const reflectionIcons: Record<string, string> = {
+  mood_shift: '🌙',
+  genre_discovery: '🎬',
+  runtime_change: '⏱️',
+  streak: '🔥',
+  milestone: '🏆'
+};
+---
+
+<Layout title="Your Taste - GoodWatch" description="Your movie taste profile">
+  <main class="min-h-screen bg-gw-bg px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+      
+      <h1 class="text-3xl font-bold mb-8">Your Taste</h1>
+      
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-4 mb-8">
+        <div class="bg-gw-card border border-gw-border rounded-xl p-4 text-center">
+          <p class="text-3xl font-bold">{totalWatches}</p>
+          <p class="text-sm text-gw-text-secondary">Watched</p>
+        </div>
+        <div class="bg-gw-card border border-gw-border rounded-xl p-4 text-center">
+          <p class="text-3xl font-bold text-green-500">{totalLoved}</p>
+          <p class="text-sm text-gw-text-secondary">Loved</p>
+        </div>
+        <div class="bg-gw-card border border-gw-border rounded-xl p-4 text-center">
+          <p class="text-3xl font-bold">{totalSwipes}</p>
+          <p class="text-sm text-gw-text-secondary">Swipes</p>
+        </div>
+      </div>
+      
+      <!-- Taste Reflections -->
+      {reflections && reflections.length > 0 && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold mb-4">Insights</h2>
+          <div class="space-y-3">
+            {reflections.map(r => (
+              <div class="bg-gw-card border border-gw-border rounded-xl p-4 flex items-start gap-3" data-reflection-id={r.id}>
+                <span class="text-2xl">{reflectionIcons[r.reflection_type] || '💡'}</span>
+                <div class="flex-1">
+                  <h3 class="font-medium">{r.title}</h3>
+                  {r.body && <p class="text-sm text-gw-text-secondary mt-1">{r.body}</p>}
+                </div>
+                <button class="text-gw-text-secondary hover:text-white dismiss-reflection" data-id={r.id}>✕</button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      
+      <!-- Taste Axes -->
+      {profile && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold mb-4">Your Preferences</h2>
+          <div class="bg-gw-card border border-gw-border rounded-xl p-6 space-y-4">
+            
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>Light & Fun</span>
+                <span>Heavy & Deep</span>
+              </div>
+              <div class="h-3 bg-gw-border rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-yellow-400 to-purple-600 rounded-full" style={`width: ${((profile.axis_light_heavy || 0) + 1) / 2 * 100}%`}></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>Quick Watch</span>
+                <span>Epic Journey</span>
+              </div>
+              <div class="h-3 bg-gw-border rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-green-400 to-blue-600 rounded-full" style={`width: ${((profile.axis_fast_slow || 0) + 1) / 2 * 100}%`}></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span>Comfort Zone</span>
+                <span>Challenge Me</span>
+              </div>
+              <div class="h-3 bg-gw-border rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-pink-400 to-orange-600 rounded-full" style={`width: ${((profile.axis_familiar_challenging || 0) + 1) / 2 * 100}%`}></div>
+              </div>
+            </div>
+            
+          </div>
+        </section>
+      )}
+      
+      <!-- Top Genres -->
+      {profile?.preferred_genres && profile.preferred_genres.length > 0 && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold mb-4">Top Genres</h2>
+          <div class="flex flex-wrap gap-2">
+            {profile.preferred_genres.slice(0, 6).map((genre: string, i: number) => (
+              <span class={`px-4 py-2 rounded-full ${i === 0 ? 'bg-gw-accent text-gw-bg' : 'bg-gw-card border border-gw-border'}`}>
+                {genre}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+      
+      <!-- Recently Watched -->
+      {watchedMovies.length > 0 && (
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold mb-4">Recently Watched</h2>
+          <div class="flex gap-3 overflow-x-auto pb-2">
+            {watchedMovies.map(w => (
+              <a href={`/movie/${w.tmdb_id}`} class="flex-shrink-0 w-24">
+                <div class="aspect-[2/3] rounded-lg overflow-hidden mb-1 relative">
+                  <img src={getPosterUrl(w.movie.poster_path, 'w185')} alt={w.movie.title} class="w-full h-full object-cover" />
+                  {w.reaction === 'loved' && (
+                    <span class="absolute top-1 right-1 bg-green-500 text-white text-xs px-1 rounded">💚</span>
+                  )}
+                </div>
+                <p class="text-xs truncate">{w.movie.title}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+      
+      <!-- Share Card -->
+      <section class="mb-8">
+        <div class="bg-gradient-to-br from-gw-accent/20 to-gw-card border border-gw-border rounded-xl p-6 text-center">
+          <h2 class="text-lg font-semibold mb-2">Share Your Taste</h2>
+          <p class="text-sm text-gw-text-secondary mb-4">Let friends know what you're into</p>
+          <button id="share-profile" class="bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-6 py-2 rounded-full font-medium transition">
+            Share Profile →
+          </button>
+        </div>
+      </section>
+      
+      {!profile && totalWatches === 0 && (
+        <div class="text-center py-12">
+          <p class="text-gw-text-secondary mb-4">Watch and rate some movies to build your taste profile!</p>
+          <a href="/tonight" class="inline-flex bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-6 py-3 rounded-full font-semibold transition">
+            Get Started
+          </a>
+        </div>
+      )}
+      
+    </div>
+  </main>
+</Layout>
+
+<script define:vars={{ userId }}>
+  // Dismiss reflections
+  document.querySelectorAll('.dismiss-reflection').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = (btn as HTMLElement).dataset.id;
+      const card = btn.closest('[data-reflection-id]');
+      card?.remove();
+      
+      await fetch('/api/dismiss-reflection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reflectionId: id, userId })
+      }).catch(() => {});
+    });
+  });
+  
+  // Share profile
+  document.getElementById('share-profile')?.addEventListener('click', async () => {
+    if (navigator.share) {
+      await navigator.share({
+        title: 'My Movie Taste - GoodWatch',
+        text: 'Check out my movie taste on GoodWatch!',
+        url: window.location.href
+      }).catch(() => {});
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('Link copied!');
+    }
+  });
+</script>
