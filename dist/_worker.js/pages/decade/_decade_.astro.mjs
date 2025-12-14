@@ -1,8 +1,8 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
-/* empty css                                  */
-import { e as createAstro, f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute, l as Fragment } from '../../chunks/astro/server_AFKA17W8.mjs';
-import { $ as $$Layout } from '../../chunks/Layout_D6ytcMm7.mjs';
-import { D as DECADES, i as getMoviesByDecade, a as generateItemListSchema, b as generateBreadcrumbSchema, G as GENRES, e as getPosterUrl, s as slugify } from '../../chunks/supabase_CNgPmO2d.mjs';
+/* empty css                                    */
+import { e as createAstro, f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute, n as Fragment } from '../../chunks/astro/server_Cyy51z0E.mjs';
+import { $ as $$Layout } from '../../chunks/Layout_B6Hz-kRD.mjs';
+import { D as DECADES, j as getMoviesByDecade, a as generateItemListSchema, b as generateBreadcrumbSchema, G as GENRES, f as getPosterUrl, e as slugify } from '../../chunks/supabase_MFvNP5ai.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const $$Astro = createAstro("https://goodwatch.movie");

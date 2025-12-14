@@ -9,7 +9,7 @@ const genreIcons: Record<string, string> = {
   'Comedy': '😂',
   'Crime': '🔫',
   'Documentary': '📹',
-  'Drama': '🎭',
+  'Drama': '',
   'Family': '👨‍👩‍👧‍👦',
   'Fantasy': '🧙',
   'History': '📜',
@@ -43,7 +43,7 @@ const genreIcons: Record<string, string> = {
             href={`/genre/${slugify(genre)}`}
             class="bg-gw-card hover:bg-gw-accent hover:text-gw-bg border border-gw-border rounded-xl p-6 text-center transition group"
           >
-            <span class="text-4xl mb-3 block">{genreIcons[genre] || '🎬'}</span>
+            <span class="text-4xl mb-3 block">{genreIcons[genre] || ''}</span>
             <span class="font-semibold text-lg">{genre}</span>
           </a>
         ))}

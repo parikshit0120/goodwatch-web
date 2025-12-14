@@ -1,5 +1,5 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
-import { q as getAllMoviesForSitemap, M as MOODS, s as slugify, G as GENRES, O as OCCASIONS, D as DECADES } from '../chunks/supabase_CNgPmO2d.mjs';
+import { r as getAllMoviesForSitemap, M as MOODS, e as slugify, G as GENRES, O as OCCASIONS, D as DECADES } from '../chunks/supabase_MFvNP5ai.mjs';
 export { renderers } from '../renderers.mjs';
 
 const prerender = false;

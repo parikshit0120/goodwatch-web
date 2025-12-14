@@ -75,7 +75,7 @@ import Layout from '../layouts/Layout.astro';
   }
 
   function render() {
-    if (idx >= movies.length) { stack.innerHTML = '<div class="text-center py-12"><div class="text-5xl mb-4">🎬</div><h2 class="text-xl font-bold mb-2">All done!</h2><button onclick="location.reload()" class="bg-gw-accent text-gw-bg px-6 py-2 rounded-full mt-4">Load More</button></div>'; return; }
+    if (idx >= movies.length) { stack.innerHTML = '<div class="text-center py-12"><div class="text-5xl mb-4"></div><h2 class="text-xl font-bold mb-2">All done!</h2><button onclick="location.reload()" class="bg-gw-accent text-gw-bg px-6 py-2 rounded-full mt-4">Load More</button></div>'; return; }
     const m = movies[idx], ax = m.movie_axes?.[0];
     cardStart = Date.now();
     const tags = ax ? [ax.warmth>=7&&'Heartwarming',ax.suspense>=7&&'Suspenseful',ax.humor>=7&&'Funny',ax.darkness>=7&&'Dark',ax.complexity>=7&&'Complex'].filter(Boolean).slice(0,3) : [];

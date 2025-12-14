@@ -1,8 +1,8 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
-/* empty css                               */
-import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute, l as Fragment } from '../chunks/astro/server_AFKA17W8.mjs';
-import { $ as $$Layout } from '../chunks/Layout_D6ytcMm7.mjs';
-import { p as getTrendingMovies, e as getPosterUrl, M as MOODS, G as GENRES, s as slugify } from '../chunks/supabase_CNgPmO2d.mjs';
+/* empty css                                 */
+import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute, n as Fragment } from '../chunks/astro/server_Cyy51z0E.mjs';
+import { $ as $$Layout } from '../chunks/Layout_B6Hz-kRD.mjs';
+import { q as getTrendingMovies, f as getPosterUrl, M as MOODS, G as GENRES, e as slugify } from '../chunks/supabase_MFvNP5ai.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Index = createComponent(async ($$result, $$props, $$slots) => {
@@ -70,7 +70,7 @@ GoodWatch helps you discover movies based on how you're feeling right now.
 </p> <p class="text-gw-text-secondary">
 No more endless scrolling through streaming platforms. Tell us your mood, 
           and we'll show you movies that match. It's that simple.
-</p> </div> <h3 class="text-xl font-bold mb-4">Why Choose GoodWatch for Movie Discovery?</h3> <div class="grid md:grid-cols-2 gap-6 mb-12"> <div class="bg-gw-card p-6 rounded-xl"> <h4 class="font-semibold mb-2">🎭 Mood-Based Recommendations</h4> <p class="text-gw-text-secondary text-sm">Find the perfect movie for your current mood. Feeling romantic? Need a laugh? We match movies to how you feel.</p> </div> <div class="bg-gw-card p-6 rounded-xl"> <h4 class="font-semibold mb-2">🎬 Curated by Film Lovers</h4> <p class="text-gw-text-secondary text-sm">Our collection spans classics to new releases, all tagged with emotional context to help you decide faster.</p> </div> <div class="bg-gw-card p-6 rounded-xl"> <h4 class="font-semibold mb-2">📺 Where to Watch</h4> <p class="text-gw-text-secondary text-sm">Instantly see which streaming services have your movie – Netflix, Prime Video, Disney+, and more.</p> </div> <div class="bg-gw-card p-6 rounded-xl"> <h4 class="font-semibold mb-2">👆 Swipe to Discover</h4> <p class="text-gw-text-secondary text-sm">Use our iOS app to swipe through recommendations. Right for yes, left for no. Build your perfect watchlist.</p> </div> </div> <h3 class="text-xl font-bold mb-4">Popular Movie Moods</h3> <p class="text-gw-text-secondary mb-6">
+</p> </div> <h3 class="text-xl font-bold mb-4">Why Choose GoodWatch for Movie Discovery?</h3> <div class="grid md:grid-cols-2 gap-6 mb-12"> <div class="bg-gw-card p-6 rounded-xl"> <h4 class="font-semibold mb-2">Mood-Based Recommendations</h4> <p class="text-gw-text-secondary text-sm">Find the perfect movie for your current mood. Feeling romantic? Need a laugh? We match movies to how you feel.</p> </div> <div class="bg-gw-card p-6 rounded-xl"> <h4 class="font-semibold mb-2">Curated by Film Lovers</h4> <p class="text-gw-text-secondary text-sm">Our collection spans classics to new releases, all tagged with emotional context to help you decide faster.</p> </div> <div class="bg-gw-card p-6 rounded-xl"> <h4 class="font-semibold mb-2">Where to Watch</h4> <p class="text-gw-text-secondary text-sm">Instantly see which streaming services have your movie – Netflix, Prime Video, Disney+, and more.</p> </div> <div class="bg-gw-card p-6 rounded-xl"> <h4 class="font-semibold mb-2">Swipe to Discover</h4> <p class="text-gw-text-secondary text-sm">Use our iOS app to swipe through recommendations. Right for yes, left for no. Build your perfect watchlist.</p> </div> </div> <h3 class="text-xl font-bold mb-4">Popular Movie Moods</h3> <p class="text-gw-text-secondary mb-6">
 Looking for movies by mood? Here are our most popular mood categories:
 <a href="/mood/feel-good" class="text-gw-accent hover:underline">feel-good movies</a>,
 <a href="/mood/thrilling" class="text-gw-accent hover:underline">thrilling movies</a>,

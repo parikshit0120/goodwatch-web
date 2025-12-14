@@ -88,7 +88,7 @@ const tertiaryMoods = [
       
       <!-- Header -->
       <header class="text-center mb-16">
-        <h1 class="font-serif text-3xl md:text-4xl font-normal mb-3 tracking-tight">
+        <h1 class="font-sans text-3xl md:text-4xl font-normal mb-3 tracking-tight">
           How do you want tonight to feel?
         </h1>
         <p class="text-gw-text-secondary">Pick one. I'll take it from there.</p>
@@ -103,7 +103,7 @@ const tertiaryMoods = [
               class="mood-card mood-card-primary group relative bg-gw-card/50 border border-gw-border hover:border-gw-text-secondary/30 rounded-lg p-8 transition-all duration-300 hover:-translate-y-1"
               data-hover={mood.hover}
             >
-              <h2 class="font-serif text-2xl mb-2">{mood.name}</h2>
+              <h2 class="font-sans text-2xl mb-2">{mood.name}</h2>
               <p class="text-sm text-gw-text-secondary leading-relaxed mood-desc transition-opacity duration-300">{mood.desc}</p>
               <p class="mood-hover-text absolute bottom-4 left-8 right-8 text-xs text-gw-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300">{mood.hover}</p>
             </a>
@@ -120,7 +120,7 @@ const tertiaryMoods = [
               class="mood-card mood-card-secondary group bg-gw-card/30 border border-gw-border/50 hover:border-gw-border rounded-lg p-5 transition-all duration-300 hover:-translate-y-0.5"
               data-hover={mood.hover}
             >
-              <h2 class="font-serif text-lg mb-1">{mood.name}</h2>
+              <h2 class="font-sans text-lg mb-1">{mood.name}</h2>
               <p class="text-xs text-gw-text-secondary leading-relaxed line-clamp-2">{mood.desc}</p>
             </a>
           ))}
@@ -159,8 +159,7 @@ const tertiaryMoods = [
 
 <style>
   /* Serif font for headings - editorial feel */
-  .font-serif {
-    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  .font-sans {
   }
   
   /* Card hover states */
@@ -186,7 +185,6 @@ const tertiaryMoods = [
 </style>
 
 <script>
-  // Add Playfair Display font
   const link = document.createElement('link');
   link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap';
   link.rel = 'stylesheet';

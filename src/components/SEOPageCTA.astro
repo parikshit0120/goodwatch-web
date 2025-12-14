@@ -1,0 +1,48 @@
+---
+// SEOPageCTA.astro - Closes dead ends on SEO pages
+// Every SEO page MUST have this at the bottom
+// Funnels users into the core product
+---
+
+<section class="seo-page-cta py-12 mt-12 border-t border-gw-border">
+  <div class="max-w-2xl mx-auto text-center px-4">
+    
+    <!-- Headline -->
+    <h2 class="text-2xl font-bold mb-3">
+      Want a recommendation right now?
+    </h2>
+    
+    <p class="text-gw-text-secondary mb-6">
+      Stop reading lists. Get one perfect pick based on your mood.
+    </p>
+    
+    <!-- Primary CTA -->
+    <a 
+      href="/tonight" 
+      class="inline-flex items-center gap-2 bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-6 py-3 rounded-full font-semibold transition"
+    >
+      Get tonight's pick →
+    </a>
+    
+    <!-- Secondary options -->
+    <div class="flex flex-wrap items-center justify-center gap-4 mt-6">
+      <a href="/moods" class="text-sm text-gw-text-secondary hover:text-gw-accent transition">
+        Browse by mood
+      </a>
+      <span class="text-gw-border">•</span>
+      <a href="/genres" class="text-sm text-gw-text-secondary hover:text-gw-accent transition">
+        Browse by genre
+      </a>
+      <span class="text-gw-border">•</span>
+      <a href="/app" class="text-sm text-gw-text-secondary hover:text-gw-accent transition">
+        Get the app
+      </a>
+    </div>
+    
+    <!-- Trust point -->
+    <p class="text-xs text-gw-text-secondary mt-8">
+      No login required • Works on Netflix, Prime, Hotstar & more
+    </p>
+    
+  </div>
+</section>

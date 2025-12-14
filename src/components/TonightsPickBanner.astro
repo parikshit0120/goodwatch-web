@@ -1,0 +1,90 @@
+---
+// TonightsPickBanner.astro - Daily anchor/hook
+// Same movie for all users for 24 hours
+// Creates habit + certainty + scarcity
+import { supabase, getPosterUrl } from '../lib/supabase';
+
+// Get a "daily pick" - in production, this would be curated
+// For now, fetch a highly-rated recent movie
+const today = new Date().toISOString().split('T')[0];
+
+// Use date as seed for consistent daily pick
+const dateSeed = new Date().getDate() + new Date().getMonth() * 31;
+
+const { data: movies } = await supabase
+  .from('movies')
+  .select('tmdb_id, title, year, poster_path, imdb_rating, genres, overview')
+  .gte('imdb_rating', 7.5)
+  .gte('year', 2015)
+  .not('poster_path', 'is', null)
+  .order('imdb_votes', { ascending: false })
+  .limit(100);
+
+// Pick based on date (deterministic)
+const tonightsPick = movies ? movies[dateSeed % movies.length] : null;
+---
+
+{tonightsPick && (
+  <section class="tonights-pick-banner bg-gradient-to-r from-gw-accent/20 via-gw-accent/10 to-transparent border border-gw-accent/30 rounded-2xl p-6 mb-8">
+    <div class="flex flex-col md:flex-row gap-6 items-center">
+      
+      <!-- Poster -->
+      <div class="flex-shrink-0">
+        <img 
+          src={getPosterUrl(tonightsPick.poster_path, 'w185')}
+          alt={tonightsPick.title}
+          class="w-24 h-36 object-cover rounded-lg shadow-lg"
+        />
+      </div>
+      
+      <!-- Content -->
+      <div class="flex-1 text-center md:text-left">
+        <div class="flex items-center gap-2 justify-center md:justify-start mb-2">
+          <span class="bg-gw-accent text-gw-bg text-xs font-bold px-2 py-1 rounded-full">
+            🎬 TONIGHT'S PICK
+          </span>
+          <span class="text-xs text-gw-text-secondary">
+            Updated daily
+          </span>
+        </div>
+        
+        <h3 class="text-xl font-bold mb-1">{tonightsPick.title}</h3>
+        
+        <div class="flex items-center gap-3 justify-center md:justify-start text-sm text-gw-text-secondary mb-3">
+          <span>{tonightsPick.year}</span>
+          {tonightsPick.imdb_rating && (
+            <span class="flex items-center gap-1">
+              <span class="bg-[#F5C518] text-black text-xs font-bold px-1 rounded">IMDb</span>
+              {tonightsPick.imdb_rating.toFixed(1)}
+            </span>
+          )}
+        </div>
+        
+        <p class="text-sm text-gw-text-secondary line-clamp-2 mb-4">
+          {tonightsPick.overview?.slice(0, 150)}...
+        </p>
+        
+        <div class="flex items-center gap-3 justify-center md:justify-start">
+          <a 
+            href={`/movie/${tonightsPick.tmdb_id}`}
+            class="bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-5 py-2 rounded-full font-semibold text-sm transition"
+          >
+            Watch this tonight
+          </a>
+          <a 
+            href="/tonight"
+            class="text-sm text-gw-text-secondary hover:text-white transition"
+          >
+            Not feeling it? →
+          </a>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Decision relief message -->
+    <p class="text-center text-xs text-gw-accent mt-4 font-medium">
+      Decision made. Stop scrolling. Press play.
+    </p>
+  </section>
+)}

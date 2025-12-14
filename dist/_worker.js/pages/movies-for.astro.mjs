@@ -1,8 +1,8 @@
 globalThis.process ??= {}; globalThis.process.env ??= {};
-/* empty css                               */
-import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../chunks/astro/server_AFKA17W8.mjs';
-import { $ as $$Layout } from '../chunks/Layout_D6ytcMm7.mjs';
-import { O as OCCASIONS } from '../chunks/supabase_CNgPmO2d.mjs';
+/* empty css                                 */
+import { f as createComponent, k as renderComponent, r as renderTemplate, m as maybeRenderHead, h as addAttribute } from '../chunks/astro/server_Cyy51z0E.mjs';
+import { $ as $$Layout } from '../chunks/Layout_B6Hz-kRD.mjs';
+import { O as OCCASIONS } from '../chunks/supabase_MFvNP5ai.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Index = createComponent(($$result, $$props, $$slots) => {

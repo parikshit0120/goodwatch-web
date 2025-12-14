@@ -1,4 +1,7 @@
 ---
+import TasteModal from '../components/TasteModal.astro';
+import WelcomeBack from '../components/WelcomeBack.astro';
+import OptionalSignup from '../components/OptionalSignup.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -110,6 +113,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
   </script>
 </head>
 <body class="bg-gw-bg text-gw-text min-h-screen font-sans antialiased">
+  <WelcomeBack />
   <!-- Navigation -->
   <nav class="fixed top-0 left-0 right-0 z-50 bg-gw-bg/80 backdrop-blur-lg border-b border-gw-border">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -222,5 +226,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
       </div>
     </div>
   </footer>
+<TasteModal />
+  <OptionalSignup />
 </body>
 </html>
