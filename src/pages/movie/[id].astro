@@ -62,7 +62,7 @@ const streamingProviders = movie.ott_providers?.filter((p: any) => p.type === "f
 
 // Provider URL helper - opens provider search with movie title
 function getProviderUrl(providerName: string, title: string, year: number): string {
-  const query = encodeURIComponent(`${title} ${year || ""}`.trim());
+  const query = encodeURIComponent(title.trim());
   const providers: Record<string, string> = {
     "Netflix": `https://www.netflix.com/search?q=${query}`,
     "Amazon Prime Video": `https://www.primevideo.com/search?phrase=${query}`,
