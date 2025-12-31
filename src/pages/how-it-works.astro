@@ -1,0 +1,88 @@
+---
+/**
+ * Info Page: How it Works
+ *
+ * GUARDRAILS:
+ * - CTA → /pick only
+ * - No references to taste quiz or browse
+ */
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="How it works - GoodWatch"
+  description="Simple, transparent, and built for you. Here is how GoodWatch selects movies."
+>
+  <Header showBack backHref="/" />
+
+  <main class="max-w-3xl mx-auto px-6 py-16">
+    <h1 class="text-4xl font-bold mb-8">How GoodWatch Works</h1>
+
+    <div class="space-y-12 text-gray-300">
+      <p class="text-xl">
+        We believe in quality over quantity. Instead of scrolling through thousands of options, we give you one.
+      </p>
+
+      <section>
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+            1
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-3">Ask for a Movie</h2>
+            <p>Hit the button and we'll find you something great to watch. No setup, no signup, no waiting.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+            2
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-3">Get One Quality Pick</h2>
+            <p>We show you one movie at a time. It's curated, highly rated, and available to stream right now.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+            3
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-3">Watch or Get Another</h2>
+            <p>Not feeling it? No problem. Hit "Not feeling it" and we'll show you something else. We learn from your choices.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-start gap-6">
+          <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">
+            4
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-3">See Where It's Streaming</h2>
+            <p>We check availability before showing you a movie. You'll see which services have it - Netflix, Prime, Disney+, and more.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="mt-16 text-center">
+      <a
+        href="/pick"
+        class="inline-block bg-white text-black font-bold px-8 py-4 rounded-full hover:bg-gray-200 transition-colors"
+      >
+        Find a Movie
+      </a>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

@@ -1,0 +1,108 @@
+---
+/**
+ * Homepage - GoodWatch
+ *
+ * GUARDRAILS:
+ * - ONE clear promise
+ * - ONE primary CTA → /pick
+ * - No lists, no grids, no browsing
+ * - Minimal, fast, crawlable
+ */
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout
+  title="GoodWatch - Stop scrolling. Start watching."
+  description="One good movie recommendation. Available to stream now. No lists, no decision fatigue."
+>
+  <!-- Hero Section -->
+  <section class="min-h-screen flex flex-col items-center justify-center px-4 py-20">
+    <div class="text-center max-w-2xl mx-auto">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+        GoodWatch
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-400 mb-12">
+        Stop scrolling. Start watching.
+      </p>
+
+      <p class="text-lg text-gray-500 mb-12 max-w-lg mx-auto">
+        One movie. Available now. Not a list.
+      </p>
+
+      {/* ONE PRIMARY CTA */}
+      <a
+        href="/pick"
+        class="inline-flex items-center justify-center bg-white text-black text-lg font-bold px-10 py-5 rounded-full hover:bg-gray-200 transition-colors"
+      >
+        Find a Movie
+        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- How it Works - Minimal -->
+  <section class="py-20 px-4 border-t border-gray-800">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold text-center mb-12">How it works</h2>
+
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+        <div>
+          <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-lg font-bold">1</span>
+          </div>
+          <p class="text-gray-400">We pick one great movie</p>
+        </div>
+
+        <div>
+          <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-lg font-bold">2</span>
+          </div>
+          <p class="text-gray-400">Available to stream now</p>
+        </div>
+
+        <div>
+          <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-lg font-bold">3</span>
+          </div>
+          <p class="text-gray-400">Watch it or get another</p>
+        </div>
+      </div>
+
+      <div class="text-center mt-12">
+        <a
+          href="/pick"
+          class="inline-block text-gray-400 hover:text-white transition-colors"
+        >
+          Try it now →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why GoodWatch - Minimal -->
+  <section class="py-20 px-4 border-t border-gray-800">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-2xl font-bold mb-8">Why GoodWatch?</h2>
+
+      <div class="space-y-6 text-gray-400">
+        <p>Streaming services show you thousands of options to keep you browsing.</p>
+        <p>We show you one. The right one.</p>
+        <p class="text-white font-medium">No lists. No scrolling. No decision fatigue.</p>
+      </div>
+
+      <div class="mt-12">
+        <a
+          href="/why-goodwatch"
+          class="text-gray-500 hover:text-white text-sm transition-colors"
+        >
+          Learn more →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

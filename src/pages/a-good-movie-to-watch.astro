@@ -1,0 +1,39 @@
+---
+/**
+ * SEO Landing Page: "a good movie to watch"
+ * Target query: "a good movie to watch"
+ *
+ * GUARDRAILS:
+ * - ONE intent, ONE CTA
+ * - No lists, no superlatives
+ * - Funnels to /pick
+ */
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="A Good Movie to Watch - GoodWatch"
+  description="Stop scrolling through endless lists. We pick one great movie for you, available to stream now."
+>
+  <main class="min-h-screen flex flex-col items-center justify-center px-6">
+    <div class="text-center max-w-xl">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">
+        Looking for a good movie to watch?
+      </h1>
+      <p class="text-xl text-gray-400 mb-10">
+        One movie. Available now. No endless scrolling.
+      </p>
+
+      <a
+        href="/pick"
+        class="inline-block bg-white text-black text-lg font-bold px-10 py-5 rounded-full hover:bg-gray-200 transition-colors"
+      >
+        Find a Movie
+      </a>
+
+      <p class="mt-12 text-gray-600 text-sm">
+        <a href="/" class="hover:text-white transition-colors">GoodWatch</a> — Stop scrolling. Start watching.
+      </p>
+    </div>
+  </main>
+</Layout>
