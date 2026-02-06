@@ -1,0 +1,2205 @@
+---
+// GoodWatch Distribution Tracker v3 - Premium UI
+// Real-time agent monitoring dashboard
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0A0A0A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>GoodWatch Tracker</title>
+  <link rel="manifest" href="/tracker/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #18181b;
+      --bg-tertiary: #27272a;
+      --bg-elevated: #1f1f23;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.15);
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #D4A574;
+      --accent-hover: #e0b88a;
+      --accent-muted: rgba(212,165,116,0.15);
+      --success: #22c55e;
+      --success-muted: rgba(34,197,94,0.15);
+      --warning: #f59e0b;
+      --warning-muted: rgba(245,158,11,0.15);
+      --error: #ef4444;
+      --error-muted: rgba(239,68,68,0.15);
+      --info: #3b82f6;
+      --info-muted: rgba(59,130,246,0.15);
+      --purple: #a855f7;
+      --purple-muted: rgba(168,85,247,0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Auth Screen */
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(180deg, var(--bg-primary) 0%, #0f0f12 100%);
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px 32px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .auth-logo {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--accent) 0%, #c4956a 100%);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 16px;
+      box-shadow: 0 4px 20px rgba(212,165,116,0.3);
+    }
+
+    .auth-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .auth-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-muted);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent) 0%, #c4956a 100%);
+      color: #000;
+      box-shadow: 0 2px 8px rgba(212,165,116,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(212,165,116,0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-elevated);
+      border-color: var(--border-hover);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 8px 12px;
+    }
+
+    .btn-ghost:hover {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-size: 18px;
+    }
+
+    .btn-icon:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border-color: var(--border-hover);
+    }
+
+    .btn-icon.alert {
+      color: var(--error);
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+      50% { box-shadow: 0 0 0 4px rgba(239,68,68,0.2); }
+    }
+
+    .form-error {
+      color: var(--error);
+      font-size: 13px;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    /* App Shell */
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-bottom: 72px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9,9,11,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+
+    .header-logo img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--success-muted);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    .live-badge.offline {
+      background: var(--error-muted);
+      color: var(--error);
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: currentColor;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .live-badge.offline .live-dot {
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .header-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 0 20px 16px;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(24,24,27,0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      padding: 8px 0;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom));
+      z-index: 100;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      color: var(--text-secondary);
+    }
+
+    .nav-item.active {
+      color: var(--accent);
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .nav-badge {
+      position: absolute;
+      top: 4px;
+      right: calc(50% - 18px);
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      background: var(--error);
+      border-radius: 9px;
+      font-size: 10px;
+      font-weight: 600;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      margin-top: 24px;
+    }
+
+    .section-header:first-child {
+      margin-top: 0;
+    }
+
+    .section-icon {
+      font-size: 18px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    /* Super Agent */
+    .super-agent-card {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(212,165,116,0.05) 100%);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .super-agent-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--accent-muted) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .super-agent-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .super-agent-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--error) 100%);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 16px rgba(212,165,116,0.3);
+    }
+
+    .super-agent-info h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .super-agent-info p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .status-pill.success {
+      background: var(--success-muted);
+      color: var(--success);
+    }
+
+    .status-pill.error {
+      background: var(--error-muted);
+      color: var(--error);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status-pill.success .status-dot {
+      animation: pulse 2s infinite;
+    }
+
+    /* Agent Grid */
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .agent-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .agent-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--text-muted);
+      transition: background 0.2s;
+    }
+
+    .agent-card.working::before { background: var(--warning); }
+    .agent-card.active::before { background: var(--success); }
+    .agent-card.error::before { background: var(--error); }
+
+    .agent-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .agent-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .agent-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .agent-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .agent-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .agent-status .status-dot {
+      width: 6px;
+      height: 6px;
+    }
+
+    .agent-status .status-dot.working {
+      background: var(--warning);
+      animation: pulse 1.5s infinite;
+    }
+
+    .agent-status .status-dot.active {
+      background: var(--success);
+    }
+
+    .agent-status .status-dot.error {
+      background: var(--error);
+    }
+
+    .agent-current {
+      background: var(--accent-muted);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .agent-current::before {
+      content: '▶';
+      font-size: 10px;
+    }
+
+    .agent-stats {
+      display: flex;
+      gap: 20px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .agent-stat {
+      text-align: center;
+    }
+
+    .agent-stat-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .agent-stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .metric-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      position: relative;
+    }
+
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .metric-trend {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .metric-trend.up {
+      background: var(--success-muted);
+      color: var(--success);
+    }
+
+    .metric-trend.down {
+      background: var(--error-muted);
+      color: var(--error);
+    }
+
+    .metric-trend.flat {
+      background: var(--bg-tertiary);
+      color: var(--text-muted);
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .metric-target {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: var(--bg-tertiary);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+
+    .sparkline {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 32px;
+    }
+
+    .sparkline-bar {
+      flex: 1;
+      background: var(--accent);
+      border-radius: 2px;
+      min-height: 2px;
+      opacity: 0.6;
+      transition: height 0.3s, opacity 0.2s;
+    }
+
+    .sparkline-bar:last-child {
+      opacity: 1;
+    }
+
+    /* Metric Entry */
+    .metric-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+
+    .metric-entry-info h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .metric-entry-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .metric-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .metric-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .metric-btn:hover {
+      background: var(--bg-elevated);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .metric-input {
+      width: 80px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      font-family: inherit;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    /* Tasks */
+    .task-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .task-tab {
+      flex: 1;
+      padding: 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .task-tab:hover {
+      border-color: var(--border-hover);
+    }
+
+    .task-tab.active {
+      border-color: var(--accent);
+      background: var(--accent-muted);
+    }
+
+    .task-tab-icon {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .task-tab-label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .task-tab-count {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .task-list {
+      min-height: 100px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .task-item:hover {
+      border-color: var(--border-hover);
+      transform: translateX(4px);
+    }
+
+    .task-item.completed {
+      opacity: 0.6;
+    }
+
+    .task-item.in_progress {
+      border-left: 3px solid var(--warning);
+    }
+
+    .task-item.blocked {
+      border-left: 3px solid var(--error);
+    }
+
+    .task-drag {
+      color: var(--text-muted);
+      margin-right: 12px;
+      cursor: grab;
+      font-size: 14px;
+    }
+
+    .task-checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      margin-right: 14px;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .task-checkbox:hover {
+      border-color: var(--accent);
+    }
+
+    .task-item.completed .task-checkbox {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .task-item.completed .task-checkbox::after {
+      content: '✓';
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .task-item.completed .task-title {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .task-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .task-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .task-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .task-badge.claude {
+      background: var(--purple-muted);
+      color: var(--purple);
+    }
+
+    .task-badge.user {
+      background: var(--success-muted);
+      color: var(--success);
+    }
+
+    .task-badge.agent {
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+    }
+
+    .task-badge.priority-high {
+      background: var(--error-muted);
+      color: var(--error);
+    }
+
+    .task-badge.priority-medium {
+      background: var(--warning-muted);
+      color: var(--warning);
+    }
+
+    /* Alerts */
+    .alert-item {
+      display: flex;
+      gap: 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 10px;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .alert-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    }
+
+    .alert-item.critical::before { background: var(--error); }
+    .alert-item.warning::before { background: var(--warning); }
+    .alert-item.info::before { background: var(--info); }
+    .alert-item.success::before { background: var(--success); }
+
+    .alert-item.acknowledged {
+      opacity: 0.5;
+    }
+
+    .alert-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .alert-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .alert-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .alert-message {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .alert-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .alert-dismiss {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .alert-dismiss:hover {
+      color: var(--text-primary);
+    }
+
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .quick-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quick-action:hover {
+      border-color: var(--accent);
+      background: var(--accent-muted);
+    }
+
+    /* FAB */
+    .fab {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--accent) 0%, #c4956a 100%);
+      border: none;
+      border-radius: 50%;
+      color: #000;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(212,165,116,0.4);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .fab:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 6px 24px rgba(212,165,116,0.5);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      transform: translateY(100%);
+      transition: transform 0.3s;
+    }
+
+    .modal-backdrop.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      background: var(--bg-tertiary);
+      border: none;
+      border-radius: 50%;
+      color: var(--text-primary);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-elevated);
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .form-select:focus {
+      border-color: var(--accent);
+    }
+
+    .form-textarea {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      outline: none;
+      resize: vertical;
+      min-height: 100px;
+      transition: all 0.2s;
+    }
+
+    .form-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .btn-danger {
+      background: var(--error);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-text {
+      font-size: 14px;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      z-index: 300;
+      opacity: 0;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success { border-color: var(--success); }
+    .toast.error { border-color: var(--error); }
+
+    /* Utilities */
+    .hidden { display: none !important; }
+    .text-success { color: var(--success); }
+    .text-error { color: var(--error); }
+    .text-warning { color: var(--warning); }
+    .text-muted { color: var(--text-muted); }
+
+    /* Settings Items */
+    .settings-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .settings-item:hover {
+      color: var(--accent);
+    }
+
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+
+    .settings-item.danger {
+      color: var(--error);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .agent-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    // Config
+    const SUPABASE_URL = 'https://jdjqrlkynwfhbtyuddjk.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkanFybGt5bndmaGJ0eXVkZGprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0NzUwMTEsImV4cCI6MjA4MDA1MTAxMX0.KDRMLCewVMp3lwphkUvtoWOkg6kyAk8iSbVkRKiHYSk';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+      realtime: { params: { eventsPerSecond: 10 } }
+    });
+
+    const AGENTS = {
+      twitter: { icon: '𝕏', color: '#1DA1F2', name: 'Twitter Agent' },
+      instagram: { icon: '📸', color: '#E4405F', name: 'Instagram Agent' },
+      leonardo: { icon: '🎨', color: '#8B5CF6', name: 'Leonardo Agent' },
+      seo: { icon: '🔍', color: '#10B981', name: 'SEO Agent' },
+      newsletter: { icon: '📧', color: '#F59E0B', name: 'Newsletter Agent' },
+      super: { icon: '🛡️', color: '#EF4444', name: 'Super Agent' }
+    };
+
+    const TARGETS = {
+      1: { downloads: 25, newsletter: 15, twitter: 100, instagram: 50, website: 200 },
+      2: { downloads: 50, newsletter: 30, twitter: 150, instagram: 100, website: 400 },
+      3: { downloads: 150, newsletter: 75, twitter: 300, instagram: 200, website: 1000 },
+      4: { downloads: 300, newsletter: 150, twitter: 500, instagram: 350, website: 1500 },
+      5: { downloads: 500, newsletter: 250, twitter: 750, instagram: 500, website: 2000 },
+      6: { downloads: 800, newsletter: 400, twitter: 1000, instagram: 700, website: 3000 },
+      7: { downloads: 1200, newsletter: 600, twitter: 1300, instagram: 900, website: 4000 },
+      8: { downloads: 1700, newsletter: 850, twitter: 1600, instagram: 1150, website: 5000 },
+      9: { downloads: 2300, newsletter: 1150, twitter: 2000, instagram: 1400, website: 6500 },
+      10: { downloads: 3000, newsletter: 1500, twitter: 2300, instagram: 1700, website: 8000 },
+      11: { downloads: 4000, newsletter: 2000, twitter: 2700, instagram: 1850, website: 9500 },
+      12: { downloads: 5000, newsletter: 2500, twitter: 3000, instagram: 2000, website: 12000 }
+    };
+
+    // State
+    let state = {
+      loading: true,
+      authenticated: false,
+      setup: false,
+      connected: false,
+      tab: 'dashboard',
+      filter: 'all',
+      modal: null,
+      editTask: null,
+      settings: null,
+      agents: [],
+      tasks: [],
+      alerts: [],
+      metrics: [],
+      history: []
+    };
+
+    let channel = null;
+
+    // Helpers
+    const $ = id => document.getElementById(id);
+    const hash = s => { let h = 0; for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h = h & h; } return h.toString(16); };
+    const today = () => new Date().toISOString().split('T')[0];
+    const dayNum = () => state.settings?.start_date ? Math.max(1, Math.floor((new Date() - new Date(state.settings.start_date)) / 86400000) + 1) : 1;
+    const weekNum = () => Math.ceil(dayNum() / 7);
+    const targets = () => TARGETS[Math.min(12, weekNum())] || TARGETS[12];
+    const timeAgo = d => { const s = Math.floor((Date.now() - new Date(d)) / 1000); return s < 60 ? 'now' : s < 3600 ? `${Math.floor(s/60)}m` : s < 86400 ? `${Math.floor(s/3600)}h` : `${Math.floor(s/86400)}d`; };
+
+    function toast(msg, type = 'info') {
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.innerHTML = `<span>${type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'}</span> ${msg}`;
+      document.body.appendChild(t);
+      setTimeout(() => t.classList.add('show'), 10);
+      setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 3000);
+    }
+
+    // Data
+    async function load() {
+      try {
+        const saved = localStorage.getItem('gw_tracker');
+        if (saved) { state.settings = JSON.parse(saved); state.setup = true; }
+        const auth = sessionStorage.getItem('gw_auth');
+        if (auth === state.settings?.hash) state.authenticated = true;
+        if (state.authenticated) {
+          await Promise.all([loadAgents(), loadTasks(), loadAlerts(), loadMetrics()]);
+          subscribe();
+        }
+      } catch (e) { console.error(e); }
+      state.loading = false;
+      render();
+    }
+
+    async function loadAgents() {
+      const { data } = await supabase.from('agents').select('*').order('id');
+      state.agents = data || Object.entries(AGENTS).map(([id, c]) => ({ id, name: c.name, status: id === 'super' ? 'active' : 'idle' }));
+    }
+
+    async function loadTasks() {
+      const { data } = await supabase.from('agent_tasks').select('*').order('sort_order');
+      state.tasks = data || [];
+    }
+
+    async function loadAlerts() {
+      const { data } = await supabase.from('alerts').select('*').eq('acknowledged', false).order('created_at', { ascending: false }).limit(50);
+      state.alerts = data || [];
+    }
+
+    async function loadMetrics() {
+      const { data: current } = await supabase.from('metrics').select('*').eq('date', today());
+      const { data: history } = await supabase.from('metrics').select('*').gte('date', new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0]).order('date');
+      state.metrics = current || [];
+      state.history = history || [];
+    }
+
+    function subscribe() {
+      if (channel) supabase.removeChannel(channel);
+      channel = supabase.channel('tracker')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'agents' }, p => { const i = state.agents.findIndex(a => a.id === p.new?.id); if (i >= 0) state.agents[i] = p.new; else if (p.new) state.agents.push(p.new); render(); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'agent_tasks' }, p => { if (p.eventType === 'INSERT') state.tasks.push(p.new); else if (p.eventType === 'UPDATE') { const i = state.tasks.findIndex(t => t.id === p.new.id); if (i >= 0) state.tasks[i] = p.new; } else if (p.eventType === 'DELETE') state.tasks = state.tasks.filter(t => t.id !== p.old.id); render(); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'alerts' }, p => { if (p.eventType === 'INSERT') { state.alerts.unshift(p.new); toast(`Alert: ${p.new.title}`, p.new.type === 'critical' ? 'error' : 'info'); } else if (p.eventType === 'UPDATE' && p.new.acknowledged) state.alerts = state.alerts.filter(a => a.id !== p.new.id); render(); })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'metrics' }, async () => { await loadMetrics(); render(); })
+        .subscribe(s => { state.connected = s === 'SUBSCRIBED'; render(); });
+    }
+
+    // API
+    async function updateMetric(type, value) {
+      await supabase.from('metrics').upsert({ metric_type: type, value, date: today() }, { onConflict: 'metric_type,date' });
+      await loadMetrics();
+      render();
+    }
+
+    async function createTask(data) {
+      const max = Math.max(0, ...state.tasks.map(t => t.sort_order || 0));
+      await supabase.from('agent_tasks').insert({ ...data, sort_order: max + 1 });
+      toast('Task created', 'success');
+    }
+
+    async function updateTask(id, data) {
+      await supabase.from('agent_tasks').update({ ...data, updated_at: new Date().toISOString() }).eq('id', id);
+    }
+
+    async function deleteTask(id) {
+      await supabase.from('agent_tasks').delete().eq('id', id);
+      toast('Task deleted', 'success');
+    }
+
+    async function ackAlert(id) {
+      await supabase.from('alerts').update({ acknowledged: true }).eq('id', id);
+    }
+
+    // Render
+    function render() {
+      const root = $('root');
+      if (state.loading) { root.innerHTML = `<div class="auth-container"><div class="loading"><div class="spinner"></div><div class="text-muted">Loading...</div></div></div>`; return; }
+      if (!state.setup) { renderSetup(root); return; }
+      if (!state.authenticated) { renderLogin(root); return; }
+      renderApp(root);
+    }
+
+    function renderSetup(root) {
+      root.innerHTML = `
+        <div class="auth-container">
+          <div class="auth-card">
+            <div class="auth-header">
+              <div class="auth-logo">🎬</div>
+              <h1 class="auth-title">GoodWatch Tracker</h1>
+              <p class="auth-subtitle">Set up your 90-day distribution tracker</p>
+            </div>
+            <form id="setup-form">
+              <div class="form-group">
+                <label class="form-label">Create Password</label>
+                <input type="password" class="form-input" id="setup-pw" placeholder="Enter a password" required minlength="4">
+              </div>
+              <label class="checkbox-label">
+                <input type="checkbox" id="show-setup-pw">
+                Show password
+              </label>
+              <div class="form-group">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-input" id="setup-date" value="${today()}">
+              </div>
+              <button type="submit" class="btn btn-primary">Start Tracking</button>
+              <div class="form-error" id="setup-error"></div>
+            </form>
+          </div>
+        </div>
+      `;
+      $('setup-form').onsubmit = async e => {
+        e.preventDefault();
+        const pw = $('setup-pw').value;
+        const date = $('setup-date').value;
+        state.settings = { hash: hash(pw), start_date: date };
+        localStorage.setItem('gw_tracker', JSON.stringify(state.settings));
+        sessionStorage.setItem('gw_auth', state.settings.hash);
+        state.setup = true;
+        state.authenticated = true;
+        await load();
+      };
+      $('show-setup-pw').onchange = e => { $('setup-pw').type = e.target.checked ? 'text' : 'password'; };
+    }
+
+    function renderLogin(root) {
+      root.innerHTML = `
+        <div class="auth-container">
+          <div class="auth-card">
+            <div class="auth-header">
+              <div class="auth-logo">🎬</div>
+              <h1 class="auth-title">GoodWatch Tracker</h1>
+              <p class="auth-subtitle">Day ${dayNum()} of 90 · Week ${weekNum()} of 12</p>
+            </div>
+            <form id="login-form">
+              <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-input" id="login-pw" placeholder="Enter password" required>
+              </div>
+              <label class="checkbox-label">
+                <input type="checkbox" id="show-login-pw">
+                Show password
+              </label>
+              <button type="submit" class="btn btn-primary">Unlock</button>
+              <div class="form-error" id="login-error"></div>
+            </form>
+          </div>
+        </div>
+      `;
+      $('login-form').onsubmit = async e => {
+        e.preventDefault();
+        if (hash($('login-pw').value) === state.settings?.hash) {
+          sessionStorage.setItem('gw_auth', state.settings.hash);
+          state.authenticated = true;
+          await load();
+        } else {
+          $('login-error').textContent = 'Incorrect password';
+        }
+      };
+      $('show-login-pw').onchange = e => { $('login-pw').type = e.target.checked ? 'text' : 'password'; };
+    }
+
+    function renderApp(root) {
+      const unack = state.alerts.filter(a => !a.acknowledged);
+      root.innerHTML = `
+        <div class="app-shell">
+          <header class="app-header">
+            <div class="header-main">
+              <div class="header-left">
+                <span class="header-logo"><img src="/logo.png" alt="GoodWatch">Tracker</span>
+                <span class="live-badge ${state.connected ? '' : 'offline'}">
+                  <span class="live-dot"></span>
+                  ${state.connected ? 'Live' : 'Offline'}
+                </span>
+              </div>
+              <div class="header-actions">
+                <button class="btn-icon ${unack.length > 0 ? 'alert' : ''}" id="alerts-btn" title="Alerts">🔔</button>
+                <button class="btn-icon" id="settings-btn" title="Settings">⚙️</button>
+              </div>
+            </div>
+            <div class="header-stats">
+              <div class="stat-card">
+                <div class="stat-value">Day ${dayNum()}</div>
+                <div class="stat-label">of 90</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">Week ${weekNum()}</div>
+                <div class="stat-label">of 12</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">${unack.length}</div>
+                <div class="stat-label">Alerts</div>
+              </div>
+            </div>
+          </header>
+          <main class="content" id="content">${renderTab()}</main>
+          <nav class="bottom-nav">
+            ${['dashboard', 'agents', 'tasks', 'metrics', 'alerts'].map(t => `
+              <div class="nav-item ${state.tab === t ? 'active' : ''}" data-tab="${t}">
+                <span class="nav-icon">${t === 'dashboard' ? '📊' : t === 'agents' ? '🤖' : t === 'tasks' ? '✓' : t === 'metrics' ? '📈' : '🚨'}</span>
+                <span>${t.charAt(0).toUpperCase() + t.slice(1)}</span>
+                ${t === 'alerts' && unack.length > 0 ? `<span class="nav-badge">${unack.length}</span>` : ''}
+              </div>
+            `).join('')}
+          </nav>
+          ${state.tab === 'tasks' ? '<button class="fab" id="add-task">+</button>' : ''}
+        </div>
+        ${renderModal()}
+      `;
+      attachEvents();
+    }
+
+    function renderTab() {
+      switch (state.tab) {
+        case 'dashboard': return renderDashboard();
+        case 'agents': return renderAgents();
+        case 'tasks': return renderTasks();
+        case 'metrics': return renderMetrics();
+        case 'alerts': return renderAlerts();
+        default: return renderDashboard();
+      }
+    }
+
+    function renderDashboard() {
+      const t = targets();
+      const critical = state.alerts.filter(a => a.type === 'critical' && !a.acknowledged);
+      const mData = ['downloads', 'newsletter', 'twitter', 'instagram', 'website'].map(type => {
+        const cur = state.metrics.find(m => m.metric_type === type);
+        const val = cur?.value || 0;
+        const target = t[type];
+        const pct = target > 0 ? Math.min(100, Math.round((val / target) * 100)) : 0;
+        const hist = state.history.filter(m => m.metric_type === type).sort((a, b) => new Date(a.date) - new Date(b.date));
+        let trend = 'flat';
+        if (hist.length >= 2) { const l = hist[hist.length - 1]?.value || 0; const p = hist[hist.length - 2]?.value || 0; trend = l > p ? 'up' : l < p ? 'down' : 'flat'; }
+        return { type, val, target, pct, trend, hist };
+      });
+
+      return `
+        <div class="super-agent-card">
+          <div class="super-agent-header">
+            <div class="super-agent-icon">🛡️</div>
+            <div class="super-agent-info">
+              <h2>Super Agent</h2>
+              <p>Monitoring ${state.agents.length - 1} agents</p>
+            </div>
+          </div>
+          <div class="status-pill ${critical.length > 0 ? 'error' : 'success'}">
+            <span class="status-dot"></span>
+            ${critical.length > 0 ? `${critical.length} critical alert${critical.length > 1 ? 's' : ''} need attention` : 'All systems operational'}
+          </div>
+          ${critical.length > 0 ? `
+            <div style="margin-top: 16px;">
+              ${critical.slice(0, 2).map(a => `
+                <div class="alert-item critical" style="margin-bottom: 8px;">
+                  <span class="alert-icon">🚨</span>
+                  <div class="alert-content">
+                    <div class="alert-title">${a.title}</div>
+                    <div class="alert-message">${a.message || ''}</div>
+                  </div>
+                  <span class="alert-time">${timeAgo(a.created_at)}</span>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="section-header"><span class="section-icon">📊</span><span class="section-title">Live Metrics</span></div>
+        <div class="metrics-grid">
+          ${mData.map(m => `
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">${m.type.charAt(0).toUpperCase() + m.type.slice(1)}</span>
+                <span class="metric-trend ${m.trend}">${m.trend === 'up' ? '↑' : m.trend === 'down' ? '↓' : '→'}</span>
+              </div>
+              <div class="metric-value">${m.val.toLocaleString()}</div>
+              <div class="metric-target">Target: ${m.target.toLocaleString()} (${m.pct}%)</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${m.pct}%; background: ${m.pct >= 100 ? 'var(--success)' : m.pct >= 70 ? 'var(--accent)' : 'var(--warning)'}"></div>
+              </div>
+              <div class="sparkline">
+                ${m.hist.slice(-7).map(h => {
+                  const max = Math.max(...m.hist.map(x => x.value), 1);
+                  return `<div class="sparkline-bar" style="height: ${Math.max(4, (h.value / max) * 32)}px"></div>`;
+                }).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="section-header"><span class="section-icon">🤖</span><span class="section-title">Agent Status</span></div>
+        <div class="agent-grid">
+          ${state.agents.filter(a => a.id !== 'super').map(agent => {
+            const cfg = AGENTS[agent.id] || {};
+            const pending = state.tasks.filter(t => t.agent_id === agent.id && t.status !== 'completed').length;
+            const done = state.tasks.filter(t => t.agent_id === agent.id && t.status === 'completed').length;
+            return `
+              <div class="agent-card ${agent.status}">
+                <div class="agent-header">
+                  <div class="agent-icon" style="background: ${cfg.color}20; color: ${cfg.color}">${cfg.icon}</div>
+                  <div>
+                    <div class="agent-name">${agent.name}</div>
+                    <div class="agent-status">
+                      <span class="status-dot ${agent.status}"></span>
+                      ${agent.status.charAt(0).toUpperCase() + agent.status.slice(1)}
+                    </div>
+                  </div>
+                </div>
+                ${agent.current_task ? `<div class="agent-current">${agent.current_task}</div>` : ''}
+                <div class="agent-stats">
+                  <div class="agent-stat"><div class="agent-stat-value">${pending}</div><div class="agent-stat-label">Pending</div></div>
+                  <div class="agent-stat"><div class="agent-stat-value">${done}</div><div class="agent-stat-label">Done</div></div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <div class="section-header"><span class="section-icon">⚡</span><span class="section-title">Quick Actions</span></div>
+        <div class="quick-actions">
+          <button class="quick-action" onclick="window.open('https://buffer.com')">📅 Buffer</button>
+          <button class="quick-action" onclick="window.open('https://app.leonardo.ai')">🎨 Leonardo</button>
+          <button class="quick-action" onclick="window.open('https://x.com')">𝕏 Twitter</button>
+          <button class="quick-action" onclick="window.open('https://instagram.com')">📸 Instagram</button>
+        </div>
+      `;
+    }
+
+    function renderAgents() {
+      return `
+        <div class="super-agent-card">
+          <div class="super-agent-header">
+            <div class="super-agent-icon">🛡️</div>
+            <div class="super-agent-info">
+              <h2>Super Agent</h2>
+              <p>Monitoring ${state.agents.length - 1} agents · ${state.alerts.length} active alerts</p>
+            </div>
+          </div>
+          <div class="card" style="background: transparent; padding: 16px 0 0; margin-top: 16px; border: none;">
+            <div style="margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span class="task-badge claude">CLAUDE</span>
+                <span style="font-weight: 600;">Automated Tasks</span>
+              </div>
+              <p class="text-muted" style="font-size: 13px; padding-left: 4px;">Generate content drafts, create image prompts, SEO analysis, newsletter drafts</p>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span class="task-badge user">YOU</span>
+                <span style="font-weight: 600;">Manual Tasks</span>
+              </div>
+              <p class="text-muted" style="font-size: 13px; padding-left: 4px;">Review & approve content, post to social media, log metrics, B2B outreach</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-header"><span class="section-icon">🤖</span><span class="section-title">Agent Details</span></div>
+        ${state.agents.filter(a => a.id !== 'super').map(agent => {
+          const cfg = AGENTS[agent.id] || {};
+          const tasks = state.tasks.filter(t => t.agent_id === agent.id);
+          const pending = tasks.filter(t => t.status === 'pending').length;
+          const prog = tasks.filter(t => t.status === 'in_progress').length;
+          const done = tasks.filter(t => t.status === 'completed').length;
+          const queue = tasks.filter(t => t.status !== 'completed').slice(0, 3);
+          return `
+            <div class="agent-card ${agent.status}" style="margin-bottom: 16px;">
+              <div class="agent-header">
+                <div class="agent-icon" style="background: ${cfg.color}20; color: ${cfg.color}">${cfg.icon}</div>
+                <div>
+                  <div class="agent-name">${agent.name}</div>
+                  <div class="agent-status">
+                    <span class="status-dot ${agent.status}"></span>
+                    ${agent.status.charAt(0).toUpperCase() + agent.status.slice(1)}
+                    ${agent.last_active ? ` · ${timeAgo(agent.last_active)}` : ''}
+                  </div>
+                </div>
+              </div>
+              ${agent.current_task ? `<div class="agent-current">${agent.current_task}</div>` : ''}
+              <div class="agent-stats">
+                <div class="agent-stat"><div class="agent-stat-value text-warning">${pending}</div><div class="agent-stat-label">Pending</div></div>
+                <div class="agent-stat"><div class="agent-stat-value" style="color: var(--info)">${prog}</div><div class="agent-stat-label">In Progress</div></div>
+                <div class="agent-stat"><div class="agent-stat-value text-success">${done}</div><div class="agent-stat-label">Completed</div></div>
+              </div>
+              ${queue.length > 0 ? `
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+                  <div class="text-muted" style="font-size: 11px; font-weight: 600; margin-bottom: 10px; letter-spacing: 0.5px;">TASK QUEUE</div>
+                  ${queue.map(task => `
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 13px;">
+                      <span class="task-badge ${task.owner}">${task.owner === 'claude' ? 'AUTO' : 'YOU'}</span>
+                      <span>${task.title}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('')}
+      `;
+    }
+
+    function renderTasks() {
+      const claude = state.tasks.filter(t => t.owner === 'claude');
+      const user = state.tasks.filter(t => t.owner === 'user');
+      let filtered = state.tasks;
+      if (state.filter === 'claude') filtered = claude;
+      if (state.filter === 'user') filtered = user;
+
+      const sorted = [...filtered].sort((a, b) => {
+        const order = { in_progress: 0, pending: 1, blocked: 2, completed: 3 };
+        if (order[a.status] !== order[b.status]) return order[a.status] - order[b.status];
+        return (b.priority || 0) - (a.priority || 0);
+      });
+
+      return `
+        <div class="task-tabs">
+          ${[['all', '📋', 'All', state.tasks.length], ['claude', '🤖', 'Claude', claude.length], ['user', '👤', 'You', user.length]].map(([f, icon, label, count]) => `
+            <div class="task-tab ${state.filter === f ? 'active' : ''}" data-filter="${f}">
+              <div class="task-tab-icon">${icon}</div>
+              <div class="task-tab-label">${label}</div>
+              <div class="task-tab-count">${count}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="task-list">
+          ${sorted.length === 0 ? '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">No tasks yet. Tap + to add one.</div></div>' : sorted.map(task => {
+            const cfg = AGENTS[task.agent_id] || {};
+            return `
+              <div class="task-item ${task.status}" data-task-id="${task.id}">
+                <span class="task-drag">⋮⋮</span>
+                <div class="task-checkbox" data-check="${task.id}"></div>
+                <div class="task-content">
+                  <div class="task-title">${task.title}</div>
+                  ${task.description ? `<div class="task-desc">${task.description}</div>` : ''}
+                  <div class="task-meta">
+                    <span class="task-badge ${task.owner}">${task.owner === 'claude' ? 'CLAUDE' : 'YOU'}</span>
+                    ${task.agent_id ? `<span class="task-badge agent" style="background: ${cfg.color}15; color: ${cfg.color}">${cfg.icon} ${cfg.name || task.agent_id}</span>` : ''}
+                    ${task.priority >= 2 ? '<span class="task-badge priority-high">HIGH</span>' : task.priority === 1 ? '<span class="task-badge priority-medium">MEDIUM</span>' : ''}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function renderMetrics() {
+      const t = targets();
+      const metrics = [
+        { key: 'downloads', label: 'App Downloads', step: 1 },
+        { key: 'newsletter', label: 'Newsletter Subs', step: 1 },
+        { key: 'twitter', label: 'Twitter Followers', step: 1 },
+        { key: 'instagram', label: 'Instagram Followers', step: 1 },
+        { key: 'website', label: 'Website Visitors', step: 10 }
+      ];
+
+      return `
+        <div class="section-header"><span class="section-icon">📊</span><span class="section-title">Quick Entry</span></div>
+        ${metrics.map(m => {
+          const cur = state.metrics.find(x => x.metric_type === m.key);
+          const val = cur?.value || 0;
+          const target = t[m.key];
+          const pct = target > 0 ? Math.round((val / target) * 100) : 0;
+          return `
+            <div class="metric-entry">
+              <div class="metric-entry-info">
+                <h4>${m.label}</h4>
+                <p>Target: ${target.toLocaleString()} (${pct}%)</p>
+              </div>
+              <div class="metric-controls">
+                <button class="metric-btn" data-metric="${m.key}" data-action="dec">−</button>
+                <input type="number" class="metric-input" data-metric="${m.key}" value="${val}">
+                <button class="metric-btn" data-metric="${m.key}" data-action="inc">+</button>
+              </div>
+            </div>
+          `;
+        }).join('')}
+
+        <div class="section-header" style="margin-top: 32px;"><span class="section-icon">📈</span><span class="section-title">Progress</span></div>
+        <div class="card">
+          ${metrics.map(m => {
+            const cur = state.metrics.find(x => x.metric_type === m.key);
+            const val = cur?.value || 0;
+            const target = t[m.key];
+            const pct = target > 0 ? Math.min(100, Math.round((val / target) * 100)) : 0;
+            const gap = Math.max(0, target - val);
+            return `
+              <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                  <span style="font-weight: 500;">${m.label}</span>
+                  <span style="color: ${pct >= 100 ? 'var(--success)' : pct >= 70 ? 'var(--accent)' : 'var(--text-muted)'};">${val.toLocaleString()} / ${target.toLocaleString()}</span>
+                </div>
+                <div class="progress-bar" style="height: 8px;">
+                  <div class="progress-fill" style="width: ${pct}%; background: ${pct >= 100 ? 'var(--success)' : pct >= 70 ? 'var(--accent)' : 'var(--warning)'}"></div>
+                </div>
+                ${gap > 0 ? `<div class="text-muted" style="font-size: 12px; margin-top: 6px;">${gap.toLocaleString()} more needed</div>` : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <div class="section-header" style="margin-top: 32px;"><span class="section-icon">📅</span><span class="section-title">7-Day Trend</span></div>
+        <div class="card">
+          ${metrics.map(m => {
+            const hist = state.history.filter(x => x.metric_type === m.key).sort((a, b) => new Date(a.date) - new Date(b.date)).slice(-7);
+            const max = Math.max(...hist.map(h => h.value), 1);
+            return `
+              <div style="margin-bottom: 20px;">
+                <div style="font-weight: 500; margin-bottom: 10px;">${m.label}</div>
+                <div class="sparkline" style="height: 40px;">
+                  ${hist.length > 0 ? hist.map(h => `<div class="sparkline-bar" style="height: ${Math.max(4, (h.value / max) * 40)}px" title="${h.date}: ${h.value}"></div>`).join('') : '<div class="text-muted" style="width: 100%; display: flex; align-items: center; justify-content: center; font-size: 12px;">No data yet</div>'}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function renderAlerts() {
+      const icons = { critical: '🚨', warning: '⚠️', info: 'ℹ️', success: '✅' };
+      const groups = [
+        { type: 'critical', label: 'Critical', alerts: state.alerts.filter(a => a.type === 'critical') },
+        { type: 'warning', label: 'Warnings', alerts: state.alerts.filter(a => a.type === 'warning') },
+        { type: 'info', label: 'Info', alerts: state.alerts.filter(a => a.type === 'info') },
+        { type: 'success', label: 'Success', alerts: state.alerts.filter(a => a.type === 'success') }
+      ].filter(g => g.alerts.length > 0);
+
+      return `
+        <div class="section-header"><span class="section-icon">🚨</span><span class="section-title">Active Alerts</span></div>
+        ${state.alerts.length === 0 ? '<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-text">No active alerts. All systems operational!</div></div>' : ''}
+        ${groups.map(g => `
+          <div class="card" style="border-left: 3px solid var(--${g.type === 'critical' ? 'error' : g.type === 'warning' ? 'warning' : g.type === 'info' ? 'info' : 'success'}); margin-bottom: 16px;">
+            <div style="font-size: 12px; font-weight: 600; color: var(--${g.type === 'critical' ? 'error' : g.type}); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">${g.label} (${g.alerts.length})</div>
+            ${g.alerts.map(a => `
+              <div class="alert-item ${a.type} ${a.acknowledged ? 'acknowledged' : ''}" style="margin-bottom: 8px;">
+                <span class="alert-icon">${icons[a.type]}</span>
+                <div class="alert-content">
+                  <div class="alert-title">${a.title}</div>
+                  <div class="alert-message">${a.message || ''}</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px;">
+                  <span class="alert-time">${timeAgo(a.created_at)}</span>
+                  <button class="alert-dismiss" data-ack="${a.id}">✓</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `).join('')}
+        <div class="quick-actions" style="margin-top: 24px;">
+          <button class="quick-action" id="ack-all">✓ Acknowledge All</button>
+          <button class="quick-action" id="run-check">🔄 Run Check</button>
+        </div>
+      `;
+    }
+
+    function renderModal() {
+      if (!state.modal) return '';
+      let content = '';
+
+      if (state.modal === 'task') {
+        const t = state.editTask;
+        content = `
+          <div class="modal-header">
+            <span class="modal-title">${t ? 'Edit Task' : 'New Task'}</span>
+            <button class="modal-close" id="modal-close">×</button>
+          </div>
+          <form id="task-form">
+            <div class="form-group">
+              <label class="form-label">Title *</label>
+              <input type="text" class="form-input" name="title" value="${t?.title || ''}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <textarea class="form-textarea" name="description">${t?.description || ''}</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Owner</label>
+              <select class="form-select" name="owner">
+                <option value="claude" ${t?.owner === 'claude' ? 'selected' : ''}>Claude (Automated)</option>
+                <option value="user" ${t?.owner === 'user' ? 'selected' : ''}>You (Manual)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Agent</label>
+              <select class="form-select" name="agent_id">
+                <option value="">No specific agent</option>
+                ${state.agents.filter(a => a.id !== 'super').map(a => `<option value="${a.id}" ${t?.agent_id === a.id ? 'selected' : ''}>${a.name}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Priority</label>
+              <select class="form-select" name="priority">
+                <option value="0" ${!t?.priority ? 'selected' : ''}>Low</option>
+                <option value="1" ${t?.priority === 1 ? 'selected' : ''}>Medium</option>
+                <option value="2" ${t?.priority === 2 ? 'selected' : ''}>High</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-select" name="status">
+                <option value="pending" ${t?.status === 'pending' || !t ? 'selected' : ''}>Pending</option>
+                <option value="in_progress" ${t?.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                <option value="blocked" ${t?.status === 'blocked' ? 'selected' : ''}>Blocked</option>
+                <option value="completed" ${t?.status === 'completed' ? 'selected' : ''}>Completed</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-bottom: 10px;">${t ? 'Save Changes' : 'Create Task'}</button>
+            ${t ? '<button type="button" class="btn btn-danger" id="delete-task" style="width: 100%;">Delete Task</button>' : ''}
+          </form>
+        `;
+      } else if (state.modal === 'settings') {
+        content = `
+          <div class="modal-header">
+            <span class="modal-title">Settings</span>
+            <button class="modal-close" id="modal-close">×</button>
+          </div>
+          <div class="settings-item" id="notif-btn">
+            <span>Enable Notifications</span>
+            <span style="color: var(--text-muted);">→</span>
+          </div>
+          <div class="settings-item" id="export-btn">
+            <span>Export Data</span>
+            <span style="color: var(--text-muted);">→</span>
+          </div>
+          <div class="settings-item" id="reset-btn">
+            <span>Reset Start Date</span>
+            <span style="color: var(--text-muted);">→</span>
+          </div>
+          <div class="settings-item danger" id="logout-btn">
+            <span>Logout</span>
+            <span>→</span>
+          </div>
+        `;
+      }
+
+      return `<div class="modal-backdrop ${state.modal ? 'open' : ''}" id="modal-backdrop"><div class="modal">${content}</div></div>`;
+    }
+
+    // Events
+    function attachEvents() {
+      document.querySelectorAll('.nav-item').forEach(n => n.onclick = () => { state.tab = n.dataset.tab; render(); });
+      $('settings-btn')?.addEventListener('click', () => { state.modal = 'settings'; render(); });
+      $('alerts-btn')?.addEventListener('click', () => { state.tab = 'alerts'; render(); });
+      $('add-task')?.addEventListener('click', () => { state.editTask = null; state.modal = 'task'; render(); });
+
+      document.querySelectorAll('.task-tab').forEach(t => t.onclick = () => { state.filter = t.dataset.filter; render(); });
+      document.querySelectorAll('.task-checkbox, [data-check]').forEach(c => c.onclick = async e => {
+        e.stopPropagation();
+        const id = c.dataset.check || c.dataset.taskId;
+        const task = state.tasks.find(t => t.id === id);
+        if (task) await updateTask(id, { status: task.status === 'completed' ? 'pending' : 'completed' });
+        await loadTasks();
+        render();
+      });
+      document.querySelectorAll('.task-item').forEach(t => t.onclick = e => {
+        if (e.target.closest('.task-checkbox, [data-check]')) return;
+        state.editTask = state.tasks.find(x => x.id === t.dataset.taskId);
+        state.modal = 'task';
+        render();
+      });
+
+      document.querySelectorAll('.metric-btn').forEach(b => b.onclick = async () => {
+        const m = b.dataset.metric;
+        const cur = state.metrics.find(x => x.metric_type === m);
+        let val = cur?.value || 0;
+        const step = m === 'website' ? 10 : 1;
+        if (b.dataset.action === 'inc') val += step;
+        else if (b.dataset.action === 'dec' && val > 0) val -= step;
+        await updateMetric(m, val);
+      });
+      document.querySelectorAll('.metric-input').forEach(i => i.onchange = async e => {
+        await updateMetric(e.target.dataset.metric, parseInt(e.target.value) || 0);
+      });
+
+      document.querySelectorAll('[data-ack]').forEach(b => b.onclick = async e => {
+        e.stopPropagation();
+        await ackAlert(b.dataset.ack);
+        await loadAlerts();
+        render();
+      });
+      $('ack-all')?.addEventListener('click', async () => {
+        for (const a of state.alerts) await ackAlert(a.id);
+        toast('All acknowledged', 'success');
+        await loadAlerts();
+        render();
+      });
+      $('run-check')?.addEventListener('click', () => toast('Check complete', 'success'));
+
+      $('modal-close')?.addEventListener('click', closeModal);
+      $('modal-backdrop')?.addEventListener('click', e => { if (e.target.id === 'modal-backdrop') closeModal(); });
+      $('task-form')?.addEventListener('submit', async e => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const data = { title: fd.get('title'), description: fd.get('description'), owner: fd.get('owner'), agent_id: fd.get('agent_id') || null, priority: parseInt(fd.get('priority')), status: fd.get('status') };
+        if (state.editTask) await updateTask(state.editTask.id, data);
+        else await createTask(data);
+        closeModal();
+        await loadTasks();
+        render();
+      });
+      $('delete-task')?.addEventListener('click', async () => {
+        if (state.editTask && confirm('Delete this task?')) {
+          await deleteTask(state.editTask.id);
+          closeModal();
+          await loadTasks();
+          render();
+        }
+      });
+      $('notif-btn')?.addEventListener('click', async () => {
+        if ('Notification' in window) {
+          const p = await Notification.requestPermission();
+          toast(p === 'granted' ? 'Notifications enabled' : 'Notifications denied', p === 'granted' ? 'success' : 'error');
+        }
+      });
+      $('export-btn')?.addEventListener('click', () => {
+        const data = { settings: state.settings, agents: state.agents, tasks: state.tasks, alerts: state.alerts, metrics: state.metrics, history: state.history, exported: new Date().toISOString() };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `goodwatch-tracker-${today()}.json`;
+        a.click();
+        toast('Data exported', 'success');
+      });
+      $('reset-btn')?.addEventListener('click', () => {
+        const d = prompt('Enter new start date (YYYY-MM-DD):', state.settings?.start_date || today());
+        if (d) {
+          state.settings.start_date = d;
+          localStorage.setItem('gw_tracker', JSON.stringify(state.settings));
+          toast('Start date updated', 'success');
+          render();
+        }
+      });
+      $('logout-btn')?.addEventListener('click', () => {
+        sessionStorage.removeItem('gw_auth');
+        state.authenticated = false;
+        if (channel) supabase.removeChannel(channel);
+        render();
+      });
+    }
+
+    function closeModal() {
+      state.modal = null;
+      state.editTask = null;
+      render();
+    }
+
+    // Init
+    load();
+  </script>
+</body>
+</html>
