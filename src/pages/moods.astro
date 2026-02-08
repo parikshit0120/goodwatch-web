@@ -1,0 +1,217 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+export const prerender = true;
+
+// Primary moods - the defaults for 70% of evenings
+const primaryMoods = [
+  { 
+    name: 'Comforting', 
+    slug: 'comforting', 
+    desc: 'Warm, familiar, zero effort',
+    hover: 'Low-stress picks you won\'t regret.'
+  },
+  { 
+    name: 'Thrilling', 
+    slug: 'thrilling', 
+    desc: 'Fast-paced, high stakes, keeps you alert',
+    hover: 'Keeps you alert. No slow starts.'
+  },
+  { 
+    name: 'Relaxing', 
+    slug: 'relaxing', 
+    desc: 'Slow, atmospheric, low tension',
+    hover: 'Unhurried. Designed to ease you in.'
+  },
+];
+
+// Secondary moods - emotional range
+const secondaryMoods = [
+  { 
+    name: 'Romantic', 
+    slug: 'romantic', 
+    desc: 'Intimate, tender, emotionally driven',
+    hover: 'Emotion-forward, not just chemistry.'
+  },
+  { 
+    name: 'Light & Funny', 
+    slug: 'funny', 
+    desc: 'Easy laughs, nothing heavy',
+    hover: 'Easy laughs, nothing exhausting.'
+  },
+  { 
+    name: 'Emotional', 
+    slug: 'emotional', 
+    desc: 'Heavy feelings, deep impact',
+    hover: 'Heavy themes. High emotional payoff.'
+  },
+  { 
+    name: 'Dark', 
+    slug: 'dark', 
+    desc: 'Bleak, unsettling, morally complex',
+    hover: 'Morally complex. Not comforting.'
+  },
+  { 
+    name: 'Inspirational', 
+    slug: 'inspirational', 
+    desc: 'Uplifting stories, human resilience',
+    hover: 'Restores a bit of faith.'
+  },
+];
+
+// Tertiary moods - taste refinements
+const tertiaryMoods = [
+  { 
+    name: 'Mind-Bending', 
+    slug: 'mind-bending', 
+    desc: 'Twists, ideas, "what did I just watch?"',
+    hover: 'Ideas first. Clarity optional.'
+  },
+  { 
+    name: 'Mysterious', 
+    slug: 'mysterious', 
+    desc: 'Slow reveals, unanswered questions',
+    hover: 'Reveals itself slowly.'
+  },
+  { 
+    name: 'High-Intensity', 
+    slug: 'intense', 
+    desc: 'Relentless, immersive, no breathing room',
+    hover: 'Relentless pacing. No downtime.'
+  },
+];
+---
+
+<Layout title="Browse by Mood - GoodWatch" description="Find movies that match how you feel tonight">
+  <main class="min-h-screen bg-gw-bg">
+    <div class="max-w-4xl mx-auto px-4 py-16 md:py-24">
+      
+      <!-- Header -->
+      <header class="text-center mb-16">
+        <h1 class="font-sans text-3xl md:text-4xl font-normal mb-3 tracking-tight">
+          How do you want tonight to feel?
+        </h1>
+        <p class="text-gw-text-secondary">Pick one. I'll take it from there.</p>
+      </header>
+      
+      <!-- Primary Moods (Large Cards) -->
+      <section class="mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {primaryMoods.map(mood => (
+            <a 
+              href={`/mood/${mood.slug}`}
+              class="mood-card mood-card-primary group relative bg-gw-card/50 border border-gw-border hover:border-gw-text-secondary/30 rounded-lg p-8 transition-all duration-300 hover:-translate-y-1"
+              data-hover={mood.hover}
+            >
+              <h2 class="font-sans text-2xl mb-2">{mood.name}</h2>
+              <p class="text-sm text-gw-text-secondary leading-relaxed mood-desc transition-opacity duration-300">{mood.desc}</p>
+              <p class="mood-hover-text absolute bottom-4 left-8 right-8 text-xs text-gw-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300">{mood.hover}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+      
+      <!-- Secondary Moods (Medium Cards) -->
+      <section class="mb-12">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {secondaryMoods.map(mood => (
+            <a 
+              href={`/mood/${mood.slug}`}
+              class="mood-card mood-card-secondary group bg-gw-card/30 border border-gw-border/50 hover:border-gw-border rounded-lg p-5 transition-all duration-300 hover:-translate-y-0.5"
+              data-hover={mood.hover}
+            >
+              <h2 class="font-sans text-lg mb-1">{mood.name}</h2>
+              <p class="text-xs text-gw-text-secondary leading-relaxed line-clamp-2">{mood.desc}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+      
+      <!-- Tertiary Moods (Small Cards) -->
+      <section class="mb-16">
+        <div class="flex flex-wrap justify-center gap-3">
+          {tertiaryMoods.map(mood => (
+            <a 
+              href={`/mood/${mood.slug}`}
+              class="mood-card mood-card-tertiary group border border-gw-border/30 hover:border-gw-border/60 rounded px-4 py-3 transition-all duration-300"
+              data-hover={mood.hover}
+            >
+              <h2 class="text-sm text-gw-text-secondary group-hover:text-white transition-colors">{mood.name}</h2>
+            </a>
+          ))}
+        </div>
+      </section>
+      
+      <!-- CTA -->
+      <footer class="text-center pt-8 border-t border-gw-border/30">
+        <p class="text-sm text-gw-text-secondary mb-4">Not sure?</p>
+        <a 
+          href="/tonight" 
+          class="inline-block text-gw-accent hover:text-white transition-colors"
+        >
+          Let me decide for you →
+        </a>
+      </footer>
+      
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Serif font for headings - editorial feel */
+  .font-sans {
+  }
+  
+  /* Card hover states */
+  .mood-card {
+    cursor: pointer;
+  }
+  
+  .mood-card-primary:hover {
+    background: rgba(30, 30, 30, 0.7);
+  }
+  
+  .mood-card-primary:hover .mood-desc {
+    opacity: 0.4;
+  }
+  
+  .mood-card-primary .mood-hover-text {
+    transform: translateY(4px);
+  }
+  
+  .mood-card-primary:hover .mood-hover-text {
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  const link = document.createElement('link');
+  link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap';
+  link.rel = 'stylesheet';
+  document.head.appendChild(link);
+  
+  // Mood selection animation
+  document.querySelectorAll('.mood-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      const href = card.getAttribute('href');
+      
+      // Fade out other cards
+      document.querySelectorAll('.mood-card').forEach(other => {
+        if (other !== card) {
+          (other as HTMLElement).style.opacity = '0.15';
+          (other as HTMLElement).style.pointerEvents = 'none';
+        }
+      });
+      
+      // Subtle scale on selected
+      (card as HTMLElement).style.transform = 'scale(1.02) translateY(-4px)';
+      (card as HTMLElement).style.borderColor = 'rgba(255,255,255,0.3)';
+      
+      // Navigate after animation
+      setTimeout(() => {
+        window.location.href = href || '/';
+      }, 350);
+    });
+  });
+</script>

@@ -1,19 +1,10 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
-import preact from '@astrojs/preact';
+import tailwind from '@astrojs/tailwind';
 import cloudflare from '@astrojs/cloudflare';
 
-// https://astro.build/config
 export default defineConfig({
-  output: 'static',
-  adapter: cloudflare({
-    platformProxy: {
-      enabled: true
-    }
-  }),
-  integrations: [preact()],
-  vite: {
-    plugins: [tailwindcss()]
-  }
+  output: 'server',
+  adapter: cloudflare(),
+  integrations: [tailwind()],
+  site: 'https://goodwatch.movie'
 });

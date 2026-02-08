@@ -1,0 +1,256 @@
+---
+// MovieCard.astro - Movie card with Save, Skip, Why this? actions
+// Closes dead ends - every card must have these actions
+
+interface Props {
+  movie: {
+    tmdb_id: number;
+    title: string;
+    year?: number;
+    poster_path?: string;
+    imdb_rating?: number;
+    genres?: any[];
+    mood_tags?: string[];
+  };
+  reason?: string; // "Why this?" explanation
+  showActions?: boolean;
+}
+
+const { movie, reason, showActions = true } = Astro.props;
+
+function getPosterUrl(path: string | undefined, size = 'w342') {
+  if (!path) return '/placeholder-poster.jpg';
+  return `https://image.tmdb.org/t/p/${size}${path}`;
+}
+
+// Generate reason if not provided
+const whyThisReason = reason || generateReason(movie);
+
+function generateReason(m: any): string {
+  if (m.mood_tags?.length > 0) {
+    return `Matches your ${m.mood_tags[0].toLowerCase()} mood`;
+  }
+  if (m.genres?.length > 0) {
+    const genre = typeof m.genres[0] === 'string' ? m.genres[0] : m.genres[0].name;
+    return `Because you like ${genre.toLowerCase()} movies`;
+  }
+  if (m.imdb_rating && m.imdb_rating >= 8) {
+    return `Highly rated by audiences`;
+  }
+  return `Popular choice tonight`;
+}
+---
+
+<div 
+  class="movie-card group relative bg-gw-card border border-gw-border rounded-xl overflow-hidden transition hover:border-gw-accent/50"
+  data-movie-id={movie.tmdb_id}
+>
+  <!-- Poster -->
+  <a href={`/movie/${movie.tmdb_id}`} class="block aspect-[2/3] overflow-hidden">
+    <img 
+      src={getPosterUrl(movie.poster_path)}
+      alt={movie.title}
+      class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+      loading="lazy"
+    />
+  </a>
+  
+  <!-- Info -->
+  <div class="p-3">
+    <a href={`/movie/${movie.tmdb_id}`} class="block">
+      <h3 class="font-medium text-sm truncate group-hover:text-gw-accent transition">{movie.title}</h3>
+      <div class="flex items-center gap-2 text-xs text-gw-text-secondary mt-1">
+        {movie.year && <span>{movie.year}</span>}
+        {movie.imdb_rating && (
+          <span class="flex items-center gap-1">
+            <span class="bg-[#F5C518] text-black text-[10px] font-bold px-1 rounded">IMDb</span>
+            {movie.imdb_rating.toFixed(1)}
+          </span>
+        )}
+      </div>
+    </a>
+    
+    {showActions && (
+      <div class="mt-3 space-y-2">
+        <!-- Action Buttons -->
+        <div class="flex gap-2">
+          <button 
+            class="save-movie-btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-gw-accent/10 hover:bg-gw-accent hover:text-gw-bg border border-gw-accent/30 rounded-lg text-xs font-medium transition"
+            data-save-movie={movie.tmdb_id}
+            data-movie-title={movie.title}
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+            Save
+          </button>
+          <button 
+            class="skip-movie-btn flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-gw-bg hover:bg-red-500/20 border border-gw-border hover:border-red-500/50 rounded-lg text-xs font-medium transition"
+            data-skip-movie={movie.tmdb_id}
+            data-movie-title={movie.title}
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Skip
+          </button>
+        </div>
+        
+        <!-- Why This? -->
+        <button 
+          class="why-this-btn w-full text-left px-3 py-2 bg-gw-bg/50 border border-gw-border/50 rounded-lg text-xs text-gw-text-secondary hover:text-white transition"
+          data-why-movie={movie.tmdb_id}
+        >
+          <span class="why-text">❓ Why this?</span>
+          <span class="why-reason hidden text-gw-accent">{whyThisReason}</span>
+        </button>
+      </div>
+    )}
+  </div>
+  
+  <!-- Saved/Skipped Badge -->
+  <div class="card-badge absolute top-2 right-2 hidden">
+    <span class="saved-badge hidden bg-gw-accent text-gw-bg text-xs font-bold px-2 py-1 rounded-full">
+      ✓ Saved
+    </span>
+    <span class="skipped-badge hidden bg-red-500/80 text-white text-xs font-bold px-2 py-1 rounded-full">
+      Skipped
+    </span>
+  </div>
+</div>
+
+<script>
+  // Movie Card Actions
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize card states from localStorage
+    const tasteData = JSON.parse(localStorage.getItem('goodwatch_taste') || '{}');
+    const savedMovies = tasteData.savedMovies || [];
+    const skippedMovies = tasteData.skippedMovies || [];
+    
+    // Update UI for saved/skipped movies
+    document.querySelectorAll('.movie-card').forEach(card => {
+      const movieId = parseInt(card.getAttribute('data-movie-id') || '0');
+      
+      if (savedMovies.includes(movieId)) {
+        markAsSaved(card as HTMLElement);
+      }
+      if (skippedMovies.includes(movieId)) {
+        markAsSkipped(card as HTMLElement);
+      }
+    });
+    
+    // Save button click
+    document.querySelectorAll('.save-movie-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const movieId = parseInt(btn.getAttribute('data-save-movie') || '0');
+        const movieTitle = btn.getAttribute('data-movie-title') || '';
+        const card = btn.closest('.movie-card') as HTMLElement;
+        
+        saveMovie(movieId, movieTitle);
+        markAsSaved(card);
+        showActionToast(`"${movieTitle}" saved to your list`);
+      });
+    });
+    
+    // Skip button click
+    document.querySelectorAll('.skip-movie-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const movieId = parseInt(btn.getAttribute('data-skip-movie') || '0');
+        const movieTitle = btn.getAttribute('data-movie-title') || '';
+        const card = btn.closest('.movie-card') as HTMLElement;
+        
+        skipMovie(movieId);
+        markAsSkipped(card);
+        
+        // Fade out card
+        card.style.opacity = '0.3';
+        card.style.pointerEvents = 'none';
+      });
+    });
+    
+    // Why this? toggle
+    document.querySelectorAll('.why-this-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const textEl = btn.querySelector('.why-text');
+        const reasonEl = btn.querySelector('.why-reason');
+        
+        textEl?.classList.toggle('hidden');
+        reasonEl?.classList.toggle('hidden');
+      });
+    });
+  });
+  
+  function saveMovie(movieId: number, title: string) {
+    const data = JSON.parse(localStorage.getItem('goodwatch_taste') || '{}');
+    data.savedMovies = data.savedMovies || [];
+    
+    if (!data.savedMovies.includes(movieId)) {
+      data.savedMovies.push(movieId);
+      localStorage.setItem('goodwatch_taste', JSON.stringify(data));
+    }
+    
+    // Also save to legacy watchlist for backward compat
+    const watchlist = JSON.parse(localStorage.getItem('goodwatch_watchlist') || '[]');
+    if (!watchlist.includes(movieId.toString())) {
+      watchlist.push(movieId.toString());
+      localStorage.setItem('goodwatch_watchlist', JSON.stringify(watchlist));
+    }
+  }
+  
+  function skipMovie(movieId: number) {
+    const data = JSON.parse(localStorage.getItem('goodwatch_taste') || '{}');
+    data.skippedMovies = data.skippedMovies || [];
+    
+    if (!data.skippedMovies.includes(movieId)) {
+      data.skippedMovies.push(movieId);
+      localStorage.setItem('goodwatch_taste', JSON.stringify(data));
+    }
+  }
+  
+  function markAsSaved(card: HTMLElement) {
+    const badge = card.querySelector('.card-badge');
+    const savedBadge = card.querySelector('.saved-badge');
+    const saveBtn = card.querySelector('.save-movie-btn');
+    
+    badge?.classList.remove('hidden');
+    savedBadge?.classList.remove('hidden');
+    
+    if (saveBtn) {
+      saveBtn.innerHTML = `
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+        Saved
+      `;
+      saveBtn.classList.add('bg-gw-accent', 'text-gw-bg');
+    }
+  }
+  
+  function markAsSkipped(card: HTMLElement) {
+    const badge = card.querySelector('.card-badge');
+    const skippedBadge = card.querySelector('.skipped-badge');
+    
+    badge?.classList.remove('hidden');
+    skippedBadge?.classList.remove('hidden');
+  }
+  
+  function showActionToast(message: string) {
+    // Create toast if doesn't exist
+    let toast = document.getElementById('action-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'action-toast';
+      toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-gw-card border border-gw-border text-white px-6 py-3 rounded-full shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50';
+      document.body.appendChild(toast);
+    }
+    
+    toast.textContent = message;
+    toast.classList.remove('translate-y-20', 'opacity-0');
+    
+    setTimeout(() => {
+      toast.classList.add('translate-y-20', 'opacity-0');
+    }, 2500);
+  }
+</script>

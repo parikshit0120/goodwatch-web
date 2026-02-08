@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Taste Quiz | GoodWatch"
+  description="Help us learn your taste in 1 minute with quick movie comparisons."
+>
+  <section class="py-8 px-4 min-h-screen">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-bold mb-2">Quick Taste Quiz</h1>
+        <p class="text-gw-text-secondary">Pick the movie you'd rather watch. No wrong answers!</p>
+      </div>
+
+      <div class="max-w-md mx-auto mb-8">
+        <div class="flex justify-between text-sm text-gw-text-secondary mb-2">
+          <span>Learning your taste...</span>
+          <span><span id="progress-count">0</span> / 10</span>
+        </div>
+        <div class="h-2 bg-gw-border rounded-full overflow-hidden">
+          <div id="progress-bar" class="h-full bg-gw-accent transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div id="comparison-area">
+        <div class="flex items-center justify-center h-80">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-gw-accent border-t-transparent"></div>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-4 mt-6" id="alt-buttons" style="display:none">
+        <button id="btn-both" class="px-4 py-2 text-sm text-gw-text-secondary hover:text-white border border-gw-border rounded-lg hover:border-gw-accent">Both look good</button>
+        <button id="btn-neither" class="px-4 py-2 text-sm text-gw-text-secondary hover:text-white border border-gw-border rounded-lg hover:border-gw-accent">Neither for me</button>
+        <button id="btn-skip" class="px-4 py-2 text-sm text-gw-text-secondary hover:text-white border border-gw-border rounded-lg hover:border-gw-accent">Skip</button>
+      </div>
+
+      <div id="complete-state" style="display:none" class="text-center py-12">
+        <div class="text-6xl mb-4"></div>
+        <h2 class="text-2xl font-bold mb-2">All done!</h2>
+        <p class="text-gw-text-secondary mb-6">Your recommendations are now personalized.</p>
+        <a href="/discover" class="inline-block bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-8 py-3 rounded-full font-semibold">Start Discovering →</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { supabase } from '../lib/supabase';
+  const TMDB = 'https://image.tmdb.org/t/p/w342';
+  const userId = localStorage.getItem('gw_user_id') || (() => { const id = 'anon_' + Math.random().toString(36).slice(2); localStorage.setItem('gw_user_id', id); return id; })();
+  
+  let movies: any[] = [], completed = 0;
+  const TARGET = 10;
+  let compared = new Set<string>(), pairStart = Date.now();
+  const area = document.getElementById('comparison-area')!, altBtns = document.getElementById('alt-buttons')!, completeState = document.getElementById('complete-state')!, progressBar = document.getElementById('progress-bar')!, progressCount = document.getElementById('progress-count')!;
+
+  async function load() {
+    const { data } = await supabase.from('movies').select('id,title,poster_path,vote_average,release_date').not('poster_path','is',null).gte('vote_average',6.5).order('vote_average',{ascending:false}).limit(100);
+    movies = (data||[]).sort(() => Math.random() - 0.5);
+    const { data: past } = await supabase.from('comparisons').select('movie_a_id,movie_b_id').eq('user_id', userId);
+    past?.forEach(c => compared.add([c.movie_a_id,c.movie_b_id].sort().join('-')));
+    showNext();
+  }
+
+  function getPair(): [any,any]|null {
+    for (let i=0; i<movies.length; i++) for (let j=i+1; j<movies.length; j++) { const k=[movies[i].id,movies[j].id].sort().join('-'); if(!compared.has(k)) return [movies[i],movies[j]]; }
+    return null;
+  }
+
+  function showNext() {
+    if (completed >= TARGET) { area.style.display='none'; altBtns.style.display='none'; completeState.style.display='block'; return; }
+    const pair = getPair();
+    if (!pair) { area.innerHTML='<p class="text-center text-gw-text-secondary py-12">No more pairs!</p>'; altBtns.style.display='none'; return; }
+    const [a,b] = pair; pairStart = Date.now(); altBtns.style.display='flex';
+    area.innerHTML = `<div class="text-center text-gw-text-secondary mb-6">Which would you rather watch?</div><div class="grid grid-cols-2 gap-4 md:gap-8">${[['a',a],['b',b]].map(([c,m]:any)=>`<button class="movie-choice group" data-choice="${c}" data-a="${a.id}" data-b="${b.id}"><div class="relative rounded-xl overflow-hidden transition-all group-hover:ring-2 group-hover:ring-gw-accent group-hover:scale-[1.02]"><img src="${TMDB}${m.poster_path}" alt="${m.title}" class="w-full aspect-[2/3] object-cover"><div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div><div class="absolute top-3 left-3 w-8 h-8 bg-gw-accent rounded-full flex items-center justify-center font-bold text-gw-bg text-sm">${c.toUpperCase()}</div><div class="absolute bottom-0 left-0 right-0 p-4"><h3 class="font-bold text-sm md:text-base leading-tight">${m.title}</h3><div class="flex items-center gap-2 text-xs text-white/70 mt-1"><span class="text-yellow-400">★</span><span>${m.vote_average?.toFixed(1)}</span>${m.release_date?`<span>${m.release_date.slice(0,4)}</span>`:''}</div></div></div></button>`).join('')}</div>`;
+    document.querySelectorAll('.movie-choice').forEach(btn => btn.addEventListener('click', (e) => { const t=e.currentTarget as HTMLElement; record(t.dataset.a!,t.dataset.b!,t.dataset.choice as any); }));
+  }
+
+  async function record(aId:string, bId:string, choice:'a'|'b'|'both'|'neither') {
+    compared.add([aId,bId].sort().join('-'));
+    await supabase.from('comparisons').insert({user_id:userId,movie_a_id:aId,movie_b_id:bId,chosen:choice,comparison_type:'calibration',time_to_decision_ms:Date.now()-pairStart});
+    completed++; progressBar.style.width=`${(completed/TARGET)*100}%`; progressCount.textContent=String(completed);
+    if(choice==='a'||choice==='b'){ document.querySelectorAll('.movie-choice').forEach((btn,i)=>{ const chosen=(choice==='a'&&i===0)||(choice==='b'&&i===1); if(chosen)btn.querySelector('div')?.classList.add('ring-4','ring-green-500'); else (btn as HTMLElement).style.opacity='0.3'; }); }
+    setTimeout(showNext, 400);
+  }
+
+  document.getElementById('btn-both')!.onclick = () => { const b=document.querySelector('.movie-choice') as HTMLElement; if(b)record(b.dataset.a!,b.dataset.b!,'both'); };
+  document.getElementById('btn-neither')!.onclick = () => { const b=document.querySelector('.movie-choice') as HTMLElement; if(b)record(b.dataset.a!,b.dataset.b!,'neither'); };
+  document.getElementById('btn-skip')!.onclick = () => { const b=document.querySelector('.movie-choice') as HTMLElement; if(b){ compared.add([b.dataset.a!,b.dataset.b!].sort().join('-')); showNext(); } };
+  document.onkeydown = e => { const b=document.querySelector('.movie-choice') as HTMLElement; if(!b)return; if(e.key==='ArrowLeft'||e.key==='1')record(b.dataset.a!,b.dataset.b!,'a'); else if(e.key==='ArrowRight'||e.key==='2')record(b.dataset.a!,b.dataset.b!,'b'); };
+  load();
+</script>

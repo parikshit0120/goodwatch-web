@@ -1,19 +1,16 @@
-# GoodWatch Web - robots.txt
-# SEO GUARDRAIL: Only locked routes are crawlable
-
 User-agent: *
 Allow: /
-Allow: /a-good-movie-to-watch
-Allow: /movie-recommendation-tonight
-Allow: /best-movie-to-watch-alone
-Allow: /good-movie-to-watch-with-family
-Allow: /how-it-works
-Allow: /why-goodwatch
-Allow: /data-sources
-Allow: /privacy
 
-# Exclude /pick from indexing (dynamic recommendation page)
-Disallow: /pick
+Sitemap: https://goodwatch.movie/sitemap.xml
 
-# Sitemap
-Sitemap: https://goodwatch.app/sitemap.xml
+# Disallow search pages (avoid duplicate content)
+Disallow: /search?
+
+# Allow important pages
+Allow: /movie/
+Allow: /mood/
+Allow: /genre/
+Allow: /moods
+Allow: /genres
+Allow: /app
+Allow: /lists

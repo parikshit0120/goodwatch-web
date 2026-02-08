@@ -1,0 +1,107 @@
+---
+// WelcomeBack.astro - Returning user experience
+// Shows personalized message based on previous activity
+---
+
+<div id="welcome-back-banner" class="hidden">
+  <div class="bg-gradient-to-r from-gw-accent/10 to-transparent border-b border-gw-accent/20 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-lg">👋</span>
+        <div>
+          <p id="welcome-message" class="text-sm font-medium">Welcome back!</p>
+          <p id="welcome-suggestion" class="text-xs text-gw-text-secondary">Ready for another recommendation?</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a 
+          id="welcome-cta" 
+          href="/tonight" 
+          class="text-xs bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-4 py-2 rounded-full font-medium transition"
+        >
+          Get tonight's pick
+        </a>
+        <button 
+          id="dismiss-welcome" 
+          class="text-gw-text-secondary hover:text-white transition p-1"
+          aria-label="Dismiss"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const banner = document.getElementById('welcome-back-banner');
+    const messageEl = document.getElementById('welcome-message');
+    const suggestionEl = document.getElementById('welcome-suggestion');
+    const ctaEl = document.getElementById('welcome-cta');
+    const dismissBtn = document.getElementById('dismiss-welcome');
+    
+    // Check if returning user
+    const tasteData = JSON.parse(localStorage.getItem('goodwatch_taste') || '{}');
+    const hasProfile = tasteData.tasteProfile?.likedMovies?.length > 0;
+    const hasSaved = (tasteData.savedMovies?.length || 0) > 0;
+    const lastVisit = localStorage.getItem('goodwatch_last_visit');
+    const dismissedAt = localStorage.getItem('goodwatch_welcome_dismissed');
+    
+    // Don't show if dismissed in last 24 hours
+    if (dismissedAt) {
+      const dismissed = new Date(dismissedAt).getTime();
+      if (Date.now() - dismissed < 24 * 60 * 60 * 1000) {
+        return;
+      }
+    }
+    
+    // Only show for returning users
+    if (!lastVisit && !hasProfile && !hasSaved) {
+      localStorage.setItem('goodwatch_last_visit', new Date().toISOString());
+      return;
+    }
+    
+    // Personalize message
+    if (hasProfile && tasteData.tasteProfile) {
+      const profile = tasteData.tasteProfile;
+      
+      if (profile.era === 'recent') {
+        messageEl!.textContent = "Welcome back! 🎬";
+        suggestionEl!.textContent = "Ready for something new?";
+      } else if (profile.era === 'classic') {
+        messageEl!.textContent = "Welcome back, classic movie fan! 🎬";
+        suggestionEl!.textContent = "Found some timeless picks for you";
+      } else if (profile.languages?.includes('Hindi')) {
+        messageEl!.textContent = "Welcome back! 🎬";
+        suggestionEl!.textContent = "More Bollywood recommendations waiting";
+      } else {
+        messageEl!.textContent = "Welcome back! 🎬";
+        suggestionEl!.textContent = "Your personalized picks are ready";
+      }
+    } else if (hasSaved) {
+      const count = tasteData.savedMovies.length;
+      messageEl!.textContent = "Welcome back! 🎬";
+      suggestionEl!.textContent = `You have ${count} saved movie${count > 1 ? 's' : ''} to watch`;
+      ctaEl!.textContent = "View saved";
+      ctaEl!.setAttribute('href', '/watchlist');
+    } else {
+      messageEl!.textContent = "Welcome back! 🎬";
+      suggestionEl!.textContent = "Want another recommendation?";
+    }
+    
+    // Show banner
+    banner?.classList.remove('hidden');
+    
+    // Update last visit
+    localStorage.setItem('goodwatch_last_visit', new Date().toISOString());
+    
+    // Dismiss handler
+    dismissBtn?.addEventListener('click', () => {
+      banner?.classList.add('hidden');
+      localStorage.setItem('goodwatch_welcome_dismissed', new Date().toISOString());
+    });
+  });
+</script>

@@ -1,16 +1,6 @@
-# GoodWatch Web - Cloudflare Pages Configuration
 name = "goodwatch-web"
-compatibility_date = "2024-12-01"
+compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Build output directory
-# Cloudflare Pages uses this automatically
-
-[vars]
-# Environment variables (non-sensitive)
-# Sensitive values should be set in Cloudflare Dashboard
-
-# Optional: KV binding for sessions (if needed)
-# [[kv_namespaces]]
-# binding = "SESSION"
-# id = "<your-kv-namespace-id>"
+[site]
+bucket = "./dist"

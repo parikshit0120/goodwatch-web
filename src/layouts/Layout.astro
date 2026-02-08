@@ -1,94 +1,232 @@
 ---
+import TasteModal from '../components/TasteModal.astro';
+import WelcomeBack from '../components/WelcomeBack.astro';
+import OptionalSignup from '../components/OptionalSignup.astro';
 import '../styles/global.css';
 
 interface Props {
   title: string;
-  description?: string;
+  description: string;
   image?: string;
-  noIndex?: boolean;
+  type?: 'website' | 'article';
+  canonical?: string;
+  noindex?: boolean;
+  schema?: object;
 }
 
-const {
-  title,
-  description = "Stop scrolling. Start watching. One good movie recommendation based on your taste.",
-  image = "/og-image.png",
-  noIndex = false
+const { 
+  title, 
+  description, 
+  image = '/og-default.jpg',
+  type = 'website',
+  canonical,
+  noindex = false,
+  schema
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://goodwatch.app');
+const siteUrl = 'https://goodwatch.movie';
+const fullTitle = title.includes('GoodWatch') ? title : `${title} | GoodWatch`;
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-    <!-- Primary Meta Tags -->
-    <title>{title}</title>
-    <meta name="title" content={title} />
-    <meta name="description" content={description} />
-    {noIndex && <meta name="robots" content="noindex, nofollow" />}
-
-    <!-- Canonical -->
-    <link rel="canonical" href={canonicalURL} />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
-
-    <!-- Preconnect to external resources -->
-    <link rel="preconnect" href="https://api.themoviedb.org" />
-    <link rel="preconnect" href="https://image.tmdb.org" />
-  </head>
-  <body class="bg-gray-900 text-white min-h-screen antialiased">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Primary Meta Tags -->
+  <title>{fullTitle}</title>
+  <meta name="title" content={fullTitle} />
+  <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+  
+  <!-- Canonical -->
+  <link rel="canonical" href={canonicalUrl} />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:site_name" content="GoodWatch" />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content={canonicalUrl} />
+  <meta name="twitter:title" content={fullTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.svg" />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Schema.org Structured Data -->
+  {schema && (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  )}
+  
+  <!-- Default Organization Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "GoodWatch",
+      "url": "https://goodwatch.movie",
+      "description": "Discover your next favorite movie based on your mood. Browse movies by mood, genre, or explore curated recommendations.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://goodwatch.movie/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+  
+  <!-- Organization Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "GoodWatch",
+      "url": "https://goodwatch.movie",
+      "logo": "https://goodwatch.movie/favicon.svg",
+      "sameAs": [],
+      "description": "GoodWatch helps you discover movies based on how you're feeling. Find the perfect movie for your mood."
+    }
+  </script>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9DJ2HVCQ3M"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9DJ2HVCQ3M');
+  </script>
+</head>
+<body class="bg-gw-bg text-gw-text min-h-screen font-sans antialiased">
+  <WelcomeBack />
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-gw-bg/80 backdrop-blur-lg border-b border-gw-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2">
+          <svg class="w-8 h-8" viewBox="0 0 24 24">
+            <rect x="0" y="0" width="24" height="24" rx="3" fill="#E63946"/>
+            <rect x="1.5" y="2" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+            <rect x="1.5" y="7.5" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+            <rect x="1.5" y="13" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+            <rect x="1.5" y="18.5" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+            <rect x="19.5" y="2" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+            <rect x="19.5" y="7.5" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+            <rect x="19.5" y="13" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+            <rect x="19.5" y="18.5" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+            <rect x="6" y="2" width="12" height="9" rx="1" fill="#0D0D0F"/>
+            <rect x="6" y="13" width="12" height="9" rx="1" fill="#0D0D0F"/>
+          </svg>
+          <span class="text-xl font-bold">GoodWatch</span>
+        </a>
+        
+        <!-- Nav Links -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="/moods" class="text-gw-text-secondary hover:text-white transition">Moods</a>
+          <a href="/genres" class="text-gw-text-secondary hover:text-white transition">Genres</a>
+          <a href="/lists" class="text-gw-text-secondary hover:text-white transition">Lists</a>
+          <a href="/search" class="text-gw-text-secondary hover:text-white transition">Search</a>
+        </div>
+        
+        <!-- CTA -->
+        <a href="/app" class="bg-gw-accent hover:bg-gw-accent-hover text-gw-bg px-4 py-2 rounded-full font-semibold text-sm transition">
+          Get the App
+        </a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Main Content -->
+  <main class="pt-16">
     <slot />
-  </body>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="bg-gw-card border-t border-gw-border mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <!-- Brand -->
+        <div class="col-span-2 md:col-span-1">
+          <a href="/" class="flex items-center gap-2 mb-4">
+            <svg class="w-8 h-8" viewBox="0 0 24 24">
+              <rect x="0" y="0" width="24" height="24" rx="3" fill="#E63946"/>
+              <rect x="1.5" y="2" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+              <rect x="1.5" y="7.5" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+              <rect x="1.5" y="13" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+              <rect x="1.5" y="18.5" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+              <rect x="19.5" y="2" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+              <rect x="19.5" y="7.5" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+              <rect x="19.5" y="13" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+              <rect x="19.5" y="18.5" width="3" height="3.5" rx="0.5" fill="#0D0D0F"/>
+              <rect x="6" y="2" width="12" height="9" rx="1" fill="#0D0D0F"/>
+              <rect x="6" y="13" width="12" height="9" rx="1" fill="#0D0D0F"/>
+            </svg>
+            <span class="text-lg font-bold">GoodWatch</span>
+          </a>
+          <p class="text-gw-text-secondary text-sm">
+            Discover your next favorite movie based on how you feel.
+          </p>
+        </div>
+        
+        <!-- Discover -->
+        <div>
+          <h4 class="font-semibold mb-4">Discover</h4>
+          <ul class="space-y-2 text-sm text-gw-text-secondary">
+            <li><a href="/moods" class="hover:text-white transition">Browse by Mood</a></li>
+            <li><a href="/genres" class="hover:text-white transition">Browse by Genre</a></li>
+            <li><a href="/decade" class="hover:text-white transition">Browse by Decade</a></li>
+            <li><a href="/best" class="hover:text-white transition">Best Movies</a></li>
+            <li><a href="/movies-for" class="hover:text-white transition">Movies For...</a></li>
+            <li><a href="/search" class="hover:text-white transition">Search</a></li>
+          </ul>
+        </div>
+        
+        <!-- Moods -->
+        <div>
+          <h4 class="font-semibold mb-4">Popular Moods</h4>
+          <ul class="space-y-2 text-sm text-gw-text-secondary">
+            <li><a href="/mood/feel-good" class="hover:text-white transition">Feel-Good</a></li>
+            <li><a href="/mood/thrilling" class="hover:text-white transition">Thrilling</a></li>
+            <li><a href="/mood/nostalgic" class="hover:text-white transition">Nostalgic</a></li>
+            <li><a href="/mood/mind-bending" class="hover:text-white transition">Mind-Bending</a></li>
+          </ul>
+        </div>
+        
+        <!-- Company -->
+        <div>
+          <h4 class="font-semibold mb-4">GoodWatch</h4>
+          <ul class="space-y-2 text-sm text-gw-text-secondary">
+            <li><a href="/app" class="hover:text-white transition">Get the App</a></li>
+            <li><a href="/blog" class="hover:text-white transition">Blog</a></li>
+            <li><a href="/about" class="hover:text-white transition">About</a></li>
+            <li><a href="/privacy" class="hover:text-white transition">Privacy</a></li>
+            <li><a href="/terms" class="hover:text-white transition">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gw-border mt-8 pt-8 text-center text-sm text-gw-text-secondary">
+        <p>&copy; {new Date().getFullYear()} GoodWatch. Movie data from TMDB.</p>
+      </div>
+    </div>
+  </footer>
+<TasteModal />
+  <OptionalSignup />
+</body>
 </html>
-
-<style is:global>
-  /* Custom scrollbar for dark theme */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #1f2937;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: #4b5563;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #6b7280;
-  }
-
-  /* Smooth scroll */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Focus styles for accessibility */
-  :focus-visible {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-  }
-
-  /* Image loading placeholder */
-  img {
-    background-color: #374151;
-  }
-</style>

@@ -1,141 +1,104 @@
 # GoodWatch Web
 
-**Stop scrolling. Start watching.**
-
-GoodWatch is a movie recommendation platform that helps you find your next favorite movie in seconds. Rate 5 movies, get personalized recommendations - no account required.
+SEO-optimized movie discovery website built with Astro + Tailwind + Supabase.
 
 ## Features
 
-- **30-Second Taste Quiz** - Rate 5 movies to build your taste profile
-- **Personalized Recommendations** - Get movie suggestions based on your preferences
-- **Streaming Availability** - See where movies are available to watch
-- **Browse by Genre** - Explore movies by genre, trending, or top-rated
-- **Search** - Find any movie instantly
-- **No Account Required** - Start immediately, all data stays in-memory
-- **Free & Ad-Free** - Clean, fast experience
+- **Mood-based discovery** - `/mood/[mood]` pages (15 moods)
+- **Genre browsing** - `/genre/[genre]` pages (18 genres)
+- **Movie details** - `/movie/[tmdb_id]` with rich Schema.org markup
+- **Search** - Full-text search with Supabase
+- **SEO optimized** - Sitemap, meta tags, structured data
+- **Cloudflare Pages** ready
 
 ## Tech Stack
 
-- **Framework**: [Astro](https://astro.build) 5.x
-- **UI Components**: [Preact](https://preactjs.com) for interactive islands
-- **Styling**: [Tailwind CSS](https://tailwindcss.com) v4
-- **State Management**: [Nanostores](https://github.com/nanostores/nanostores)
-- **Data Sources**: [TMDB API](https://www.themoviedb.org/documentation/api), [Supabase](https://supabase.com)
+- **Astro** - Static + SSR hybrid
+- **Tailwind CSS** - Styling
+- **Supabase** - Movie database
+- **Cloudflare Pages** - Hosting
 
-## Getting Started
+## Local Development
 
-### Prerequisites
-
-- Node.js 18+
-- npm or pnpm
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/goodwatch/goodwatch-web.git
-cd goodwatch-web
-```
-
-2. Install dependencies:
 ```bash
 npm install
-```
-
-3. Set up environment variables:
-```bash
-cp .env.example .env
-```
-
-Edit `.env` with your API keys:
-- `PUBLIC_TMDB_API_KEY` - Get from [TMDB](https://www.themoviedb.org/settings/api)
-- `PUBLIC_SUPABASE_URL` - Your Supabase project URL
-- `PUBLIC_SUPABASE_ANON_KEY` - Your Supabase anonymous key
-
-4. Start the development server:
-```bash
 npm run dev
 ```
 
-Visit `http://localhost:4321` to see the app.
+## Deploy to Cloudflare Pages
 
-## Project Structure
+### Option 1: Connect GitHub (Recommended)
+
+1. Push this repo to GitHub
+2. Go to Cloudflare Dashboard → Pages → Create project
+3. Connect your GitHub repo
+4. Build settings:
+   - Framework preset: Astro
+   - Build command: `npm run build`
+   - Build output: `dist`
+5. Deploy!
+
+### Option 2: Direct Upload
+
+```bash
+npm run build
+npx wrangler pages deploy dist
+```
+
+## Environment Variables
+
+The Supabase credentials are already in the code for now. For production:
+
+```
+PUBLIC_SUPABASE_URL=https://tlzpswurafpphujrihvq.supabase.co
+PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
+```
+
+## SEO Pages Generated
+
+- `/` - Homepage with mood selector
+- `/moods` - All moods index
+- `/mood/[mood]` - 15 mood-specific pages
+- `/genres` - All genres index  
+- `/genre/[genre]` - 18 genre-specific pages
+- `/movie/[id]` - Individual movie pages (thousands)
+- `/search` - Search results
+- `/lists` - Curated collections
+- `/app` - App download CTA
+- `/sitemap.xml` - Dynamic sitemap
+
+## Schema.org Markup
+
+Each movie page includes:
+- Movie schema (title, description, rating, cast, director)
+- BreadcrumbList schema
+- Organization schema (site-wide)
+- SearchAction schema (site-wide)
+
+## File Structure
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── Header.astro
-│   ├── Footer.astro
-│   ├── MovieCard.astro
-│   ├── MovieRow.astro
-│   ├── TasteQuiz.tsx    # Interactive quiz (Preact)
-│   ├── Recommendations.tsx
-│   └── SearchBar.tsx
 ├── layouts/
-│   └── Layout.astro     # Base page layout
+│   └── Layout.astro       # Base layout with SEO
 ├── lib/
-│   ├── tmdb.ts          # TMDB API client
-│   ├── supabase.ts      # Supabase client
-│   └── recommendations.ts
+│   └── supabase.ts        # Supabase client + queries
 ├── pages/
-│   ├── index.astro      # Homepage
-│   ├── taste.astro      # Taste quiz
-│   ├── recommendations.astro
-│   ├── pick.astro       # Single recommendation
-│   ├── search.astro
-│   ├── browse/
-│   │   ├── index.astro
-│   │   └── genre/[id].astro
-│   └── movie/[id].astro # Movie details
-├── stores/
-│   ├── taste.ts         # Taste profile state
-│   └── preferences.ts   # User preferences
-├── styles/
-│   └── global.css
-└── types/
-    └── movie.ts         # TypeScript types
+│   ├── index.astro        # Homepage
+│   ├── moods.astro        # Moods index
+│   ├── genres.astro       # Genres index
+│   ├── search.astro       # Search page
+│   ├── lists.astro        # Curated lists
+│   ├── app.astro          # App download
+│   ├── 404.astro          # 404 page
+│   ├── sitemap.xml.ts     # Dynamic sitemap
+│   ├── mood/
+│   │   └── [mood].astro   # Mood pages
+│   ├── genre/
+│   │   └── [genre].astro  # Genre pages
+│   └── movie/
+│       └── [id].astro     # Movie detail pages
+public/
+├── robots.txt
+└── (add favicon.png, og-default.jpg)
 ```
-
-## Available Commands
-
-| Command | Action |
-|---------|--------|
-| `npm run dev` | Start development server at `localhost:4321` |
-| `npm run build` | Build for production to `./dist/` |
-| `npm run preview` | Preview production build locally |
-
-## API Integration
-
-### TMDB
-- Movie metadata, images, credits
-- Trending, popular, top-rated lists
-- Search functionality
-- Watch provider availability (powered by JustWatch data)
-
-### Supabase
-- User data storage (optional)
-- Custom curated lists (future)
-
-## Design Principles
-
-1. **User-First** - No signup required, start immediately
-2. **Quality over Quantity** - One recommendation at a time
-3. **Transparent** - No black-box algorithms
-4. **Fast** - Optimized for performance
-5. **Accessible** - Keyboard navigation, proper contrast
-
-## Contributing
-
-Contributions are welcome! Please read our contributing guidelines before submitting a PR.
-
-## License
-
-MIT License - see LICENSE file for details.
-
-## Data Attribution
-
-This product uses the TMDB API but is not endorsed or certified by TMDB.
-
----
-
-Built with love for movie lovers everywhere.

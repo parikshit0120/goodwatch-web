@@ -1,0 +1,13 @@
+{
+  "name": "goodwatch-scoring",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "score": "node score-movies.mjs",
+    "score:test": "node score-movies-test.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0",
+    "@supabase/supabase-js": "^2.47.0"
+  }
+}
