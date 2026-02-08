@@ -1,0 +1,56 @@
+<!-- GoodWatch App Screenshot v2 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 608" width="288" height="608">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#0a0a0a"/>
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37"/>
+      <stop offset="100%" style="stop-color:#C9A227"/>
+    </linearGradient>
+    <linearGradient id="scoreBoxBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1C1C1E"/>
+      <stop offset="100%" style="stop-color:#1C1C1E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Phone background -->
+  <rect width="288" height="608" rx="40" fill="url(#bg)"/>
+
+  <!-- Status bar -->
+  <text x="24" y="44" fill="#8E8E93" font-family="system-ui" font-size="14" font-weight="500">9:41</text>
+  <rect x="230" y="34" width="22" height="10" rx="2" fill="#8E8E93"/>
+
+  <!-- Header: GoodWatch -->
+  <text x="24" y="80" fill="url(#goldGradient)" font-family="system-ui" font-size="18" font-weight="700">GoodWatch</text>
+
+  <!-- Divider line -->
+  <rect x="0" y="92" width="288" height="1" fill="rgba(255,255,255,0.1)"/>
+
+  <!-- Movie Poster (centered, large) -->
+  <rect x="44" y="110" width="200" height="280" rx="16" fill="#1C1C1E"/>
+  <!-- Poster play icon hint -->
+  <circle cx="144" cy="250" r="24" fill="#D4AF37" opacity="0.15"/>
+  <path d="M136 238 L158 250 L136 262 Z" fill="#D4AF37" opacity="0.6"/>
+
+  <!-- Movie Title -->
+  <text x="144" y="420" fill="#ffffff" font-family="system-ui" font-size="22" font-weight="700" text-anchor="middle">Inception</text>
+
+  <!-- Movie Metadata -->
+  <text x="144" y="442" fill="#8E8E93" font-family="system-ui" font-size="13" text-anchor="middle">2010 · 2h 28m</text>
+
+  <!-- GoodScore Box -->
+  <rect x="94" y="458" width="100" height="80" rx="12" fill="url(#scoreBoxBg)" stroke="#D4AF37" stroke-width="1.5" stroke-opacity="0.3"/>
+
+  <!-- GoodScore Number -->
+  <text x="144" y="505" fill="url(#goldGradient)" font-family="system-ui" font-size="40" font-weight="700" text-anchor="middle">87</text>
+
+  <!-- GOODSCORE Label -->
+  <text x="144" y="528" fill="#8E8E93" font-family="system-ui" font-size="9" font-weight="600" text-anchor="middle" letter-spacing="1.5">GOODSCORE</text>
+
+  <!-- Watch Now Button (Gold CTA) -->
+  <rect x="24" y="550" width="240" height="44" rx="12" fill="url(#goldGradient)"/>
+  <text x="144" y="578" fill="#0a0a0a" font-family="system-ui" font-size="15" font-weight="600" text-anchor="middle">▶  Watch on Netflix</text>
+
+</svg>

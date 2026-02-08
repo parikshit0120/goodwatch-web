@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Unsubscribe - GoodWatch</title>
+    <meta name="title" content="Unsubscribe - GoodWatch">
+    <meta name="description" content="Unsubscribe from GoodWatch weekly newsletter.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles (pre-compiled Tailwind) -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body class="bg-gw-bg text-gw-text font-sans antialiased min-h-screen flex items-center justify-center">
+
+    <div class="max-w-md mx-auto px-4 py-16 text-center">
+        <!-- Logo -->
+        <a href="/" class="inline-flex items-center gap-2 mb-8">
+            <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="40" height="40" class="rounded-lg">
+            <span class="text-2xl font-semibold">GoodWatch</span>
+        </a>
+
+        <!-- States -->
+        <div id="loading-state" class="hidden">
+            <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-gw-surface flex items-center justify-center">
+                <svg class="w-8 h-8 text-gw-accent animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </div>
+            <p class="text-gw-text-muted">Processing your request...</p>
+        </div>
+
+        <div id="success-state" class="hidden">
+            <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-gw-accent/10 flex items-center justify-center">
+                <svg class="w-8 h-8 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-4">You've been unsubscribed</h1>
+            <p class="text-gw-text-muted mb-8">We'll miss you. You won't receive any more weekly digests from us.</p>
+            <a href="/" class="inline-flex items-center justify-center px-6 py-3 bg-gw-surface border border-gw-border rounded-xl font-medium hover:bg-gw-border transition-colors">
+                Back to Home
+            </a>
+        </div>
+
+        <div id="error-state" class="hidden">
+            <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-red-500/10 flex items-center justify-center">
+                <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-4">Something went wrong</h1>
+            <p id="error-message" class="text-gw-text-muted mb-8">We couldn't process your unsubscribe request.</p>
+            <a href="/" class="inline-flex items-center justify-center px-6 py-3 bg-gw-surface border border-gw-border rounded-xl font-medium hover:bg-gw-border transition-colors">
+                Back to Home
+            </a>
+        </div>
+
+        <div id="invalid-state" class="hidden">
+            <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-gw-surface flex items-center justify-center">
+                <svg class="w-8 h-8 text-gw-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-4">Invalid unsubscribe link</h1>
+            <p class="text-gw-text-muted mb-8">This unsubscribe link is invalid or has already been used.</p>
+            <a href="/" class="inline-flex items-center justify-center px-6 py-3 bg-gw-surface border border-gw-border rounded-xl font-medium hover:bg-gw-border transition-colors">
+                Back to Home
+            </a>
+        </div>
+
+        <div id="already-state" class="hidden">
+            <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-gw-surface flex items-center justify-center">
+                <svg class="w-8 h-8 text-gw-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-4">Already unsubscribed</h1>
+            <p class="text-gw-text-muted mb-8">You've already unsubscribed from our newsletter.</p>
+            <a href="/" class="inline-flex items-center justify-center px-6 py-3 bg-gw-surface border border-gw-border rounded-xl font-medium hover:bg-gw-border transition-colors">
+                Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration (goodwatch-web project)
+        const SUPABASE_URL = 'https://zaoihuwiovhakapdbhbi.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inphb2lodXdpb3ZoYWthcGRiaGJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4NDQxMjksImV4cCI6MjA4NTQyMDEyOX0.n6_QQpNs5fm3sv9LRZmFm4S3ZIk95Rl_xvjaPcVug8Q';
+
+        // State elements
+        const loadingState = document.getElementById('loading-state');
+        const successState = document.getElementById('success-state');
+        const errorState = document.getElementById('error-state');
+        const invalidState = document.getElementById('invalid-state');
+        const alreadyState = document.getElementById('already-state');
+        const errorMessage = document.getElementById('error-message');
+
+        function showState(state) {
+            loadingState.classList.add('hidden');
+            successState.classList.add('hidden');
+            errorState.classList.add('hidden');
+            invalidState.classList.add('hidden');
+            alreadyState.classList.add('hidden');
+            state.classList.remove('hidden');
+        }
+
+        async function unsubscribe() {
+            // Get token from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            if (!token) {
+                showState(invalidState);
+                return;
+            }
+
+            // Validate UUID format
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            if (!uuidRegex.test(token)) {
+                showState(invalidState);
+                return;
+            }
+
+            showState(loadingState);
+
+            try {
+                // Call the unsubscribe RPC function
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/unsubscribe_by_token`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    },
+                    body: JSON.stringify({ token: token })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to unsubscribe');
+                }
+
+                const result = await response.json();
+
+                if (result === true) {
+                    showState(successState);
+                } else {
+                    // Token not found or already unsubscribed
+                    showState(alreadyState);
+                }
+            } catch (error) {
+                console.error('Unsubscribe error:', error);
+                errorMessage.textContent = 'We encountered an error. Please try again later or contact support.';
+                showState(errorState);
+            }
+        }
+
+        // Run on page load
+        unsubscribe();
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+# GoodWatch
+> One perfect movie recommendation. No browsing. No decision fatigue.
+
+GoodWatch is a movie recommendation app that solves decision fatigue. Instead of endless scrolling through Netflix, Prime Video, or JioHotstar, GoodWatch gives you one perfect movie recommendation based on your mood, available time, and streaming platforms.
+
+## What GoodWatch Does
+- Gives ONE movie recommendation (not a list of 50)
+- Uses GoodScore: a composite rating (0-100) combining IMDb, Rotten Tomatoes, Metacritic, and TMDB scores
+- Supports Indian OTT platforms: Netflix, Amazon Prime Video, JioHotstar, SonyLIV, Zee5, JioCinema, Apple TV+
+- Supports 5 languages: Hindi, Tamil, Telugu, Malayalam, English
+- Free to use, no ads in recommendations
+
+## GoodScore Explained
+GoodScore is our unified rating system that combines multiple critic and audience scores into one 0-100 number:
+- IMDb (35% weight)
+- Rotten Tomatoes Critics (25% weight)
+- Rotten Tomatoes Audience (15% weight)
+- Metacritic (15% weight)
+- TMDB (10% weight)
+
+A GoodScore of 80+ means the movie is excellent across all platforms. A score of 90+ means it's a masterpiece.
+
+## Site Content
+- **Homepage**: https://goodwatch.movie/ — App landing page with features, FAQ, and download links
+- **Movie Database**: https://goodwatch.movie/movies/ — 20,000+ movies with GoodScore, ratings breakdown, streaming availability, and synopses
+- **Blog**: https://goodwatch.movie/blog/ — 50 posts covering best movies by platform, genre, language, decade, and mood, plus editorial content about streaming culture
+- **Full Content**: https://goodwatch.movie/llms-full.txt
+
+## Key Facts
+- Founded: 2025
+- Based in: India
+- Platform: iOS (App Store)
+- Database: 20,000+ movies with enriched metadata
+- Contact: hello@goodwatch.movie
+- Website: https://goodwatch.movie

@@ -1,0 +1,67 @@
+# GoodWatch Robots.txt
+# https://goodwatch.movie/
+# Last updated: 2026-02-07
+
+# Default: allow all crawlers (no crawl-delay — we want fast indexing)
+User-agent: *
+Allow: /
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# AI / LLM Crawlers — Explicitly Allowed
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# OpenAI (ChatGPT Search, GPT web browsing)
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Google AI (Gemini, AI Overviews, SGE)
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 2
+
+# Common Crawl (used by many AI training datasets)
+User-agent: CCBot
+Allow: /
+Crawl-delay: 5
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# Apple (Siri, Apple Intelligence)
+User-agent: Applebot
+Allow: /
+Crawl-delay: 2
+
+# Microsoft (Bing Chat, Copilot)
+User-agent: Bingbot
+Allow: /
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Sitemaps and LLM Content
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Sitemap: https://goodwatch.movie/sitemap.xml

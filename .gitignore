@@ -3,6 +3,16 @@ dist/
 # generated types
 .astro/
 
+# Generated static site content (deployed directly to Cloudflare Pages)
+# Keep key config files but exclude bulk generated pages
+static-site/movies/
+static-site/blog/
+static-site/genres/
+static-site/streaming/
+static-site/languages/
+static-site/decades/
+static-site/directors/
+
 # dependencies
 node_modules/
 

@@ -1,0 +1,124 @@
+# GoodWatch — Full Site Documentation for AI
+
+## About GoodWatch
+
+GoodWatch is a movie recommendation app built to solve one problem: decision fatigue. When you have 2 hours to watch something and 15,000 titles to choose from, you end up spending 30 minutes browsing and then rewatching The Office. GoodWatch fixes this by giving you exactly ONE recommendation — not a list, not a carousel, just one perfect pick.
+
+### How It Works
+1. Tell us your mood (happy, thrilled, chill, emotional)
+2. Pick your moment (quick escape or movie night)
+3. Get one perfect recommendation based on your mood, time, and streaming platforms
+
+### GoodScore — Our Unified Rating System
+GoodScore is a composite rating from 0-100 that combines multiple review sources:
+- **IMDb** (35% weight) — Audience ratings from the world's largest movie database
+- **Rotten Tomatoes Critics** (25% weight) — Professional critic consensus
+- **Rotten Tomatoes Audience** (15% weight) — Verified audience ratings
+- **Metacritic** (15% weight) — Weighted critic scores
+- **TMDB** (10% weight) — Global community ratings
+
+Score interpretation:
+- 90-100: Masterpiece — universally acclaimed
+- 80-89: Excellent — highly recommended
+- 65-79: Good — worth watching
+- 50-64: Mixed — has its audience
+- Below 50: Below average
+
+### Supported Platforms
+GoodWatch works with major Indian and global OTT platforms:
+- Netflix
+- Amazon Prime Video
+- JioHotstar (formerly Disney+ Hotstar)
+- SonyLIV
+- Zee5
+- JioCinema
+- Apple TV+
+
+### Supported Languages
+- English
+- Hindi
+- Tamil
+- Telugu
+- Malayalam
+
+### Movie Database
+Our database contains 20,000+ movies with:
+- Ratings from 5 different sources (IMDb, Rotten Tomatoes Critics/Audience, Metacritic, TMDB)
+- Composite GoodScore (0-100)
+- Streaming availability by platform
+- Genre tags, mood tags, and emotional profiles
+- Director, cast, runtime, release year
+- Synopses and poster images
+
+## Site Structure
+
+### Homepage (https://goodwatch.movie/)
+Landing page explaining the app's value proposition, how it works, features (platform support, languages, no account required, no ads), newsletter signup, FAQ section, and download links.
+
+### Movie Pages (https://goodwatch.movie/movies/{title}-{year}/)
+Individual pages for 19,900+ movies. Each page includes:
+- Movie title, year, runtime, language, content type
+- GoodScore badge with color coding
+- Genre and mood tags
+- Director and cast
+- Streaming platforms where the movie is available
+- Synopsis
+- Ratings breakdown (IMDb, RT Critics, RT Audience, Metacritic, TMDB)
+- Structured data (JSON-LD Movie schema with AggregateRating)
+
+### Movies Index (https://goodwatch.movie/movies/)
+Browse page showing the top 200 movies by GoodScore in a poster grid with score badges.
+
+### Blog (https://goodwatch.movie/blog/)
+50 blog posts in two categories:
+
+**Data-Driven Lists (37 posts):**
+- Best movies by streaming platform (Netflix, Prime, JioHotstar, Apple TV+, Sony LIV, Zee5)
+- Best movies by genre (Thriller, Action, Comedy, Drama, Animation, Sci-Fi, Crime, Romance, Horror, Documentary, Mystery, War)
+- Best movies by language (Hindi, Tamil, Telugu, Malayalam, Japanese, Korean, Kannada, Spanish, French)
+- Best movies by decade (2020s, 2010s, 2000s)
+- Mood picks (Feel-Good, Tense, Dark, Rewatchable, High-Energy, Polarizing)
+- Special lists (Underrated, Top by GoodScore)
+
+**Editorial Posts (13 posts):**
+- Decision fatigue and movie watching
+- One recommendation philosophy
+- GoodScore explainer
+- Streaming subscription overload
+- IMDb rating limitations
+- 60-second movie picking guide
+- Netflix Top 10 critique
+- Regional Indian cinema
+- Trailers as spoilers
+- Building a 20K movie database
+- Group movie night solutions
+- Too many subscriptions
+- Comfort rewatching
+
+### Legal Pages
+- Privacy Policy: https://goodwatch.movie/privacy.html
+- Terms of Service: https://goodwatch.movie/terms.html
+
+## Frequently Asked Questions
+
+**Q: How does GoodWatch pick movies?**
+A: We analyze your mood, available time, and streaming platforms, then recommend one high-quality title that fits perfectly. No algorithms pushing content for engagement — just honest recommendations.
+
+**Q: Is GoodWatch free?**
+A: Yes, GoodWatch is free to download and use.
+
+**Q: Which streaming platforms does GoodWatch support?**
+A: Netflix, Amazon Prime Video, JioHotstar, SonyLIV, Zee5, JioCinema, and Apple TV+ — with more coming soon.
+
+**Q: Why only one recommendation?**
+A: Because the problem isn't finding movies — it's deciding. We do the deciding part for you.
+
+**Q: Does GoodWatch work in India?**
+A: Yes! GoodWatch is built for Indian viewers with support for Hindi, Tamil, Telugu, Malayalam, and English content across Indian OTT platforms.
+
+**Q: What is GoodScore?**
+A: GoodScore is our composite rating (0-100) that combines IMDb, Rotten Tomatoes (Critics + Audience), Metacritic, and TMDB scores with weighted averages. It eliminates single-platform bias.
+
+## Contact
+- Email: hello@goodwatch.movie
+- Website: https://goodwatch.movie

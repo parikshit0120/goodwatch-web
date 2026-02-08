@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>GoodWatch — Best Movie Recommendation App | What to Watch Tonight</title>
+    <meta name="title" content="GoodWatch — Best Movie Recommendation App | What to Watch Tonight">
+    <meta name="description" content="GoodWatch recommends one perfect movie based on your mood, streaming platforms, and time. Browse 20,000+ movies rated by GoodScore — a composite of IMDb, Rotten Tomatoes, Metacritic & TMDB.">
+    <meta name="keywords" content="movie recommendation app, what to watch tonight, Netflix recommendation, decision fatigue, movie picker, best movie app India">
+    <meta name="author" content="GoodWatch">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://goodwatch.movie/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://goodwatch.movie/">
+    <meta property="og:title" content="GoodWatch — Best Movie Recommendation App | What to Watch Tonight">
+    <meta property="og:description" content="One perfect movie recommendation based on your mood and streaming platforms. 20,000+ movies rated by GoodScore.">
+    <meta property="og:image" content="https://goodwatch.movie/assets/images/logo.png?v=2">
+    <meta property="og:site_name" content="GoodWatch">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://goodwatch.movie/">
+    <meta name="twitter:title" content="GoodWatch — Best Movie Recommendation App | What to Watch Tonight">
+    <meta name="twitter:description" content="One perfect movie recommendation based on your mood and streaming platforms. 20,000+ movies rated by GoodScore.">
+    <meta name="twitter:image" content="https://goodwatch.movie/assets/images/logo.png?v=2">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles (pre-compiled Tailwind) -->
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "GoodWatch",
+        "operatingSystem": "iOS",
+        "applicationCategory": "EntertainmentApplication",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "description": "Movie recommendation app that gives you one perfect pick based on your mood, streaming platforms, and available time. Powered by GoodScore — a composite of IMDb, Rotten Tomatoes, Metacritic & TMDB ratings."
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "GoodWatch",
+        "url": "https://goodwatch.movie",
+        "logo": "https://goodwatch.movie/assets/images/logo.png?v=2",
+        "sameAs": [
+            "https://www.instagram.com/goodwatch.movie",
+            "https://x.com/goodwatchmovie",
+            "https://apps.apple.com/app/goodwatch-movie-recommendations/id6740092498"
+        ],
+        "description": "GoodWatch solves decision fatigue with one perfect movie recommendation.",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "hello@goodwatch.movie",
+            "contactType": "customer support"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "GoodWatch",
+        "url": "https://goodwatch.movie",
+        "description": "One perfect movie recommendation. No browsing. No scrolling. Just watch. GoodWatch uses GoodScore — a composite rating from IMDb, Rotten Tomatoes, Metacritic, and TMDB — to find the best movie for your mood.",
+        "publisher": {
+            "@type": "Organization",
+            "name": "GoodWatch"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://goodwatch.movie/movies/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How does GoodWatch pick movies?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We analyze your mood, available time, and streaming platforms, then recommend one high-quality title that fits perfectly. No algorithms pushing content for engagement - just honest recommendations."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is GoodWatch free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, GoodWatch is free to download and use."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which streaming platforms does GoodWatch support?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Netflix, Amazon Prime Video, JioHotstar, SonyLIV, Zee5, JioCinema, and Apple TV+ - with more coming soon."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Why only one recommendation?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Because the problem isn't finding movies - it's deciding. We do the deciding part for you."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does GoodWatch work in India?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! GoodWatch is built for Indian viewers with support for Hindi, Tamil, Telugu, Malayalam, and English content across Indian OTT platforms."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+<body class="bg-gw-bg text-gw-text font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-gw-bg/80 backdrop-blur-lg border-b border-gw-border">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center gap-2">
+                    <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="32" height="32" class="rounded-lg">
+                    <span class="text-xl font-semibold">GoodWatch</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="/movies/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Movies</a>
+                    <a href="/blog/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Blog</a>
+                    <a href="#download" class="hidden sm:inline-flex items-center px-4 py-2 bg-gw-accent hover:bg-gw-accent-hover text-white font-medium rounded-lg transition-colors text-sm">
+                        Download App
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- SECTION 1: HERO -->
+        <section class="min-h-screen flex items-center pt-16 relative overflow-hidden">
+            <!-- Gradient background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-gw-accent/10 via-transparent to-transparent"></div>
+
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 relative z-10">
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                    <div class="text-center lg:text-left">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+                            The Best <span class="text-gw-accent">Movie Recommendation</span> App. One Pick. Done.
+                        </h1>
+                        <p class="text-lg sm:text-xl text-gw-text-muted mb-8 max-w-lg mx-auto lg:mx-0">
+                            Stop browsing 15,000 titles. GoodWatch picks the perfect movie for your mood, your platforms, and your time — backed by ratings from IMDb, Rotten Tomatoes, Metacritic & TMDB.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" id="download">
+                            <a href="https://apps.apple.com/app/goodwatch-movie-recommendations/id6740092498" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 bg-gw-accent hover:bg-gw-accent-hover text-white px-6 py-3 rounded-xl font-medium transition-colors">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                </svg>
+                                <span>Download on App Store</span>
+                            </a>
+                            <div class="inline-flex items-center justify-center gap-2 bg-gw-surface text-gw-text-muted px-6 py-3 rounded-xl font-medium border border-gw-border cursor-default">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                                </svg>
+                                <span>Google Play</span>
+                                <span class="text-xs bg-gw-accent/20 text-gw-accent px-2 py-0.5 rounded-full">Soon</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center lg:justify-end">
+                        <!-- App Screenshot Placeholder -->
+                        <div class="relative">
+                            <div class="w-64 sm:w-72 aspect-[9/19] bg-gw-surface rounded-[2.5rem] border-4 border-gw-border shadow-2xl overflow-hidden">
+                                <img src="/assets/images/app-screenshot.svg?v=2" alt="GoodWatch app showing a movie recommendation card" class="w-full h-full object-cover" loading="eager">
+                            </div>
+                            <!-- Floating badge -->
+                            <div class="absolute -right-4 -bottom-4 bg-gw-accent text-white px-4 py-2 rounded-xl shadow-lg font-medium text-sm">
+                                One tap. Done.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: PROBLEM/SOLUTION -->
+        <section class="py-20 sm:py-28 bg-gw-surface">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+                        Netflix has <span class="text-gw-accent">15,000</span> titles.<br>
+                        You have <span class="text-gw-accent">2 hours</span>.
+                    </h2>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gw-bg/50 rounded-2xl p-6 sm:p-8 border border-gw-border">
+                        <div class="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <p class="text-lg text-gw-text-muted">
+                            You spend <span class="text-gw-text font-medium">30 minutes browsing</span>, then rewatch The Office.
+                        </p>
+                    </div>
+
+                    <div class="bg-gw-bg/50 rounded-2xl p-6 sm:p-8 border border-gw-border">
+                        <div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                        </div>
+                        <p class="text-lg text-gw-text-muted">
+                            Every app wants you to <span class="text-gw-text font-medium">scroll forever</span>.
+                        </p>
+                    </div>
+
+                    <div class="bg-gw-bg/50 rounded-2xl p-6 sm:p-8 border border-gw-border">
+                        <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <p class="text-lg text-gw-text-muted">
+                            Decision fatigue is real. <span class="text-gw-text font-medium">We fixed it.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: HOW IT WORKS -->
+        <section class="py-20 sm:py-28">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">How it works</h2>
+                    <p class="text-gw-text-muted text-lg">Three taps. That's it.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+                    <!-- Step 1 -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gw-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-gw-accent">1</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Tell us your mood</h3>
+                        <p class="text-gw-text-muted">4 choices max. Happy, sad, thrilled, or chill.</p>
+                        <div class="flex flex-wrap justify-center gap-2 mt-4">
+                            <span class="px-3 py-1 bg-gw-surface rounded-full text-sm border border-gw-border">Happy</span>
+                            <span class="px-3 py-1 bg-gw-surface rounded-full text-sm border border-gw-border">Thrilled</span>
+                            <span class="px-3 py-1 bg-gw-surface rounded-full text-sm border border-gw-border">Chill</span>
+                            <span class="px-3 py-1 bg-gw-surface rounded-full text-sm border border-gw-border">Emotional</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gw-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-gw-accent">2</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Pick your moment</h3>
+                        <p class="text-gw-text-muted">Quick escape or movie night?</p>
+                        <div class="flex flex-wrap justify-center gap-2 mt-4">
+                            <span class="px-3 py-1 bg-gw-surface rounded-full text-sm border border-gw-border">90 min</span>
+                            <span class="px-3 py-1 bg-gw-surface rounded-full text-sm border border-gw-border">2+ hours</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gw-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-gw-accent">3</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Get one perfect pick</h3>
+                        <p class="text-gw-text-muted">We decide. You watch.</p>
+                        <div class="flex justify-center mt-4">
+                            <span class="px-4 py-2 bg-gw-accent text-white rounded-full text-sm font-medium">Play now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: FEATURES -->
+        <section class="py-20 sm:py-28 bg-gw-surface">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">Built for how you actually watch</h2>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Feature 1: Platforms -->
+                    <div class="bg-gw-bg rounded-2xl p-6 border border-gw-border">
+                        <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Works with your platforms</h3>
+                        <p class="text-gw-text-muted text-sm mb-4">Netflix, Prime, JioHotstar, SonyLIV, Zee5, JioCinema, Apple TV+</p>
+                        <div class="flex flex-wrap gap-2">
+                            <img src="/assets/images/platforms/netflix.svg" alt="Netflix" width="24" height="24" class="w-6 h-6 rounded" loading="lazy">
+                            <img src="/assets/images/platforms/prime.svg" alt="Prime Video" width="24" height="24" class="w-6 h-6 rounded" loading="lazy">
+                            <img src="/assets/images/platforms/hotstar.svg" alt="JioHotstar" width="24" height="24" class="w-6 h-6 rounded" loading="lazy">
+                            <img src="/assets/images/platforms/sonyliv.svg" alt="SonyLIV" width="24" height="24" class="w-6 h-6 rounded" loading="lazy">
+                        </div>
+                    </div>
+
+                    <!-- Feature 2: Languages -->
+                    <div class="bg-gw-bg rounded-2xl p-6 border border-gw-border">
+                        <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">Your languages</h3>
+                        <p class="text-gw-text-muted text-sm">Hindi, Tamil, Telugu, Malayalam, English</p>
+                    </div>
+
+                    <!-- Feature 3: No account -->
+                    <div class="bg-gw-bg rounded-2xl p-6 border border-gw-border">
+                        <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">No account required</h3>
+                        <p class="text-gw-text-muted text-sm">Start watching in 30 seconds.</p>
+                    </div>
+
+                    <!-- Feature 4: No ads -->
+                    <div class="bg-gw-bg rounded-2xl p-6 border border-gw-border">
+                        <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">No ads in recommendations</h3>
+                        <p class="text-gw-text-muted text-sm">We're not paid to push content.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: NEWSLETTER -->
+        <section class="py-20 sm:py-28">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-gradient-to-br from-gw-accent/20 to-gw-surface rounded-3xl p-8 sm:p-12 border border-gw-border text-center">
+                    <div class="w-16 h-16 bg-gw-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-3">Get the best new releases. Weekly.</h2>
+                    <p class="text-gw-text-muted mb-8 max-w-md mx-auto">
+                        One email a week. The best new drops across your platforms. That's it.
+                    </p>
+
+                    <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
+                        <input
+                            type="email"
+                            id="newsletter-email"
+                            placeholder="you@example.com"
+                            required
+                            class="flex-1 px-4 py-3 bg-gw-bg border border-gw-border rounded-xl text-gw-text placeholder:text-gw-text-muted focus:outline-none focus:ring-2 focus:ring-gw-accent focus:border-transparent"
+                        >
+                        <button
+                            type="submit"
+                            id="newsletter-submit"
+                            class="px-6 py-3 bg-gw-accent hover:bg-gw-accent-hover text-white font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Subscribe
+                        </button>
+                    </form>
+
+                    <div id="newsletter-message" class="hidden text-sm mb-4 font-medium"></div>
+
+                    <p id="newsletter-fine-print" class="text-gw-text-muted text-sm">No spam. Unsubscribe anytime.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: FAQ -->
+        <section class="py-20 sm:py-28 bg-gw-surface">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">Frequently asked questions</h2>
+                </div>
+
+                <div class="space-y-4" id="faq-accordion">
+                    <!-- FAQ 1 -->
+                    <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
+                        <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
+                            <span class="font-medium text-lg">How does GoodWatch pick movies?</span>
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gw-text-muted">We analyze your mood, available time, and streaming platforms, then recommend one high-quality title that fits perfectly. No algorithms pushing content for engagement - just honest recommendations.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
+                        <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
+                            <span class="font-medium text-lg">Is GoodWatch free?</span>
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gw-text-muted">Yes, GoodWatch is free to download and use.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
+                        <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
+                            <span class="font-medium text-lg">Which streaming platforms does GoodWatch support?</span>
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gw-text-muted">Netflix, Amazon Prime Video, JioHotstar, SonyLIV, Zee5, JioCinema, and Apple TV+ - with more coming soon.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
+                        <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
+                            <span class="font-medium text-lg">Why only one recommendation?</span>
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gw-text-muted">Because the problem isn't finding movies - it's deciding. We do the deciding part for you.</p>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
+                        <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
+                            <span class="font-medium text-lg">Does GoodWatch work in India?</span>
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gw-text-muted">Yes! GoodWatch is built for Indian viewers with support for Hindi, Tamil, Telugu, Malayalam, and English content across Indian OTT platforms.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: FEATURED MOVIES (Internal Linking) -->
+        <section class="py-20 sm:py-28">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">Top Rated Movies by GoodScore</h2>
+                    <p class="text-gw-text-muted text-lg">Explore our database of 20,000+ movies rated by IMDb, Rotten Tomatoes, Metacritic & TMDB.</p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <a href="/genres/thriller/" class="block bg-gw-surface rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <h3 class="text-lg font-semibold group-hover:text-gw-accent transition-colors">Best Thriller Movies</h3>
+                        <p class="text-gw-text-muted text-sm mt-2">Heart-pounding thrillers ranked by composite ratings</p>
+                    </a>
+                    <a href="/genres/action/" class="block bg-gw-surface rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <h3 class="text-lg font-semibold group-hover:text-gw-accent transition-colors">Best Action Movies</h3>
+                        <p class="text-gw-text-muted text-sm mt-2">Top action films by GoodScore rating</p>
+                    </a>
+                    <a href="/genres/drama/" class="block bg-gw-surface rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <h3 class="text-lg font-semibold group-hover:text-gw-accent transition-colors">Best Drama Movies</h3>
+                        <p class="text-gw-text-muted text-sm mt-2">Critically acclaimed dramas that move you</p>
+                    </a>
+                    <a href="/genres/comedy/" class="block bg-gw-surface rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <h3 class="text-lg font-semibold group-hover:text-gw-accent transition-colors">Best Comedy Movies</h3>
+                        <p class="text-gw-text-muted text-sm mt-2">The funniest films according to every rating site</p>
+                    </a>
+                    <a href="/genres/science-fiction/" class="block bg-gw-surface rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <h3 class="text-lg font-semibold group-hover:text-gw-accent transition-colors">Best Sci-Fi Movies</h3>
+                        <p class="text-gw-text-muted text-sm mt-2">Mind-bending science fiction ranked by GoodScore</p>
+                    </a>
+                    <a href="/genres/horror/" class="block bg-gw-surface rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <h3 class="text-lg font-semibold group-hover:text-gw-accent transition-colors">Best Horror Movies</h3>
+                        <p class="text-gw-text-muted text-sm mt-2">Genuinely terrifying horror approved by critics</p>
+                    </a>
+                </div>
+
+                <div class="text-center">
+                    <h3 class="text-lg font-semibold mb-4 text-gw-text-muted">Browse by Streaming Platform</h3>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <a href="/streaming/netflix/" class="px-4 py-2 bg-gw-surface border border-gw-border rounded-xl text-sm hover:border-gw-accent/30 hover:text-gw-accent transition-colors">Netflix</a>
+                        <a href="/streaming/amazon-prime-video/" class="px-4 py-2 bg-gw-surface border border-gw-border rounded-xl text-sm hover:border-gw-accent/30 hover:text-gw-accent transition-colors">Prime Video</a>
+                        <a href="/streaming/jiohotstar/" class="px-4 py-2 bg-gw-surface border border-gw-border rounded-xl text-sm hover:border-gw-accent/30 hover:text-gw-accent transition-colors">JioHotstar</a>
+                        <a href="/streaming/apple-tv/" class="px-4 py-2 bg-gw-surface border border-gw-border rounded-xl text-sm hover:border-gw-accent/30 hover:text-gw-accent transition-colors">Apple TV+</a>
+                        <a href="/streaming/sonyliv/" class="px-4 py-2 bg-gw-surface border border-gw-border rounded-xl text-sm hover:border-gw-accent/30 hover:text-gw-accent transition-colors">SonyLIV</a>
+                        <a href="/streaming/zee5/" class="px-4 py-2 bg-gw-surface border border-gw-border rounded-xl text-sm hover:border-gw-accent/30 hover:text-gw-accent transition-colors">Zee5</a>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
+                    <a href="/movies/" class="inline-flex items-center px-6 py-3 bg-gw-accent hover:bg-gw-accent-hover text-white font-medium rounded-xl transition-colors">
+                        Browse All 20,000+ Movies
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 8: FEATURED BLOG POSTS (Internal Linking) -->
+        <section class="py-20 sm:py-28 bg-gw-surface">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">From the Blog</h2>
+                    <p class="text-gw-text-muted text-lg">Data-driven movie guides and streaming tips.</p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <a href="/blog/top-10-movies-netflix-india/" class="block bg-gw-bg rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <span class="text-gw-accent text-xs font-medium">Best of Netflix</span>
+                        <h3 class="text-lg font-semibold mt-2 mb-2 group-hover:text-gw-accent transition-colors">Top 10 Movies on Netflix India Right Now</h3>
+                        <p class="text-gw-text-muted text-sm">Ranked by GoodScore — ratings from 4 platforms combined.</p>
+                    </a>
+                    <a href="/blog/best-thriller-movies-all-time/" class="block bg-gw-bg rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <span class="text-gw-accent text-xs font-medium">Best by Genre</span>
+                        <h3 class="text-lg font-semibold mt-2 mb-2 group-hover:text-gw-accent transition-colors">10 Best Thriller Movies of All Time</h3>
+                        <p class="text-gw-text-muted text-sm">The greatest thrillers ever made, by GoodScore.</p>
+                    </a>
+                    <a href="/blog/what-is-goodscore/" class="block bg-gw-bg rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <span class="text-gw-accent text-xs font-medium">How It Works</span>
+                        <h3 class="text-lg font-semibold mt-2 mb-2 group-hover:text-gw-accent transition-colors">What Is GoodScore and Why Should You Trust It?</h3>
+                        <p class="text-gw-text-muted text-sm">How we combine 4 rating platforms into one score.</p>
+                    </a>
+                    <a href="/blog/top-10-hindi-movies-all-time/" class="block bg-gw-bg rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <span class="text-gw-accent text-xs font-medium">Best by Language</span>
+                        <h3 class="text-lg font-semibold mt-2 mb-2 group-hover:text-gw-accent transition-colors">Top 10 Hindi Movies of All Time</h3>
+                        <p class="text-gw-text-muted text-sm">The greatest Bollywood films by composite rating.</p>
+                    </a>
+                    <a href="/blog/decision-fatigue-ruining-movie-night/" class="block bg-gw-bg rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <span class="text-gw-accent text-xs font-medium">Decision Fatigue</span>
+                        <h3 class="text-lg font-semibold mt-2 mb-2 group-hover:text-gw-accent transition-colors">Decision Fatigue Is Ruining Your Movie Night</h3>
+                        <p class="text-gw-text-muted text-sm">Why you spend 30 minutes scrolling and how to fix it.</p>
+                    </a>
+                    <a href="/blog/top-10-malayalam-movies-goodscore/" class="block bg-gw-bg rounded-2xl border border-gw-border p-6 hover:border-gw-accent/30 transition-colors group">
+                        <span class="text-gw-accent text-xs font-medium">Best by Language</span>
+                        <h3 class="text-lg font-semibold mt-2 mb-2 group-hover:text-gw-accent transition-colors">Top 10 Malayalam Movies — Cinema Gold</h3>
+                        <p class="text-gw-text-muted text-sm">Kerala's finest films ranked by GoodScore.</p>
+                    </a>
+                </div>
+
+                <div class="text-center mt-8">
+                    <a href="/blog/" class="text-gw-accent hover:text-gw-accent-hover font-medium transition-colors">
+                        Read All Articles →
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 9: CTA -->
+        <section class="py-20 sm:py-28">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+                    Stop browsing.<br>
+                    <span class="text-gw-accent">Start watching.</span>
+                </h2>
+                <p class="text-lg text-gw-text-muted mb-8 max-w-lg mx-auto">
+                    Download GoodWatch and get your first recommendation in under 30 seconds.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://apps.apple.com/app/goodwatch-movie-recommendations/id6740092498" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 bg-gw-accent hover:bg-gw-accent-hover text-white px-8 py-4 rounded-xl font-medium transition-colors text-lg">
+                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                        <span>Download on App Store</span>
+                    </a>
+                    <div class="inline-flex items-center justify-center gap-2 bg-gw-surface text-gw-text-muted px-8 py-4 rounded-xl font-medium border border-gw-border cursor-default text-lg">
+                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                        </svg>
+                        <span>Google Play</span>
+                        <span class="text-xs bg-gw-accent/20 text-gw-accent px-2 py-0.5 rounded-full">Soon</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gw-surface border-t border-gw-border py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Brand -->
+                <div class="sm:col-span-2 lg:col-span-1">
+                    <a href="/" class="flex items-center gap-2 mb-4">
+                        <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="32" height="32" class="rounded-lg">
+                        <span class="text-xl font-semibold">GoodWatch</span>
+                    </a>
+                    <p class="text-gw-text-muted text-sm mb-4">One perfect recommendation. No decision fatigue.</p>
+                    <p class="text-gw-text-muted text-sm">Made in India</p>
+                </div>
+
+                <!-- Explore -->
+                <div>
+                    <h3 class="font-semibold mb-4">Explore</h3>
+                    <ul class="space-y-3 text-gw-text-muted text-sm">
+                        <li><a href="/movies/" class="hover:text-gw-text transition-colors">Browse Movies</a></li>
+                        <li><a href="/genres/" class="hover:text-gw-text transition-colors">Movies by Genre</a></li>
+                        <li><a href="/streaming/" class="hover:text-gw-text transition-colors">Movies by Platform</a></li>
+                        <li><a href="/languages/" class="hover:text-gw-text transition-colors">Movies by Language</a></li>
+                        <li><a href="/blog/" class="hover:text-gw-text transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h3 class="font-semibold mb-4">Legal</h3>
+                    <ul class="space-y-3 text-gw-text-muted text-sm">
+                        <li><a href="/privacy.html" class="hover:text-gw-text transition-colors">Privacy Policy</a></li>
+                        <li><a href="/terms.html" class="hover:text-gw-text transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect -->
+                <div>
+                    <h3 class="font-semibold mb-4">Connect</h3>
+                    <ul class="space-y-3 text-gw-text-muted text-sm">
+                        <li><a href="mailto:hello@goodwatch.movie" class="hover:text-gw-text transition-colors">Contact</a></li>
+                        <li>
+                            <div class="flex gap-4 mt-2">
+                                <a href="#" class="hover:text-gw-text transition-colors" aria-label="Twitter">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                    </svg>
+                                </a>
+                                <a href="#" class="hover:text-gw-text transition-colors" aria-label="Instagram">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gw-border pt-8 text-center text-gw-text-muted text-sm">
+                <p>&copy; 2026 GoodWatch. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/assets/js/main.js"></script>
+</body>
+</html>

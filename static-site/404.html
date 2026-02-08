@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found — GoodWatch</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body class="bg-gw-bg text-gw-text min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="border-b border-gw-border">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2">
+                <img src="/assets/images/logo.png?v=2" alt="GoodWatch" class="h-8 w-8">
+                <span class="text-xl font-bold">GoodWatch</span>
+            </a>
+            <nav class="flex items-center gap-6 text-sm">
+                <a href="/movies/" class="text-gw-text-muted hover:text-gw-accent transition-colors">Movies</a>
+                <a href="/genres/" class="text-gw-text-muted hover:text-gw-accent transition-colors">Genres</a>
+                <a href="/blog/" class="text-gw-text-muted hover:text-gw-accent transition-colors">Blog</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 404 Content -->
+    <main class="flex-1 flex items-center justify-center px-4">
+        <div class="text-center max-w-lg">
+            <div class="text-8xl font-bold text-gw-accent mb-4">404</div>
+            <h1 class="text-2xl font-bold mb-3">Page not found</h1>
+            <p class="text-gw-text-muted mb-8">
+                The page you're looking for doesn't exist or has been moved.
+                But we've got 20,000+ movies waiting for you.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="/" class="px-6 py-3 bg-gw-accent text-white font-semibold rounded-xl hover:bg-gw-accent/90 transition-colors">
+                    Go Home
+                </a>
+                <a href="/movies/" class="px-6 py-3 border border-gw-border text-gw-text font-semibold rounded-xl hover:border-gw-accent hover:text-gw-accent transition-colors">
+                    Browse Movies
+                </a>
+                <a href="/genres/" class="px-6 py-3 border border-gw-border text-gw-text font-semibold rounded-xl hover:border-gw-accent hover:text-gw-accent transition-colors">
+                    Explore Genres
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gw-border mt-auto">
+        <div class="max-w-6xl mx-auto px-4 py-6 text-center text-sm text-gw-text-muted">
+            &copy; 2026 GoodWatch. One perfect movie recommendation.
+        </div>
+    </footer>
+</body>
+</html>

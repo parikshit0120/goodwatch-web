@@ -1,0 +1,46 @@
+# GoodWatch — URL Redirects
+# Fixes 404s from old site structure that Google has crawled
+# Format: old_path new_path status_code
+
+# Old genre paths → new genre paths
+/genre/action /genres/action/ 301
+/genre/comedy /genres/comedy/ 301
+/genre/drama /genres/drama/ 301
+/genre/thriller /genres/thriller/ 301
+/genre/horror /genres/horror/ 301
+/genre/romance /genres/romance/ 301
+/genre/sci-fi /genres/sci-fi/ 301
+/genre/science-fiction /genres/science-fiction/ 301
+/genre/adventure /genres/adventure/ 301
+/genre/animation /genres/animation/ 301
+/genre/documentary /genres/documentary/ 301
+/genre/fantasy /genres/fantasy/ 301
+/genre/mystery /genres/mystery/ 301
+/genre/crime /genres/crime/ 301
+/genre/family /genres/family/ 301
+/genre/war /genres/war/ 301
+/genre/history /genres/history/ 301
+/genre/music /genres/music/ 301
+/genre/western /genres/western/ 301
+/genre/* /genres/ 301
+
+# Old mood paths → homepage (no mood pages in static site)
+/mood/feel-good / 301
+/mood/romantic / 301
+/mood/thrilling / 301
+/mood/dark / 301
+/mood/funny / 301
+/mood/inspirational / 301
+/mood/* / 301
+/moods / 301
+
+# Old movie paths (numeric IDs) → movies index
+/movie/* /movies/ 301
+
+# Old app/special pages → homepage
+/app / 301
+/for-ai-assistants / 301
+
+# Old explore/discover paths
+/explore /movies/ 301
+/discover /movies/ 301
