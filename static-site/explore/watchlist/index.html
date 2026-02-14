@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Watchlist | GoodWatch</title>
+    <meta name="description" content="Your saved movies and shows on GoodWatch. Keep track of what you want to watch next.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <style>
+        .skeleton{background:linear-gradient(90deg,#1c1c1e 25%,#262626 50%,#1c1c1e 75%);background-size:200%;animation:shimmer 1.5s infinite}
+        @keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
+        .poster-fallback{background:#1c1c1e}
+    </style>
+</head>
+<body class="bg-gw-bg text-gw-text font-sans antialiased">
+
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-gw-bg/80 backdrop-blur-lg border-b border-gw-border">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <a href="/" class="flex items-center gap-3">
+                <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="48" height="48" class="w-12 h-12 rounded-lg">
+                <span class="text-2xl font-semibold">GoodWatch</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="/explore/" class="text-sm text-gw-text transition-colors font-medium">Explore</a>
+                <a href="/movies/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Movies</a>
+                <a href="/blog/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Blog</a>
+                <span id="nav-auth-loading" class="text-sm text-gw-text-muted">...</span>
+                <button id="nav-sign-out" class="hidden text-sm text-gw-text-muted hover:text-gw-text transition-colors" onclick="gwAuth.signOut()">Sign Out</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Auth Gate -->
+<div id="auth-gate" style="display:none;position:fixed;top:80px;left:0;right:0;bottom:0;z-index:40;background:#0A0A0F">
+    <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">
+        <div class="text-center px-6 max-w-md">
+            <img src="/assets/images/logo.png?v=2" alt="GoodWatch" width="80" height="80" class="mx-auto mb-6 rounded-2xl">
+            <h2 class="text-3xl font-bold mb-3">Sign in to see your watchlist</h2>
+            <p class="text-gw-text-muted mb-8">Save movies and shows to watch later. Your watchlist syncs across devices.</p>
+            <div class="space-y-3 max-w-xs mx-auto">
+                <button onclick="gwAuth.signInWithGoogle()" class="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white text-gray-800 font-medium rounded-xl hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Sign in with Google
+                </button>
+                <button onclick="gwAuth.signInWithApple()" class="w-full flex items-center justify-center gap-3 px-6 py-3 bg-black text-white font-medium rounded-xl hover:bg-gray-900 transition-colors border border-gray-700">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    Sign in with Apple
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="main-content" class="pt-24 pb-16 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Breadcrumb -->
+        <nav class="text-sm text-gw-text-muted mb-6" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-gw-accent transition-colors">Home</a>
+            <span class="mx-1">&rsaquo;</span>
+            <a href="/explore/" class="hover:text-gw-accent transition-colors">Explore</a>
+            <span class="mx-1">&rsaquo;</span>
+            <span class="text-gw-text">Watchlist</span>
+        </nav>
+
+        <!-- Title -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold mb-3">My Watchlist</h1>
+            <p id="watchlist-count" class="text-gw-text-muted text-lg">Your saved movies & shows</p>
+        </div>
+
+        <!-- Sub-navigation -->
+        <div class="flex justify-center gap-2 mb-8">
+            <a href="/explore/" class="px-4 py-2 rounded-full text-sm font-medium border border-gw-border text-gw-text-muted hover:border-gw-accent/50 hover:text-gw-text transition-colors">All Movies</a>
+            <a href="/explore/new-releases/" class="px-4 py-2 rounded-full text-sm font-medium border border-gw-border text-gw-text-muted hover:border-gw-accent/50 hover:text-gw-text transition-colors">New Releases</a>
+            <a href="/explore/platforms/" class="px-4 py-2 rounded-full text-sm font-medium border border-gw-border text-gw-text-muted hover:border-gw-accent/50 hover:text-gw-text transition-colors">By Platform</a>
+            <a href="/explore/watchlist/" class="px-4 py-2 rounded-full text-sm font-medium bg-gw-accent/15 text-gw-accent border border-gw-accent/30">Watchlist</a>
+        </div>
+
+        <!-- Watchlist Grid -->
+        <div id="watchlist-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-20">
+            <svg class="w-16 h-16 mx-auto text-gw-text-muted mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+            </svg>
+            <p class="text-lg text-gw-text-muted mb-2">Your watchlist is empty</p>
+            <p class="text-sm text-gw-text-muted mb-6">Browse movies and tap the bookmark icon to save them here</p>
+            <a href="/explore/" class="inline-flex items-center px-6 py-3 bg-gw-accent hover:bg-gw-accent-hover text-white font-medium rounded-xl transition-colors">
+                Explore Movies
+            </a>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+        </div>
+
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-gw-surface border-t border-gw-border py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <div class="sm:col-span-2 lg:col-span-1">
+                <a href="/" class="flex items-center gap-2 mb-4">
+                    <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="32" height="32" class="rounded-lg">
+                    <span class="text-xl font-semibold">GoodWatch</span>
+                </a>
+                <p class="text-gw-text-muted text-sm mb-4">One perfect recommendation. No decision fatigue.</p>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Explore</h3>
+                <ul class="space-y-3 text-gw-text-muted text-sm">
+                    <li><a href="/explore/" class="hover:text-gw-text transition-colors">Search & Explore</a></li>
+                    <li><a href="/movies/" class="hover:text-gw-text transition-colors">Browse Movies</a></li>
+                    <li><a href="/genres/" class="hover:text-gw-text transition-colors">Movies by Genre</a></li>
+                    <li><a href="/streaming/" class="hover:text-gw-text transition-colors">Movies by Platform</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Legal</h3>
+                <ul class="space-y-3 text-gw-text-muted text-sm">
+                    <li><a href="/privacy.html" class="hover:text-gw-text transition-colors">Privacy Policy</a></li>
+                    <li><a href="/terms.html" class="hover:text-gw-text transition-colors">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Connect</h3>
+                <ul class="space-y-3 text-gw-text-muted text-sm">
+                    <li><a href="mailto:hello@goodwatch.movie" class="hover:text-gw-text transition-colors">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gw-border pt-8 text-center text-gw-text-muted text-sm">
+            <p>&copy; 2026 GoodWatch. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/js/auth.js?v=3"></script>
+<script src="/assets/js/watchlist.js?v=3"></script>
+<script>
+(function(){
+    var SUPABASE_URL = 'https://jdjqrlkynwfhbtyuddjk.supabase.co';
+    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+        + '.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkanFybGt5bndmaGJ0eXVkZGprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0NzUwMTEsImV4cCI6MjA4MDA1MTAxMX0'
+        + '.KDRMLCewVMp3lwphkUvtoWOkg6kyAk8iSbVkRKiHYSk';
+    var TMDB_IMG = 'https://image.tmdb.org/t/p/w342';
+
+    function esc(s) {
+        if (!s) return '';
+        var d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    function slugify(title, year) {
+        var s = title.toLowerCase().trim();
+        s = s.replace(/['\u2019\u2018\u2032]/g, '');
+        s = s.replace(/[^a-z0-9\s-]/g, '');
+        s = s.replace(/[\s-]+/g, '-').replace(/^-|-$/g, '');
+        if (year) s += '-' + year;
+        return s;
+    }
+
+    function goodScore(m) {
+        var cs = m.composite_score;
+        if (cs) return Math.round(cs * 10);
+        var imdb = m.imdb_rating;
+        var tmdb = m.vote_average;
+        if (imdb && tmdb) return Math.round((imdb * 0.75 + tmdb * 0.25) * 10);
+        if (imdb) return Math.round(imdb * 10);
+        if (tmdb) return Math.round(tmdb * 10);
+        return null;
+    }
+
+    function scoreColor(score) {
+        if (score === null) return 'text-gray-500';
+        if (score >= 80) return 'text-green-400';
+        if (score >= 65) return 'text-gw-accent';
+        if (score >= 50) return 'text-yellow-400';
+        return 'text-red-400';
+    }
+
+    function showLoading() {
+        var el = document.getElementById('loading-state');
+        if (!el) return;
+        el.innerHTML = '';
+        for (var i = 0; i < 10; i++) {
+            var div = document.createElement('div');
+            div.innerHTML = '<div class="aspect-[2/3] rounded-xl skeleton mb-2"></div>'
+                + '<div class="h-4 w-3/4 skeleton rounded mb-1"></div>'
+                + '<div class="h-3 w-1/2 skeleton rounded"></div>';
+            el.appendChild(div);
+        }
+    }
+
+    function renderCard(m) {
+        var score = goodScore(m);
+        var slug = slugify(m.title, m.year);
+        var genres = '';
+        if (m.genres && Array.isArray(m.genres)) {
+            genres = m.genres.slice(0, 2).map(function(g) {
+                return typeof g === 'string' ? g : (g.name || '');
+            }).filter(Boolean).join(', ');
+        }
+        var posterUrl = m.poster_path ? (TMDB_IMG + m.poster_path) : '';
+
+        var wrapper = document.createElement('div');
+        wrapper.className = 'relative group';
+
+        var a = document.createElement('a');
+        a.href = '/movies/' + slug + '/';
+        a.className = 'block';
+
+        var scoreHtml = '';
+        if (score !== null) {
+            scoreHtml = '<div class="absolute top-2 right-2 bg-black/70 backdrop-blur-sm rounded-lg px-2 py-1">'
+                + '<span class="' + scoreColor(score) + ' text-sm font-bold">' + score + '</span></div>';
+        }
+
+        var imgHtml = posterUrl
+            ? '<img src="' + esc(posterUrl) + '" alt="' + esc(m.title) + '" class="w-full h-full object-cover" loading="lazy" onerror="this.parentElement.classList.add(\'poster-fallback\');this.remove()">'
+            : '<div class="w-full h-full flex items-center justify-center bg-gw-surface text-gw-text-muted text-xs p-2 text-center">' + esc(m.title) + '</div>';
+
+        a.innerHTML = '<div class="relative aspect-[2/3] rounded-xl overflow-hidden mb-2">'
+            + imgHtml + scoreHtml
+            + '<div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>'
+            + '</div>'
+            + '<h3 class="font-medium text-sm group-hover:text-gw-accent transition-colors truncate">' + esc(m.title) + '</h3>'
+            + '<div class="flex items-center gap-1 text-xs text-gw-text-muted">'
+            + (m.year ? '<span>' + m.year + '</span>' : '')
+            + (genres ? '<span class="text-gw-border">\u00b7</span><span>' + esc(genres) + '</span>' : '')
+            + '</div>';
+
+        wrapper.appendChild(a);
+
+        // Remove button
+        var btn = document.createElement('button');
+        btn.className = 'absolute top-2 left-2 z-10 w-8 h-8 flex items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm hover:bg-red-600/80 transition-colors';
+        btn.title = 'Remove from Watchlist';
+        btn.innerHTML = '<svg class="w-5 h-5 text-gw-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M5 3h14a2 2 0 012 2v16l-9-4-9 4V5a2 2 0 012-2z"/></svg>';
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.gwWatchlist.remove(m.id).then(function() {
+                wrapper.remove();
+                // Update count
+                var grid = document.getElementById('watchlist-grid');
+                var remaining = grid ? grid.children.length : 0;
+                if (remaining === 0) {
+                    document.getElementById('empty-state').classList.remove('hidden');
+                }
+                var countEl = document.getElementById('watchlist-count');
+                if (countEl) countEl.textContent = remaining + ' saved';
+            }).catch(function(err) { console.error('Remove error:', err); });
+        });
+        wrapper.appendChild(btn);
+
+        return wrapper;
+    }
+
+    async function loadWatchlist() {
+        showLoading();
+        try {
+            // Get watchlist items
+            var items = await window.gwWatchlist.get();
+            if (!items || items.length === 0) {
+                document.getElementById('loading-state').innerHTML = '';
+                document.getElementById('empty-state').classList.remove('hidden');
+                document.getElementById('watchlist-count').textContent = '0 saved';
+                return;
+            }
+
+            // Fetch movie details for all watchlist items
+            var movieIds = items.map(function(i) { return i.movie_id; });
+            var resp = await fetch(SUPABASE_URL + '/rest/v1/movies?id=in.(' + movieIds.join(',') + ')&select=id,tmdb_id,title,year,content_type,poster_path,composite_score,imdb_rating,vote_average,runtime,genres,ott_providers,original_language,director', {
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': 'Bearer ' + SUPABASE_KEY
+                }
+            });
+
+            if (!resp.ok) throw new Error('Failed to fetch movies');
+
+            var movies = await resp.json();
+
+            // Sort movies in watchlist order (most recently added first)
+            var movieMap = {};
+            movies.forEach(function(m) { movieMap[m.id] = m; });
+            var sorted = items.map(function(i) { return movieMap[i.movie_id]; }).filter(Boolean);
+
+            // Render
+            document.getElementById('loading-state').innerHTML = '';
+            var grid = document.getElementById('watchlist-grid');
+            grid.innerHTML = '';
+
+            sorted.forEach(function(m) {
+                grid.appendChild(renderCard(m));
+            });
+
+            document.getElementById('watchlist-count').textContent = sorted.length + ' saved';
+        } catch (err) {
+            console.error('Watchlist load error:', err);
+            document.getElementById('loading-state').innerHTML = '';
+            document.getElementById('watchlist-grid').innerHTML = '<div class="col-span-full text-center py-16 text-gw-text-muted">'
+                + '<p class="text-lg mb-2">Something went wrong</p>'
+                + '<p class="text-sm">Could not load your watchlist. Please try again.</p></div>';
+        }
+    }
+
+    // Auth gate + load
+    gwAuth.getSession().then(function(res) {
+        var loading = document.getElementById('nav-auth-loading');
+        var signOut = document.getElementById('nav-sign-out');
+        var gate = document.getElementById('auth-gate');
+        var content = document.getElementById('main-content');
+        if (res.data && res.data.session) {
+            if (loading) loading.classList.add('hidden');
+            if (signOut) signOut.classList.remove('hidden');
+            if (gate) gate.style.display = 'none';
+            if (content) content.style.display = '';
+            loadWatchlist();
+        } else {
+            if (loading) loading.classList.add('hidden');
+            if (gate) gate.style.display = '';
+            if (content) content.style.display = 'none';
+        }
+    });
+})();
+</script>
+</body>
+</html>

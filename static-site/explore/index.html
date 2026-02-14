@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore 25,000+ Movies & Shows | Search by Genre, Platform, Mood | GoodWatch</title>
+    <meta name="description" content="Search and filter 25,000+ movies and series by genre, language, streaming platform, mood, duration, and decade. Ranked by GoodScore — a composite of IMDb, Rotten Tomatoes, Metacritic & TMDB.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://goodwatch.movie/explore/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://goodwatch.movie/explore/">
+    <meta property="og:title" content="Explore 25,000+ Movies & Shows | GoodWatch">
+    <meta property="og:description" content="Search and filter movies by genre, language, platform, mood, duration, and decade. Ranked by GoodScore.">
+    <meta property="og:image" content="https://goodwatch.movie/assets/images/logo.png?v=2">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Explore 25,000+ Movies & Shows | GoodWatch">
+    <meta name="twitter:description" content="Search and filter movies by genre, language, platform, mood, duration, and decade. Ranked by GoodScore.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <style>
+        .scrollbar-none::-webkit-scrollbar{display:none}
+        .scrollbar-none{-ms-overflow-style:none;scrollbar-width:none}
+        .filter-chip-active{background:rgba(212,175,55,.15);border-color:#D4A843!important;color:#D4A843!important}
+        .type-active{background:rgba(212,175,55,.15);color:#D4A843;border-color:#D4A843}
+        .skeleton{background:linear-gradient(90deg,#1c1c1e 25%,#262626 50%,#1c1c1e 75%);background-size:200%;animation:shimmer 1.5s infinite}
+        @keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
+        .poster-fallback{background:#1c1c1e}
+    </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Explore Movies & Shows",
+        "url": "https://goodwatch.movie/explore/",
+        "description": "Search and filter 25,000+ movies and series by genre, language, streaming platform, mood, duration, and decade.",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "GoodWatch",
+            "url": "https://goodwatch.movie",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://goodwatch.movie/explore/?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+            }
+        }
+    }
+    </script>
+</head>
+<body class="bg-gw-bg text-gw-text font-sans antialiased">
+
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-gw-bg/80 backdrop-blur-lg border-b border-gw-border">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+            <a href="/" class="flex items-center gap-3">
+                <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="48" height="48" class="w-12 h-12 rounded-lg">
+                <span class="text-2xl font-semibold">GoodWatch</span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="/explore/" class="text-sm text-gw-text transition-colors font-medium">Explore</a>
+                <a href="/movies/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Movies</a>
+                <a href="/blog/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Blog</a>
+                <span id="nav-auth-loading" class="text-sm text-gw-text-muted">...</span>
+                <button id="nav-sign-out" class="hidden text-sm text-gw-text-muted hover:text-gw-text transition-colors" onclick="gwAuth.signOut()">Sign Out</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Auth Gate — hidden by default, shown via JS when not signed in -->
+<div id="auth-gate" style="display:none;position:fixed;top:80px;left:0;right:0;bottom:0;z-index:40;background:#0A0A0F">
+    <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%">
+        <div class="text-center px-6 max-w-md">
+            <img src="/assets/images/logo.png?v=2" alt="GoodWatch" width="80" height="80" class="mx-auto mb-6 rounded-2xl">
+            <h2 class="text-3xl font-bold mb-3">Sign in to explore</h2>
+            <p class="text-gw-text-muted mb-8">Search 25,000+ movies and shows, save to your watchlist, and get personalized recommendations.</p>
+            <div id="auth-error-banner" class="hidden mb-4 px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm max-w-xs mx-auto">
+                Sign-in failed. Please try again.
+            </div>
+            <div class="space-y-3 max-w-xs mx-auto">
+                <button onclick="gwAuth.signInWithGoogle()" class="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white text-gray-800 font-medium rounded-xl hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Sign in with Google
+                </button>
+                <button onclick="gwAuth.signInWithApple()" class="w-full flex items-center justify-center gap-3 px-6 py-3 bg-black text-white font-medium rounded-xl hover:bg-gray-900 transition-colors border border-gray-700">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    Sign in with Apple
+                </button>
+            </div>
+            <p class="text-gw-text-muted text-xs mt-6">By signing in, you agree to our <a href="/terms.html" class="text-gw-accent hover:underline">Terms</a> and <a href="/privacy.html" class="text-gw-accent hover:underline">Privacy Policy</a>.</p>
+        </div>
+    </div>
+</div>
+
+<main id="main-content" class="pt-24 pb-16 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Breadcrumb -->
+        <nav class="text-sm text-gw-text-muted mb-6" aria-label="Breadcrumb">
+            <a href="/" class="hover:text-gw-accent transition-colors">Home</a>
+            <span class="mx-1">&rsaquo;</span>
+            <span class="text-gw-text">Explore</span>
+        </nav>
+
+        <!-- Title -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold mb-3">Explore <span class="text-gw-accent">25,000+</span> Movies & Shows</h1>
+            <p class="text-gw-text-muted text-lg">Search, filter, and discover — ranked by GoodScore</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-8">
+            <div class="relative max-w-2xl mx-auto">
+                <input type="search" id="search-input"
+                    placeholder="Search movies, shows, directors..."
+                    class="w-full px-5 py-4 pr-12 bg-gw-surface border border-gw-border rounded-2xl text-gw-text placeholder:text-gw-text-muted focus:outline-none focus:ring-2 focus:ring-gw-accent focus:border-transparent text-lg"
+                    autocomplete="off">
+                <svg id="search-icon" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%)" class="w-5 h-5 text-gw-text-muted pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <button id="search-clear" class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 items-center justify-center text-gw-text-muted hover:text-gw-text" style="display:none">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sub-navigation: Explore | New Releases | Platforms -->
+        <div class="flex justify-center gap-2 mb-8">
+            <a href="/explore/" class="px-4 py-2 rounded-full text-sm font-medium bg-gw-accent/15 text-gw-accent border border-gw-accent/30">All Movies</a>
+            <a href="/explore/new-releases/" class="px-4 py-2 rounded-full text-sm font-medium border border-gw-border text-gw-text-muted hover:border-gw-accent/50 hover:text-gw-text transition-colors">New Releases</a>
+            <a href="/explore/platforms/" class="px-4 py-2 rounded-full text-sm font-medium border border-gw-border text-gw-text-muted hover:border-gw-accent/50 hover:text-gw-text transition-colors">By Platform</a>
+            <a href="/explore/watchlist/" class="px-4 py-2 rounded-full text-sm font-medium border border-gw-border text-gw-text-muted hover:border-gw-accent/50 hover:text-gw-text transition-colors">Watchlist</a>
+        </div>
+
+        <!-- Filter Categories -->
+        <div id="filter-categories" class="flex overflow-x-auto gap-2 pb-3 mb-2 scrollbar-none"></div>
+
+        <!-- Filter Chips (shown when category selected) -->
+        <div id="filter-chips" class="flex flex-wrap gap-2 mb-3 hidden"></div>
+
+        <!-- Active Filters -->
+        <div id="active-filters" class="flex flex-wrap gap-2 items-center mb-6 hidden"></div>
+
+        <!-- Sort + Content Type + Results Count -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <span id="results-count" class="text-sm text-gw-text-muted"></span>
+            <div class="flex items-center gap-3">
+                <!-- Content type toggle -->
+                <div class="flex bg-gw-surface border border-gw-border rounded-lg overflow-hidden">
+                    <button data-type="all" class="px-3 py-1.5 text-sm text-gw-text-muted hover:text-gw-text transition-colors type-active">All</button>
+                    <button data-type="movie" class="px-3 py-1.5 text-sm text-gw-text-muted hover:text-gw-text transition-colors">Movies</button>
+                    <button data-type="series" class="px-3 py-1.5 text-sm text-gw-text-muted hover:text-gw-text transition-colors">Series</button>
+                </div>
+                <!-- Sort -->
+                <select id="sort-select" class="bg-gw-surface border border-gw-border rounded-lg px-3 py-1.5 text-sm text-gw-text focus:outline-none focus:ring-1 focus:ring-gw-accent">
+                    <option value="rating-desc">Highest Rated</option>
+                    <option value="rating-asc">Lowest Rated</option>
+                    <option value="year-desc">Newest First</option>
+                    <option value="year-asc">Oldest First</option>
+                    <option value="runtime-desc">Longest First</option>
+                    <option value="runtime-asc">Shortest First</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Movie Grid -->
+        <div id="movie-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-20">
+            <svg class="w-16 h-16 mx-auto text-gw-text-muted mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+            </svg>
+            <p class="text-lg text-gw-text-muted mb-2">No movies found</p>
+            <p class="text-sm text-gw-text-muted">Try adjusting your filters or search terms</p>
+        </div>
+
+        <!-- Load More -->
+        <div class="text-center mt-12">
+            <button id="load-more" class="px-8 py-3 bg-gw-surface border border-gw-border hover:border-gw-accent/30 text-gw-text font-medium rounded-xl transition-colors">
+                Load More Movies
+            </button>
+        </div>
+
+        <!-- App CTA -->
+        <div class="mt-16 text-center bg-gw-surface border border-gw-border rounded-2xl p-8 sm:p-12">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4">Want personalized picks?</h2>
+            <p class="text-gw-text-muted mb-6 max-w-md mx-auto">GoodWatch picks the perfect movie for your mood, platforms, and time — one recommendation at a time.</p>
+            <a href="https://apps.apple.com/app/goodwatch-movie-recommendations/id6740092498" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-gw-accent hover:bg-gw-accent-hover text-white px-6 py-3 rounded-xl font-medium transition-colors">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                Download on App Store
+            </a>
+        </div>
+
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-gw-surface border-t border-gw-border py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <div class="sm:col-span-2 lg:col-span-1">
+                <a href="/" class="flex items-center gap-2 mb-4">
+                    <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="32" height="32" class="rounded-lg">
+                    <span class="text-xl font-semibold">GoodWatch</span>
+                </a>
+                <p class="text-gw-text-muted text-sm mb-4">One perfect recommendation. No decision fatigue.</p>
+                <p class="text-gw-text-muted text-sm">Made in India</p>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Explore</h3>
+                <ul class="space-y-3 text-gw-text-muted text-sm">
+                    <li><a href="/explore/" class="hover:text-gw-text transition-colors">Search & Explore</a></li>
+                    <li><a href="/movies/" class="hover:text-gw-text transition-colors">Browse Movies</a></li>
+                    <li><a href="/genres/" class="hover:text-gw-text transition-colors">Movies by Genre</a></li>
+                    <li><a href="/streaming/" class="hover:text-gw-text transition-colors">Movies by Platform</a></li>
+                    <li><a href="/languages/" class="hover:text-gw-text transition-colors">Movies by Language</a></li>
+                    <li><a href="/blog/" class="hover:text-gw-text transition-colors">Blog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Legal</h3>
+                <ul class="space-y-3 text-gw-text-muted text-sm">
+                    <li><a href="/privacy.html" class="hover:text-gw-text transition-colors">Privacy Policy</a></li>
+                    <li><a href="/terms.html" class="hover:text-gw-text transition-colors">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-semibold mb-4">Connect</h3>
+                <ul class="space-y-3 text-gw-text-muted text-sm">
+                    <li><a href="mailto:hello@goodwatch.movie" class="hover:text-gw-text transition-colors">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gw-border pt-8 text-center text-gw-text-muted text-sm">
+            <p>&copy; 2026 GoodWatch. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="/assets/js/auth.js?v=3"></script>
+<script src="/assets/js/watchlist.js?v=3"></script>
+<script src="/assets/js/explore.js?v=3"></script>
+<script>
+(function(){
+    // Show auth error banner if redirected from failed auth
+    var qp = new URLSearchParams(window.location.search);
+    if (qp.get('auth_error')) {
+        var banner = document.getElementById('auth-error-banner');
+        if (banner) banner.classList.remove('hidden');
+        // Clean URL
+        history.replaceState(null, '', window.location.pathname);
+    }
+
+    gwAuth.getSession().then(function(res){
+        var loading = document.getElementById('nav-auth-loading');
+        var signOut = document.getElementById('nav-sign-out');
+        var gate = document.getElementById('auth-gate');
+        var content = document.getElementById('main-content');
+        if(res.data && res.data.session){
+            if(loading) loading.classList.add('hidden');
+            if(signOut) signOut.classList.remove('hidden');
+            if(gate) gate.style.display = 'none';
+            if(content) content.style.display = '';
+            if(window.gwWatchlist) window.gwWatchlist.loadCache();
+        } else {
+            if(loading) loading.classList.add('hidden');
+            if(gate) gate.style.display = '';
+            if(content) content.style.display = 'none';
+        }
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signing In — GoodWatch</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body class="bg-gw-bg text-gw-text font-sans antialiased min-h-screen flex items-center justify-center">
+    <div class="text-center px-4">
+        <img src="/assets/images/logo.png?v=2" alt="GoodWatch" width="64" height="64" class="mx-auto mb-4 rounded-xl">
+        <h1 class="text-2xl font-bold mb-2">Signing you in...</h1>
+        <p id="status" class="text-gw-text-muted">Processing authentication</p>
+        <div class="mt-6">
+            <div class="w-8 h-8 border-2 border-gw-accent border-t-transparent rounded-full animate-spin mx-auto"></div>
+        </div>
+        <p id="error" class="hidden text-red-400 mt-6"></p>
+        <a id="retry-link" href="/explore/" class="hidden mt-4 inline-block text-gw-accent hover:underline">Go to Explore</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script>
+        (function () {
+            var SUPABASE_URL = 'https://jdjqrlkynwfhbtyuddjk.supabase.co';
+            var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+                + '.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkanFybGt5bndmaGJ0eXVkZGprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0NzUwMTEsImV4cCI6MjA4MDA1MTAxMX0'
+                + '.KDRMLCewVMp3lwphkUvtoWOkg6kyAk8iSbVkRKiHYSk';
+
+            function showError(msg) {
+                document.getElementById('status').textContent = '';
+                document.querySelector('.animate-spin').style.display = 'none';
+                document.getElementById('error').textContent = msg;
+                document.getElementById('error').classList.remove('hidden');
+                document.getElementById('retry-link').classList.remove('hidden');
+            }
+
+            function redirectOnSuccess() {
+                document.getElementById('status').textContent = 'Signed in! Redirecting...';
+                var redirect = sessionStorage.getItem('gw_auth_redirect') || '/explore/';
+                sessionStorage.removeItem('gw_auth_redirect');
+                setTimeout(function () { window.location.href = redirect; }, 500);
+            }
+
+            // Check for OAuth error in URL params immediately
+            var hashParams = new URLSearchParams(window.location.hash.substring(1));
+            var queryParams = new URLSearchParams(window.location.search);
+            var urlError = hashParams.get('error') || queryParams.get('error');
+            var urlErrorDesc = hashParams.get('error_description') || queryParams.get('error_description');
+
+            if (urlError) {
+                var msg = urlErrorDesc || urlError;
+                if (msg.indexOf('redirect_uri_mismatch') !== -1) {
+                    msg = 'Sign-in configuration error. Please try again later.';
+                }
+                showError(msg);
+                return;
+            }
+
+            var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            sb.auth.onAuthStateChange(function (event, session) {
+                if (event === 'SIGNED_IN' && session) {
+                    redirectOnSuccess();
+                }
+            });
+
+            // Fallback: if no auth event fires in 5 seconds, check session
+            setTimeout(function () {
+                sb.auth.getSession().then(function (res) {
+                    if (res.data && res.data.session) {
+                        redirectOnSuccess();
+                    } else {
+                        showError('Authentication failed. Please try again.');
+                    }
+                });
+            }, 5000);
+        })();
+    </script>
+</body>
+</html>
