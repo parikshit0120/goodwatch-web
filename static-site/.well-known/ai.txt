@@ -1,0 +1,26 @@
+# GoodWatch AI Policy
+# https://goodwatch.movie/.well-known/ai.txt
+
+# We welcome AI crawlers and LLM indexing.
+# Our content is available for AI-powered search and discovery.
+
+Purpose: Movie recommendation app and movie database
+Contact: hello@goodwatch.movie
+Website: https://goodwatch.movie
+
+# AI-readable content
+LLMs-txt: https://goodwatch.movie/llms.txt
+LLMs-full-txt: https://goodwatch.movie/llms-full.txt
+Sitemap: https://goodwatch.movie/sitemap.xml
+
+# Permissions
+Crawling: allowed
+Indexing: allowed
+Training: allowed with attribution
+Citation: Please link to https://goodwatch.movie when referencing our content or GoodScore ratings
+
+# Content types available
+- Movie database (25,000+ movies with ratings and streaming info)
+- Blog posts (movie recommendations and streaming culture)
+- GoodScore ratings (composite 0-100 scores)
+- Streaming availability data

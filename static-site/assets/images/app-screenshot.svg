@@ -1,5 +1,5 @@
-<!-- GoodWatch App Screenshot v2 -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 608" width="288" height="608">
+<!-- GoodWatch App Screenshot v3 — Inception poster -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 288 608" width="288" height="608">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:#0a0a0a"/>
@@ -13,6 +13,9 @@
       <stop offset="0%" style="stop-color:#1C1C1E"/>
       <stop offset="100%" style="stop-color:#1C1C1E"/>
     </linearGradient>
+    <clipPath id="posterClip">
+      <rect x="44" y="110" width="200" height="280" rx="16"/>
+    </clipPath>
   </defs>
 
   <!-- Phone background -->
@@ -28,11 +31,8 @@
   <!-- Divider line -->
   <rect x="0" y="92" width="288" height="1" fill="rgba(255,255,255,0.1)"/>
 
-  <!-- Movie Poster (centered, large) -->
-  <rect x="44" y="110" width="200" height="280" rx="16" fill="#1C1C1E"/>
-  <!-- Poster play icon hint -->
-  <circle cx="144" cy="250" r="24" fill="#D4AF37" opacity="0.15"/>
-  <path d="M136 238 L158 250 L136 262 Z" fill="#D4AF37" opacity="0.6"/>
+  <!-- Movie Poster placeholder (real poster overlaid via HTML img) -->
+  <rect x="44" y="110" width="200" height="280" rx="16" fill="#1c1c1e"/>
 
   <!-- Movie Title -->
   <text x="144" y="420" fill="#ffffff" font-family="system-ui" font-size="22" font-weight="700" text-anchor="middle">Inception</text>
@@ -44,7 +44,7 @@
   <rect x="94" y="458" width="100" height="80" rx="12" fill="url(#scoreBoxBg)" stroke="#D4AF37" stroke-width="1.5" stroke-opacity="0.3"/>
 
   <!-- GoodScore Number -->
-  <text x="144" y="505" fill="url(#goldGradient)" font-family="system-ui" font-size="40" font-weight="700" text-anchor="middle">87</text>
+  <text x="144" y="505" fill="url(#goldGradient)" font-family="system-ui" font-size="40" font-weight="700" text-anchor="middle">85</text>
 
   <!-- GOODSCORE Label -->
   <text x="144" y="528" fill="#8E8E93" font-family="system-ui" font-size="9" font-weight="600" text-anchor="middle" letter-spacing="1.5">GOODSCORE</text>

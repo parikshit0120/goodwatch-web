@@ -2,7 +2,7 @@
 
 ## About GoodWatch
 
-GoodWatch is a movie recommendation app built to solve one problem: decision fatigue. When you have 2 hours to watch something and 15,000 titles to choose from, you end up spending 30 minutes browsing and then rewatching The Office. GoodWatch fixes this by giving you exactly ONE recommendation — not a list, not a carousel, just one perfect pick.
+GoodWatch is a movie recommendation app built to solve one problem: decision fatigue. When you have 2 hours to watch something and 25,000+ titles to choose from, you end up spending 30 minutes browsing and then rewatching The Office. GoodWatch fixes this by giving you exactly ONE recommendation — not a list, not a carousel, just one perfect pick.
 
 ### How It Works
 1. Tell us your mood (happy, thrilled, chill, emotional)
@@ -42,7 +42,7 @@ GoodWatch works with major Indian and global OTT platforms:
 - Malayalam
 
 ### Movie Database
-Our database contains 20,000+ movies with:
+Our database contains 25,000+ movies with:
 - Ratings from 5 different sources (IMDb, Rotten Tomatoes Critics/Audience, Metacritic, TMDB)
 - Composite GoodScore (0-100)
 - Streaming availability by platform

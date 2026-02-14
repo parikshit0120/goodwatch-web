@@ -7,7 +7,7 @@
     <!-- Primary Meta Tags -->
     <title>GoodWatch — Best Movie Recommendation App | What to Watch Tonight</title>
     <meta name="title" content="GoodWatch — Best Movie Recommendation App | What to Watch Tonight">
-    <meta name="description" content="GoodWatch recommends one perfect movie based on your mood, streaming platforms, and time. Browse 20,000+ movies rated by GoodScore — a composite of IMDb, Rotten Tomatoes, Metacritic & TMDB.">
+    <meta name="description" content="GoodWatch recommends one perfect movie based on your mood, streaming platforms, and time. Browse 22,500+ movies rated by GoodScore — a composite of IMDb, Rotten Tomatoes, Metacritic & TMDB.">
     <meta name="keywords" content="movie recommendation app, what to watch tonight, Netflix recommendation, decision fatigue, movie picker, best movie app India">
     <meta name="author" content="GoodWatch">
     <meta name="robots" content="index, follow">
@@ -17,7 +17,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://goodwatch.movie/">
     <meta property="og:title" content="GoodWatch — Best Movie Recommendation App | What to Watch Tonight">
-    <meta property="og:description" content="One perfect movie recommendation based on your mood and streaming platforms. 20,000+ movies rated by GoodScore.">
+    <meta property="og:description" content="One perfect movie recommendation based on your mood and streaming platforms. 22,500+ movies rated by GoodScore.">
     <meta property="og:image" content="https://goodwatch.movie/assets/images/logo.png?v=2">
     <meta property="og:site_name" content="GoodWatch">
 
@@ -25,7 +25,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://goodwatch.movie/">
     <meta name="twitter:title" content="GoodWatch — Best Movie Recommendation App | What to Watch Tonight">
-    <meta name="twitter:description" content="One perfect movie recommendation based on your mood and streaming platforms. 20,000+ movies rated by GoodScore.">
+    <meta name="twitter:description" content="One perfect movie recommendation based on your mood and streaming platforms. 22,500+ movies rated by GoodScore.">
     <meta name="twitter:image" content="https://goodwatch.movie/assets/images/logo.png?v=2">
 
     <!-- Favicon -->
@@ -39,6 +39,17 @@
 
     <!-- Styles (pre-compiled Tailwind) -->
     <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <!-- Poster grid background + SVG safety styles -->
+    <style>
+        svg:not(.poster-grid svg){flex-shrink:0}
+        .poster-grid-wrap{position:absolute;inset:0;overflow:hidden}
+        .poster-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;transform:rotate(-8deg) scale(1.3);transform-origin:center center;width:120%;position:absolute;top:-10%;left:-10%;opacity:.40;pointer-events:none}
+        .poster-grid img{width:100%!important;height:auto!important;max-width:none!important;aspect-ratio:2/3;object-fit:cover;border-radius:6px;background:#1c1c1e;display:block!important}
+        .poster-grid-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(10,10,15,0.15) 0%,rgba(10,10,15,0.35) 25%,rgba(10,10,15,0.6) 50%,rgba(10,10,15,0.85) 75%,rgba(10,10,15,1) 100%)}
+        @media(min-width:768px){.poster-grid{grid-template-columns:repeat(6,1fr)}}
+        @media(min-width:1024px){.poster-grid{grid-template-columns:repeat(8,1fr)}}
+    </style>
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -93,7 +104,7 @@
             "@type": "SearchAction",
             "target": {
                 "@type": "EntryPoint",
-                "urlTemplate": "https://goodwatch.movie/movies/?q={search_term_string}"
+                "urlTemplate": "https://goodwatch.movie/explore/?q={search_term_string}"
             },
             "query-input": "required name=search_term_string"
         }
@@ -154,14 +165,16 @@
     <!-- Navigation -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-gw-bg/80 backdrop-blur-lg border-b border-gw-border">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <a href="/" class="flex items-center gap-2">
-                    <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="32" height="32" class="rounded-lg">
-                    <span class="text-xl font-semibold">GoodWatch</span>
+            <div class="flex items-center justify-between h-20">
+                <a href="/" class="flex items-center gap-3">
+                    <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="48" height="48" class="w-12 h-12 rounded-lg">
+                    <span class="text-2xl font-semibold">GoodWatch</span>
                 </a>
                 <div class="flex items-center gap-4">
+                    <a href="/explore/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Explore</a>
                     <a href="/movies/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Movies</a>
                     <a href="/blog/" class="text-sm text-gw-text-muted hover:text-gw-text transition-colors">Blog</a>
+                    <a href="/explore/" class="text-sm text-gw-accent hover:text-gw-accent-hover font-medium transition-colors">Sign In</a>
                     <a href="#download" class="hidden sm:inline-flex items-center px-4 py-2 bg-gw-accent hover:bg-gw-accent-hover text-white font-medium rounded-lg transition-colors text-sm">
                         Download App
                     </a>
@@ -170,12 +183,40 @@
         </div>
     </nav>
 
-    <main>
-        <!-- SECTION 1: HERO -->
-        <section class="min-h-screen flex items-center pt-16 relative overflow-hidden">
-            <!-- Gradient background -->
-            <div class="absolute inset-0 bg-gradient-to-b from-gw-accent/10 via-transparent to-transparent"></div>
+    <main class="relative">
+        <!-- Poster grid background (mirrors iOS LandingView) — covers hero + transparent sections -->
+        <div class="poster-grid-wrap" aria-hidden="true">
+            <div class="poster-grid">
+                <img src="https://image.tmdb.org/t/p/w185/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" alt="" loading="eager">
+                <img src="https://image.tmdb.org/t/p/w185/qJ2tW6WMUDux911r6m7haRef0WH.jpg" alt="" loading="eager">
+                <img src="https://image.tmdb.org/t/p/w185/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg" alt="" loading="eager">
+                <img src="https://image.tmdb.org/t/p/w185/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg" alt="" loading="eager">
+                <img src="https://image.tmdb.org/t/p/w185/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/saHP97rTPS5eLmrLQEcANmKrsFl.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/wWJbBo5yjw22AIjE8isBFoiBI3S.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/lBYOKAMcxIvuk9s9hMuecB9dPBV.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/bAKvH3yDzEHG0kTwQ6HbCCCpYhh.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/sv1xJUazXeYqALzczSZ3O6nkH75.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/62HCnUTziyWcpDaBO2i1DX17ljH.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/6CoRTJTmijhBLJTUNoVSUNxZMEI.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/3bhkrj58Vtu7enYsRolD1fZdja1.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/ngl2FKBlU4fhbdsrtdom9LVLBXw.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg" alt="" loading="lazy">
+                <img src="https://image.tmdb.org/t/p/w185/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg" alt="" loading="lazy">
+            </div>
+            <div class="poster-grid-overlay"></div>
+        </div>
 
+        <!-- SECTION 1: HERO -->
+        <section class="min-h-screen flex items-center pt-20 relative z-10">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 relative z-10">
                 <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     <div class="text-center lg:text-left">
@@ -183,17 +224,17 @@
                             The Best <span class="text-gw-accent">Movie Recommendation</span> App. One Pick. Done.
                         </h1>
                         <p class="text-lg sm:text-xl text-gw-text-muted mb-8 max-w-lg mx-auto lg:mx-0">
-                            Stop browsing 15,000 titles. GoodWatch picks the perfect movie for your mood, your platforms, and your time — backed by ratings from IMDb, Rotten Tomatoes, Metacritic & TMDB.
+                            Stop browsing 22,500+ titles. GoodWatch picks the perfect movie for your mood, your platforms, and your time — backed by ratings from IMDb, Rotten Tomatoes, Metacritic & TMDB.
                         </p>
                         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" id="download">
                             <a href="https://apps.apple.com/app/goodwatch-movie-recommendations/id6740092498" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 bg-gw-accent hover:bg-gw-accent-hover text-white px-6 py-3 rounded-xl font-medium transition-colors">
-                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                <svg class="w-6 h-6 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                                 </svg>
                                 <span>Download on App Store</span>
                             </a>
                             <div class="inline-flex items-center justify-center gap-2 bg-gw-surface text-gw-text-muted px-6 py-3 rounded-xl font-medium border border-gw-border cursor-default">
-                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                                <svg class="w-6 h-6 shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
                                 </svg>
                                 <span>Google Play</span>
@@ -204,8 +245,12 @@
                     <div class="flex justify-center lg:justify-end">
                         <!-- App Screenshot Placeholder -->
                         <div class="relative">
-                            <div class="w-64 sm:w-72 aspect-[9/19] bg-gw-surface rounded-[2.5rem] border-4 border-gw-border shadow-2xl overflow-hidden">
-                                <img src="/assets/images/app-screenshot.svg?v=2" alt="GoodWatch app showing a movie recommendation card" class="w-full h-full object-cover" loading="eager">
+                            <div class="w-64 sm:w-72 aspect-[9/19] bg-gw-surface rounded-[2.5rem] border-4 border-gw-border shadow-2xl overflow-hidden relative">
+                                <img src="/assets/images/app-screenshot.svg?v=4" alt="GoodWatch app showing Inception movie recommendation with GoodScore 85" class="w-full h-full object-cover" loading="eager">
+                                <img src="https://image.tmdb.org/t/p/w342/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg"
+                                     alt="Inception movie poster" class="absolute rounded-2xl object-cover"
+                                     style="top:18.1%;left:15.3%;width:69.4%;height:46.1%"
+                                     loading="eager">
                             </div>
                             <!-- Floating badge -->
                             <div class="absolute -right-4 -bottom-4 bg-gw-accent text-white px-4 py-2 rounded-xl shadow-lg font-medium text-sm">
@@ -218,11 +263,11 @@
         </section>
 
         <!-- SECTION 2: PROBLEM/SOLUTION -->
-        <section class="py-20 sm:py-28 bg-gw-surface">
+        <section class="py-20 sm:py-28 bg-gw-surface relative z-10">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-                        Netflix has <span class="text-gw-accent">15,000</span> titles.<br>
+                        Streaming apps have <span class="text-gw-accent">22,500+</span> titles.<br>
                         You have <span class="text-gw-accent">2 hours</span>.
                     </h2>
                 </div>
@@ -230,7 +275,7 @@
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="bg-gw-bg/50 rounded-2xl p-6 sm:p-8 border border-gw-border">
                         <div class="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 shrink-0 text-red-500" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
@@ -241,7 +286,7 @@
 
                     <div class="bg-gw-bg/50 rounded-2xl p-6 sm:p-8 border border-gw-border">
                         <div class="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 shrink-0 text-orange-500" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
                         </div>
@@ -252,7 +297,7 @@
 
                     <div class="bg-gw-bg/50 rounded-2xl p-6 sm:p-8 border border-gw-border">
                         <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 shrink-0 text-gw-accent" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
                         </div>
@@ -265,7 +310,7 @@
         </section>
 
         <!-- SECTION 3: HOW IT WORKS -->
-        <section class="py-20 sm:py-28">
+        <section class="py-20 sm:py-28 relative z-10">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl sm:text-4xl font-bold mb-4">How it works</h2>
@@ -317,7 +362,7 @@
         </section>
 
         <!-- SECTION 4: FEATURES -->
-        <section class="py-20 sm:py-28 bg-gw-surface">
+        <section class="py-20 sm:py-28 bg-gw-surface relative z-10">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl sm:text-4xl font-bold mb-4">Built for how you actually watch</h2>
@@ -327,7 +372,7 @@
                     <!-- Feature 1: Platforms -->
                     <div class="bg-gw-bg rounded-2xl p-6 border border-gw-border">
                         <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 shrink-0 text-gw-accent" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                             </svg>
                         </div>
@@ -344,7 +389,7 @@
                     <!-- Feature 2: Languages -->
                     <div class="bg-gw-bg rounded-2xl p-6 border border-gw-border">
                         <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 shrink-0 text-gw-accent" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
                             </svg>
                         </div>
@@ -355,7 +400,7 @@
                     <!-- Feature 3: No account -->
                     <div class="bg-gw-bg rounded-2xl p-6 border border-gw-border">
                         <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 shrink-0 text-gw-accent" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
                         </div>
@@ -366,7 +411,7 @@
                     <!-- Feature 4: No ads -->
                     <div class="bg-gw-bg rounded-2xl p-6 border border-gw-border">
                         <div class="w-12 h-12 bg-gw-accent/10 rounded-xl flex items-center justify-center mb-4">
-                            <svg class="w-6 h-6 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 shrink-0 text-gw-accent" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
                         </div>
@@ -378,11 +423,11 @@
         </section>
 
         <!-- SECTION 5: NEWSLETTER -->
-        <section class="py-20 sm:py-28">
+        <section class="py-20 sm:py-28 relative z-10">
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="bg-gradient-to-br from-gw-accent/20 to-gw-surface rounded-3xl p-8 sm:p-12 border border-gw-border text-center">
                     <div class="w-16 h-16 bg-gw-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-gw-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 shrink-0 text-gw-accent" width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
                     </div>
@@ -416,7 +461,7 @@
         </section>
 
         <!-- SECTION 6: FAQ -->
-        <section class="py-20 sm:py-28 bg-gw-surface">
+        <section class="py-20 sm:py-28 bg-gw-surface relative z-10">
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl sm:text-4xl font-bold mb-4">Frequently asked questions</h2>
@@ -427,7 +472,7 @@
                     <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
                         <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
                             <span class="font-medium text-lg">How does GoodWatch pick movies?</span>
-                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -440,7 +485,7 @@
                     <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
                         <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
                             <span class="font-medium text-lg">Is GoodWatch free?</span>
-                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -453,7 +498,7 @@
                     <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
                         <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
                             <span class="font-medium text-lg">Which streaming platforms does GoodWatch support?</span>
-                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -466,7 +511,7 @@
                     <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
                         <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
                             <span class="font-medium text-lg">Why only one recommendation?</span>
-                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -479,7 +524,7 @@
                     <div class="faq-item bg-gw-bg rounded-2xl border border-gw-border overflow-hidden">
                         <button class="faq-trigger w-full px-6 py-5 text-left flex items-center justify-between gap-4">
                             <span class="font-medium text-lg">Does GoodWatch work in India?</span>
-                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="faq-icon w-5 h-5 text-gw-text-muted flex-shrink-0 transition-transform" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -492,11 +537,11 @@
         </section>
 
         <!-- SECTION 7: FEATURED MOVIES (Internal Linking) -->
-        <section class="py-20 sm:py-28">
+        <section class="py-20 sm:py-28 relative z-10">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl sm:text-4xl font-bold mb-4">Top Rated Movies by GoodScore</h2>
-                    <p class="text-gw-text-muted text-lg">Explore our database of 20,000+ movies rated by IMDb, Rotten Tomatoes, Metacritic & TMDB.</p>
+                    <p class="text-gw-text-muted text-lg">Explore our database of 22,500+ movies rated by IMDb, Rotten Tomatoes, Metacritic & TMDB.</p>
                 </div>
 
                 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -540,14 +585,14 @@
 
                 <div class="text-center mt-8">
                     <a href="/movies/" class="inline-flex items-center px-6 py-3 bg-gw-accent hover:bg-gw-accent-hover text-white font-medium rounded-xl transition-colors">
-                        Browse All 20,000+ Movies
+                        Browse All 22,500+ Movies
                     </a>
                 </div>
             </div>
         </section>
 
         <!-- SECTION 8: FEATURED BLOG POSTS (Internal Linking) -->
-        <section class="py-20 sm:py-28 bg-gw-surface">
+        <section class="py-20 sm:py-28 bg-gw-surface relative z-10">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl sm:text-4xl font-bold mb-4">From the Blog</h2>
@@ -596,7 +641,7 @@
         </section>
 
         <!-- SECTION 9: CTA -->
-        <section class="py-20 sm:py-28">
+        <section class="py-20 sm:py-28 relative z-10">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
                     Stop browsing.<br>
@@ -607,13 +652,13 @@
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="https://apps.apple.com/app/goodwatch-movie-recommendations/id6740092498" target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 bg-gw-accent hover:bg-gw-accent-hover text-white px-8 py-4 rounded-xl font-medium transition-colors text-lg">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                        <svg class="w-7 h-7 shrink-0" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                         </svg>
                         <span>Download on App Store</span>
                     </a>
                     <div class="inline-flex items-center justify-center gap-2 bg-gw-surface text-gw-text-muted px-8 py-4 rounded-xl font-medium border border-gw-border cursor-default text-lg">
-                        <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                        <svg class="w-7 h-7 shrink-0" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
                         </svg>
                         <span>Google Play</span>
@@ -627,12 +672,12 @@
     <!-- FOOTER -->
     <footer class="bg-gw-surface border-t border-gw-border py-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                 <!-- Brand -->
-                <div class="sm:col-span-2 lg:col-span-1">
+                <div>
                     <a href="/" class="flex items-center gap-2 mb-4">
                         <img src="/assets/images/logo.png?v=2" alt="GoodWatch Logo" width="32" height="32" class="rounded-lg">
-                        <span class="text-xl font-semibold">GoodWatch</span>
+                        <span class="font-semibold">GoodWatch</span>
                     </a>
                     <p class="text-gw-text-muted text-sm mb-4">One perfect recommendation. No decision fatigue.</p>
                     <p class="text-gw-text-muted text-sm">Made in India</p>
@@ -642,6 +687,7 @@
                 <div>
                     <h3 class="font-semibold mb-4">Explore</h3>
                     <ul class="space-y-3 text-gw-text-muted text-sm">
+                        <li><a href="/explore/" class="hover:text-gw-text transition-colors">Search & Explore</a></li>
                         <li><a href="/movies/" class="hover:text-gw-text transition-colors">Browse Movies</a></li>
                         <li><a href="/genres/" class="hover:text-gw-text transition-colors">Movies by Genre</a></li>
                         <li><a href="/streaming/" class="hover:text-gw-text transition-colors">Movies by Platform</a></li>
@@ -667,12 +713,12 @@
                         <li>
                             <div class="flex gap-4 mt-2">
                                 <a href="#" class="hover:text-gw-text transition-colors" aria-label="Twitter">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 shrink-0" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                                     </svg>
                                 </a>
                                 <a href="#" class="hover:text-gw-text transition-colors" aria-label="Instagram">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 shrink-0" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
                                     </svg>
                                 </a>

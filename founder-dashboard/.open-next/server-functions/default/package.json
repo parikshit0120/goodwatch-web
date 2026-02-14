@@ -1,0 +1,35 @@
+{
+  "name": "goodwatch-founder-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:cloudflare": "npm run build && npx @opennextjs/cloudflare build",
+    "start": "next start",
+    "deploy": "npm run build:cloudflare && wrangler pages deploy .open-next/worker --project-name=goodwatch-founder-dashboard"
+  },
+  "dependencies": {
+    "@google-analytics/data": "^5.0.0",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^4.1.0",
+    "firebase": "^11.1.0",
+    "firebase-admin": "^13.0.2",
+    "next": "^15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@opennextjs/cloudflare": "^1.16.4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^9",
+    "eslint-config-next": "^15.1.6",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

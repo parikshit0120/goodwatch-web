@@ -24,8 +24,9 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // ============================================
 // STEP 1: Fetch IMDb ID from TMDB
 // ============================================
-async function fetchImdbIdFromTMDB(tmdbId) {
-  const url = `https://api.themoviedb.org/3/movie/${tmdbId}/external_ids?api_key=${TMDB_API_KEY}`;
+async function fetchImdbIdFromTMDB(tmdbId, contentType = 'movie') {
+  const tmdbType = (contentType === 'tv' || contentType === 'series') ? 'tv' : 'movie';
+  const url = `https://api.themoviedb.org/3/${tmdbType}/${tmdbId}/external_ids?api_key=${TMDB_API_KEY}`;
   
   try {
     const res = await fetch(url);
@@ -71,9 +72,9 @@ async function fetchOmdbData(imdbId) {
 // ============================================
 function validateOmdbResponse(movie, omdbData) {
   if (!omdbData) return false;
-  
-  // Must be a movie, not series/episode/game
-  if (omdbData.type !== 'movie') {
+
+  // Must be a movie or series — reject episodes and games
+  if (omdbData.type !== 'movie' && omdbData.type !== 'series') {
     console.log(`  ⚠️ Type mismatch: ${omdbData.type}`);
     return false;
   }
@@ -116,7 +117,7 @@ async function enrichImdbData(limit = 100, mode = 'missing-id') {
   // Select movies based on mode
   let query = supabase
     .from('movies')
-    .select('id, tmdb_id, title, year, imdb_id, imdb_rating, imdb_votes')
+    .select('id, tmdb_id, title, year, imdb_id, imdb_rating, imdb_votes, content_type')
     .order('popularity', { ascending: false })
     .limit(limit);
   
@@ -159,7 +160,7 @@ async function enrichImdbData(limit = 100, mode = 'missing-id') {
     
     // Step 1: Get IMDb ID if missing
     if (!imdbId) {
-      imdbId = await fetchImdbIdFromTMDB(movie.tmdb_id);
+      imdbId = await fetchImdbIdFromTMDB(movie.tmdb_id, movie.content_type);
       
       if (imdbId) {
         updateData.imdb_id = imdbId;

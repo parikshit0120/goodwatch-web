@@ -22,7 +22,7 @@ A GoodScore of 80+ means the movie is excellent across all platforms. A score of
 
 ## Site Content
 - **Homepage**: https://goodwatch.movie/ — App landing page with features, FAQ, and download links
-- **Movie Database**: https://goodwatch.movie/movies/ — 20,000+ movies with GoodScore, ratings breakdown, streaming availability, and synopses
+- **Movie Database**: https://goodwatch.movie/movies/ — 25,000+ movies with GoodScore, ratings breakdown, streaming availability, and synopses
 - **Blog**: https://goodwatch.movie/blog/ — 50 posts covering best movies by platform, genre, language, decade, and mood, plus editorial content about streaming culture
 - **Full Content**: https://goodwatch.movie/llms-full.txt
 
@@ -30,6 +30,6 @@ A GoodScore of 80+ means the movie is excellent across all platforms. A score of
 - Founded: 2025
 - Based in: India
 - Platform: iOS (App Store)
-- Database: 20,000+ movies with enriched metadata
+- Database: 25,000+ movies with enriched metadata
 - Contact: hello@goodwatch.movie
 - Website: https://goodwatch.movie

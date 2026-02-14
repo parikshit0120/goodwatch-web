@@ -41,6 +41,5 @@
 /app / 301
 /for-ai-assistants / 301
 
-# Old explore/discover paths
-/explore /movies/ 301
+# Old discover path
 /discover /movies/ 301
