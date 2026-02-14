@@ -1,0 +1,75 @@
+#!/bin/bash
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# GoodWatch Protected File Pre-Commit Hook
+# Blocks commits that modify protected files unless unlocked.
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+UNLOCK_FILE="$(git rev-parse --git-dir)/.protection-unlocked"
+
+# Check if unlock token exists and hasn't expired (60 seconds)
+if [ -f "$UNLOCK_FILE" ]; then
+    UNLOCK_TIME=$(cat "$UNLOCK_FILE" 2>/dev/null)
+    CURRENT_TIME=$(date +%s)
+    if [ -n "$UNLOCK_TIME" ] && [ "$CURRENT_TIME" -le "$((UNLOCK_TIME + 60))" ]; then
+        # Valid unlock token — allow commit and consume token
+        rm -f "$UNLOCK_FILE"
+        exit 0
+    else
+        # Token expired — remove it
+        rm -f "$UNLOCK_FILE"
+    fi
+fi
+
+# Protected file patterns
+PROTECTED_PATTERNS=(
+    "CLAUDE.md"
+    "INVARIANTS.md"
+    "GWProductInvariantTests.swift"
+    "RecommendationEngine"
+    "Movie.swift"
+    "GWSpec"
+    "RootFlowView"
+    "MovieRecommendationService"
+    "SupabaseConfig"
+)
+
+# Get list of staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACDMR)
+
+BLOCKED_FILES=()
+
+for FILE in $STAGED_FILES; do
+    BASENAME=$(basename "$FILE")
+    for PATTERN in "${PROTECTED_PATTERNS[@]}"; do
+        case "$BASENAME" in
+            *"$PATTERN"*)
+                BLOCKED_FILES+=("$FILE")
+                ;;
+        esac
+    done
+done
+
+if [ ${#BLOCKED_FILES[@]} -gt 0 ]; then
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  🛑 PROTECTED FILE COMMIT BLOCKED"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    echo "  The following protected files were modified:"
+    echo ""
+    for F in "${BLOCKED_FILES[@]}"; do
+        echo "    • $F"
+    done
+    echo ""
+    echo "  These files are protected by GoodWatch safety rules."
+    echo "  To commit changes to protected files, run:"
+    echo ""
+    echo "    ./unlock.sh"
+    echo ""
+    echo "  Then retry your commit within 60 seconds."
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    exit 1
+fi
+
+exit 0
