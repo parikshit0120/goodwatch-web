@@ -48,6 +48,19 @@
         });
     }
 
+    function gwSignInWithFacebook() {
+        var sb = getSb();
+        if (!sb) return Promise.reject(new Error('Supabase not loaded'));
+        sessionStorage.setItem('gw_auth_redirect', window.location.href);
+        return sb.auth.signInWithOAuth({
+            provider: 'facebook',
+            options: {
+                redirectTo: REDIRECT_URL,
+                scopes: 'email,public_profile'
+            }
+        });
+    }
+
     function gwSignOut() {
         var sb = getSb();
         if (!sb) return Promise.reject(new Error('Supabase not loaded'));
@@ -88,6 +101,7 @@
     window.gwAuth = {
         signInWithGoogle: gwSignInWithGoogle,
         signInWithApple: gwSignInWithApple,
+        signInWithFacebook: gwSignInWithFacebook,
         signOut: gwSignOut,
         getSession: gwGetSession,
         getUser: gwGetUser,
