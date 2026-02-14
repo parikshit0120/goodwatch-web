@@ -28,6 +28,9 @@
         .skeleton{background:linear-gradient(90deg,#1c1c1e 25%,#262626 50%,#1c1c1e 75%);background-size:200%;animation:shimmer 1.5s infinite}
         @keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
         .poster-fallback{background:#1c1c1e}
+        /* Hide browser's native search input clear button */
+        input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+        input[type="search"]::-ms-clear{display:none}
     </style>
     <script type="application/ld+json">
     {
